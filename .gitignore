@@ -24,6 +24,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# Cursor rules (приватные правила работы)
+.cursorrules
+
 # Environment variables
 .env
 .env.local
