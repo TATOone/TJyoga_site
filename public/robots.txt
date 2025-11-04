@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://tjyoga.ru/sitemap.xml
+
+# Disallow (при необходимости можно добавить)
+# Disallow: /admin/
+# Disallow: /api/
