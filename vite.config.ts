@@ -14,6 +14,19 @@ export default defineConfig({
   logLevel: 'info', 
   build: {
     rollupOptions: {
+      output: {
+        manualChunks: {
+          // Разделяем большие библиотеки в отдельные чанки
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['@radix-ui/themes', 'framer-motion'],
+          'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'vendor-utils': ['react-toastify', 'lucide-react'],
+        },
+        // Оптимизация имен файлов для кеширования
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+      },
       onwarn(warning, warn) {
         // ignore certain harmless warnings
         if (
@@ -38,5 +51,7 @@ export default defineConfig({
         warn(warning);
       },
     },
+    // Оптимизация размера чанков
+    chunkSizeWarningLimit: 500,
   },
 });
