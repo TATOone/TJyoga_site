@@ -49,7 +49,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-light-text/90 backdrop-blur-sm shadow-sm">
-      <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <nav id="navigation" className="container mx-auto px-4 py-4 flex justify-between items-center" role="navigation" aria-label="Главная навигация">
         <motion.h1
           className="text-2xl font-bold text-terracotta"
           initial={{ opacity: 0 }}

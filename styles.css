@@ -3,3 +3,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Accessibility: Skip Links */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus visible для лучшей навигации с клавиатуры */
+*:focus-visible {
+  outline: 2px solid #8B956D;
+  outline-offset: 2px;
+}
+
+/* Улучшение видимости focus для кнопок */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #8B956D;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
