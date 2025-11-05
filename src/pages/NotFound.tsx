@@ -1,11 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Home } from 'lucide-react';
 
 const NotFound: React.FC = () => {
   return (
-    <section className="relative flex py-10 min-h-screen items-center justify-center overflow-hidden bg-black">
+    <section className="relative flex py-10 min-h-screen items-center justify-center overflow-hidden bg-cream">
       <div className="mx-auto relative z-30 w-full max-w-[600px] text-center px-4">
         {/* Large 404 Text */}
-        <div className="mb-8">
+        <motion.div 
+          className="mb-8"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <svg
             width="472"
             height="158"
@@ -108,32 +116,88 @@ const NotFound: React.FC = () => {
               </linearGradient>
             </defs>
           </svg>
-        </div>
+        </motion.div>
 
-        <h1 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
-          OPPS! Page Not Found
-        </h1>
-        <p className="mb-8 text-base text-white/60 sm:text-lg">
-          We can&apos;t seem to find the page you are looking for!
-        </p>
-        <a
-          href={typeof window !== 'undefined' ? window.location.origin : '/'}
-          className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+        <motion.h1 
+          className="mb-4 text-3xl font-bold text-dark-brown sm:text-4xl"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Back to homepage
-        </a>
+          Страница не найдена
+        </motion.h1>
+        <motion.p 
+          className="mb-8 text-base text-gray-brown sm:text-lg"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          К сожалению, запрашиваемая страница не существует. Возможно, она была перемещена или удалена.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 rounded-lg bg-terracotta text-light-text px-6 py-3 text-sm font-medium transition-colors hover:bg-golden-sandy focus:outline-none focus:ring-2 focus:ring-terracotta focus:ring-offset-2"
+          >
+            <Home className="w-4 h-4" />
+            Вернуться на главную
+          </Link>
+        </motion.div>
 
-        {/* Footer */}
-        <div className="mt-16">
-          <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} - Meku.dev
-          </p>
-        </div>
+        {/* Дополнительные ссылки */}
+        <motion.div 
+          className="mt-12 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <a
+            href="#hero"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/#hero';
+            }}
+            className="text-olive-green hover:text-golden-sandy transition-colors"
+          >
+            Главная
+          </a>
+          <a
+            href="#services"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/#services';
+            }}
+            className="text-olive-green hover:text-golden-sandy transition-colors"
+          >
+            Услуги
+          </a>
+          <a
+            href="#about"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/#about';
+            }}
+            className="text-olive-green hover:text-golden-sandy transition-colors"
+          >
+            О нас
+          </a>
+          <a
+            href="https://t.me/TJyoga"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-olive-green hover:text-golden-sandy transition-colors"
+          >
+            Telegram
+          </a>
+        </motion.div>
       </div>
 
-      <div className="absolute inset-0 bg-[url(https://meku.dev/images/grain.png)] bg-cover bg-center opacity-60 mix-blend-soft-light z-20"></div>
-
-      <div className="absolute bottom-0 left-0 right-0 z-10">
+      {/* Декоративный фон */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 opacity-20">
         <svg
           width="2192"
           height="771"

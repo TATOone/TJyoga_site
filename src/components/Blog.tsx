@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { IMAGES } from '../config/images';
+import { analyticsEvents } from '../utils/analytics';
 
 const Blog: React.FC = () => {
   const ref = useRef(null);
@@ -70,6 +71,10 @@ const Blog: React.FC = () => {
             href="https://t.me/TJyoga"
             className="bg-olive-green text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-olive-green"
             aria-label="Читать о йоге"
+            onClick={() => {
+              analyticsEvents.ctaClick('Читать о йоге', 'blog');
+              analyticsEvents.telegramClick('TJyoga', 'blog');
+            }}
           >
             Читать о йоге
           </a>

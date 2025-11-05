@@ -9,11 +9,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './src/pages/Home.tsx';
 import SkipLinks from './src/components/SkipLinks';
+import Analytics from './src/components/Analytics';
 const NotFound = lazy(() => import('./src/pages/NotFound.tsx'));
 
 const App: React.FC = () => {
   return (
     <Theme appearance="inherit" radius="large" scaling="100%">
+      <Analytics />
       <SkipLinks />
       <Router>
         <main id="main-content" className="min-h-screen font-inter" role="main">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { analyticsEvents } from '../utils/analytics';
 
 const CTA: React.FC = () => {
   const ref = useRef(null);
@@ -36,6 +37,10 @@ const CTA: React.FC = () => {
             href="https://t.me/starovoitovae"
             className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
             aria-label="Написать Жене"
+            onClick={() => {
+              analyticsEvents.ctaClick('Написать Жене', 'cta');
+              analyticsEvents.telegramClick('starovoitovae', 'cta_write');
+            }}
           >
             Написать Жене
           </a>
@@ -43,6 +48,10 @@ const CTA: React.FC = () => {
             href="https://t.me/TJyoga"
             className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
             aria-label="Присоединиться к клубу"
+            onClick={() => {
+              analyticsEvents.ctaClick('Присоединиться к клубу', 'cta');
+              analyticsEvents.telegramClick('TJyoga', 'cta_join');
+            }}
           >
             Присоединиться к клубу
           </a>

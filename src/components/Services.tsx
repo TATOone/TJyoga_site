@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { MessageCircle, Globe, Star } from 'lucide-react';
 import { IMAGES } from '../config/images';
+import { analyticsEvents } from '../utils/analytics';
 
 const Services: React.FC = () => {
   const ref = useRef(null);
@@ -79,6 +80,14 @@ const Services: React.FC = () => {
                   href={service.link}
                   className="bg-terracotta text-light-text px-4 py-2 rounded hover:bg-golden-sandy transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta mt-auto"
                   aria-label={service.button}
+                  onClick={() => {
+                    analyticsEvents.serviceClick(service.title);
+                    analyticsEvents.ctaClick(service.button, 'services');
+                    if (service.link.includes('t.me')) {
+                      const channel = service.link.includes('TJyoga') ? 'TJyoga' : 'starovoitovae';
+                      analyticsEvents.telegramClick(channel, `services_${service.title}`);
+                    }
+                  }}
                 >
                   {service.button}
                 </a>

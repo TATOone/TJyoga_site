@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { IMAGES } from '../config/images';
+import { analyticsEvents } from '../utils/analytics';
 
 
 const Hero: React.FC = () => {
@@ -43,6 +44,10 @@ const Hero: React.FC = () => {
             href="https://t.me/TJyoga"
             className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
             aria-label="Присоединиться к йога-клубу"
+            onClick={() => {
+              analyticsEvents.ctaClick('Присоединиться к йога-клубу', 'hero');
+              analyticsEvents.telegramClick('TJyoga', 'hero_cta');
+            }}
           >
             Присоединиться к йога-клубу
           </a>
@@ -50,6 +55,10 @@ const Hero: React.FC = () => {
             href="https://t.me/starovoitovae"
             className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
             aria-label="Бесплатная консультация"
+            onClick={() => {
+              analyticsEvents.ctaClick('Бесплатная консультация', 'hero');
+              analyticsEvents.telegramClick('starovoitovae', 'hero_consultation');
+            }}
           >
             Бесплатная консультация
           </a>
