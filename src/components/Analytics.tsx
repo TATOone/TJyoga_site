@@ -33,17 +33,17 @@ const Analytics: React.FC = () => {
           function (...args: any[]) {
             (m[i].a = m[i].a || []).push(args);
           };
-        m[i].l = 1 * new Date();
+        m[i].l = 1 * Number(new Date());
         for (let j = 0; j < document.scripts.length; j++) {
           if (document.scripts[j].src === r) {
             return;
           }
         }
-        (k = e.createElement(t) as HTMLScriptElement),
-          (a = e.getElementsByTagName(t)[0]),
-          (k.async = 1),
-          (k.src = r),
-          a.parentNode?.insertBefore(k, a);
+        k = e.createElement(t) as HTMLScriptElement;
+        a = e.getElementsByTagName(t)[0];
+        k.async = 1;
+        k.src = r;
+        a.parentNode?.insertBefore(k, a);
       })(
         window,
         document,
@@ -62,7 +62,7 @@ const Analytics: React.FC = () => {
       };
       (window as any).ym = ymFunc;
       (window as any).ym.a = (window as any).ym.a || [];
-      (window as any).ym(parseInt(yandexId), 'init', {
+      (window as any).ym(parseInt(String(yandexId), 10), 'init', {
         clickmap: true,
         trackLinks: true,
         accurateTrackBounce: true,
