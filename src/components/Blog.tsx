@@ -47,7 +47,15 @@ const Blog: React.FC = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.2 }}
             >
-              <img src={post.image} alt={post.title} className="w-full h-32 object-cover rounded mb-4" loading="lazy" />
+              <img 
+                src={post.image} 
+                alt={post.title} 
+                className="w-full h-32 object-cover rounded mb-4" 
+                loading="lazy"
+                width="800"
+                height="320"
+                decoding="async"
+              />
               <h3 className="text-lg font-semibold text-terracotta">{post.title}</h3>
             </motion.div>
           ))}

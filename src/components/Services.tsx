@@ -59,7 +59,15 @@ const Services: React.FC = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.2 }}
             >
-              <img src={service.image} alt={service.title} className="w-full h-48 object-cover" loading="lazy" />
+              <img 
+                src={service.image} 
+                alt={service.title} 
+                className="w-full h-48 object-cover" 
+                loading="lazy"
+                width="800"
+                height="400"
+                decoding="async"
+              />
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center mb-4">
                   {service.icon}

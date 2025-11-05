@@ -52,7 +52,15 @@ const Testimonials: React.FC = () => {
             >
               <p className="text-dark-brown mb-4">"{testimonial.text}"</p>
               <div className="flex items-center">
-                <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4" loading="lazy" />
+                <img 
+                  src={testimonial.image} 
+                  alt={testimonial.name} 
+                  className="w-12 h-12 rounded-full mr-4" 
+                  loading="lazy"
+                  width="48"
+                  height="48"
+                  decoding="async"
+                />
                 <p className="font-semibold text-olive-green">{testimonial.name}</p>
               </div>
             </motion.div>

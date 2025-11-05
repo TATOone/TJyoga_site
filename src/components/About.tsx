@@ -31,6 +31,9 @@ const About: React.FC = () => {
               alt={ IMAGES.about.alt}
               className="w-full h-auto rounded-lg shadow-lg"
               loading="lazy"
+              width="800"
+              height="600"
+              decoding="async"
             />
           </motion.div>
           <motion.div

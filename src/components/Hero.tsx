@@ -12,6 +12,9 @@ const Hero: React.FC = () => {
         className="absolute inset-0 w-full h-full object-cover opacity-40"
         loading="eager"
         fetchPriority="high"
+        width="1920"
+        height="1080"
+        decoding="async"
       />
       <div className="relative z-10 text-center px-4 max-w-4xl">
         <motion.h1
