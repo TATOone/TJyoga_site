@@ -12,6 +12,9 @@ const Footer: React.FC = () => {
           <div className="text-center md:text-right">
             <p className="mb-2">Telegram: <a href="https://t.me/starovoitovae" className="text-golden-sandy hover:underline">@starovoitovae</a></p>
             <p className="mb-2">Канал: <a href="https://t.me/TJyoga" className="text-golden-sandy hover:underline">TJ Yoga Channel</a></p>
+            <p className="text-gray-brown text-sm mb-2">
+              <a href="#disclaimer" className="text-golden-sandy hover:underline">Отказ от ответственности</a>
+            </p>
             <p className="text-gray-brown">© 2025 TJ Yoga. Все права защищены</p>
           </div>
         </div>
