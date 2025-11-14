@@ -16,6 +16,7 @@ export const IMAGES = {
     personal: "https://i.imgur.com/3O3wkme.jpeg",
   },
   blog: {
+    // Изображения для блога о йоге - философия и практика
     preview1: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     preview2: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   },

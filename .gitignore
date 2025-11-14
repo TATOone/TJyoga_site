@@ -48,3 +48,10 @@ coverage
 
 # OS files
 Thumbs.db
+
+# Lighthouse CI reports
+.lighthouseci/
+lhci-report/
+
+# Puppeteer cache
+.puppeteer-cache/

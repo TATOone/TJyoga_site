@@ -18,7 +18,7 @@ export default defineConfig({
         manualChunks: {
           // Разделяем большие библиотеки в отдельные чанки
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-ui': ['@radix-ui/themes', 'framer-motion'],
+          'vendor-ui': ['framer-motion'],
           'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
           'vendor-utils': ['react-toastify', 'lucide-react'],
         },

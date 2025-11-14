@@ -50,14 +50,23 @@ const Header: React.FC = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-light-text/90 backdrop-blur-sm shadow-sm">
       <nav id="navigation" className="container mx-auto px-4 py-4 flex justify-between items-center" role="navigation" aria-label="Главная навигация">
-        <motion.h1
-          className="text-2xl font-bold text-terracotta"
+        <motion.a
+          href="#hero"
+          className="flex items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
+          aria-label="TJ yoga - перейти на главную"
         >
-          TJ Yoga
-        </motion.h1>
+          <img
+            src="/images/logo/tjyoga-logo.svg"
+            alt="TJ yoga logo"
+            className="h-10 md:h-12 w-auto"
+            width="200"
+            height="50"
+            loading="eager"
+          />
+        </motion.a>
         
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6">

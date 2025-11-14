@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="200" viewBox="0 0 800 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TJ yoga logo">
+  <title>TJ yoga logo</title>
+  <desc>Stylized lotus/mandala emblem with TJ yoga wordmark in terracotta</desc>
+  
+  <!-- Emblem: stylized lotus/mandala with ornate patterns -->
+  <g transform="translate(100,100)">
+    <!-- Central circle -->
+    <circle r="12" fill="#C85C3C" stroke="#A04A33" stroke-width="2"/>
+    
+    <!-- Inner petals layer (6) -->
+    <g fill="none" stroke="#C85C3C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0 -50 C 12 -35, 12 -20, 0 -5 C -12 -20, -12 -35, 0 -50"/>
+      <path d="M43.3 -25 C 30 -15, 20 -5, 0 -5 C 15 -8, 25 -12, 43.3 -25"/>
+      <path d="M43.3 25 C 30 15, 20 5, 0 5 C 15 8, 25 12, 43.3 25"/>
+      <path d="M0 50 C 12 35, 12 20, 0 5 C -12 20, -12 35, 0 50"/>
+      <path d="M-43.3 25 C -30 15, -20 5, 0 5 C -15 8, -25 12, -43.3 25"/>
+      <path d="M-43.3 -25 C -30 -15, -20 -5, 0 -5 C -15 -8, -25 -12, -43.3 -25"/>
+    </g>
+    
+    <!-- Outer ornate layer with curved extensions -->
+    <g fill="none" stroke="#C85C3C" stroke-width="3.5" stroke-linecap="round">
+      <!-- Top elements (crown-like) -->
+      <path d="M0 -60 Q -8 -75, -18 -85 Q -25 -88, -30 -85"/>
+      <path d="M0 -60 Q 8 -75, 18 -85 Q 25 -88, 30 -85"/>
+      
+      <!-- Side elements -->
+      <path d="M50 -30 Q 65 -25, 75 -15 Q 78 -10, 75 -5"/>
+      <path d="M50 30 Q 65 25, 75 15 Q 78 10, 75 5"/>
+      <path d="M-50 -30 Q -65 -25, -75 -15 Q -78 -10, -75 -5"/>
+      <path d="M-50 30 Q -65 25, -75 15 Q -78 10, -75 5"/>
+      
+      <!-- Bottom elements -->
+      <path d="M0 60 Q -8 75, -18 85 Q -25 88, -30 85"/>
+      <path d="M0 60 Q 8 75, 18 85 Q 25 88, 30 85"/>
+    </g>
+    
+    <!-- Decorative arcs connecting elements -->
+    <g fill="none" stroke="#A04A33" stroke-width="2" opacity="0.6">
+      <path d="M-30 -85 A50 50 0 0 1 30 -85"/>
+      <path d="M75 -5 A50 50 0 0 1 75 5"/>
+      <path d="M-75 -5 A50 50 0 0 1 -75 5"/>
+      <path d="M-30 85 A50 50 0 0 1 30 85"/>
+    </g>
+  </g>
+  
+  <!-- Wordmark: TJ yoga (soft humanist, TJ uppercase, yoga lowercase) -->
+  <g transform="translate(220,100)" aria-label="TJ yoga wordmark">
+    <text x="0" y="0" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans'" font-size="64" font-weight="600" fill="#C85C3C" letter-spacing="2">
+      <tspan font-weight="700">TJ</tspan>
+      <tspan> yoga</tspan>
+    </text>
+  </g>
+</svg>
