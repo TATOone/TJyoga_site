@@ -5,18 +5,30 @@ import { analyticsEvents } from '../utils/analytics';
 
 
 const Hero: React.FC = () => {
+  const [imageError, setImageError] = React.useState(false);
+
   return (
     <section id="hero" className="relative h-screen flex items-center justify-center bg-cream">
-      <img
-        src={IMAGES.hero.main}
-        alt={IMAGES.hero.alt}
-        className="absolute inset-0 w-full h-full object-cover opacity-40"
-        loading="eager"
-        fetchPriority="high"
-        width="1920"
-        height="1080"
-        decoding="async"
-      />
+      {!imageError && (
+        <img
+          src={IMAGES.hero.main}
+          alt={IMAGES.hero.alt}
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          loading="eager"
+          fetchPriority="high"
+          width="1920"
+          height="1080"
+          decoding="async"
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            console.error('Hero image failed to load:', IMAGES.hero.main);
+            setImageError(true);
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+          }}
+        />
+      )}
       <div className="relative z-10 text-center px-4 max-w-4xl">
         <motion.h1
           className="text-4xl md:text-6xl font-bold text-dark-brown mb-4"

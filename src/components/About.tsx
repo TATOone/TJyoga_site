@@ -27,13 +27,20 @@ const About: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <img
-              src={ IMAGES.about.teachers }
-              alt={ IMAGES.about.alt}
+              src={IMAGES.about.teachers}
+              alt={IMAGES.about.alt}
               className="w-full h-auto rounded-lg shadow-lg"
               loading="lazy"
               width="800"
               height="600"
               decoding="async"
+              crossOrigin="anonymous"
+              referrerPolicy="no-referrer"
+              onError={(e) => {
+                console.error('About image failed to load:', IMAGES.about.teachers);
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
             />
           </motion.div>
           <motion.div
