@@ -11,18 +11,19 @@ export const IMAGES = {
     alt: 'Женя Старовойтова и Тим - основатели TJ Yoga'
   },
   services: {
-    onlineClub: "https://i.imgur.com/LRxChic.jpeg",
-    retreat: "https://i.imgur.com/CkHdHdV.jpeg",
-    personal: "https://i.imgur.com/3O3wkme.jpeg",
+    onlineClub: "/images/services-online-club.jpg",
+    retreat: "/images/services-retreat.jpg",
+    personal: "/images/services-personal.jpg",
   },
   blog: {
     // Изображения для блога о йоге - философия и практика
-    preview1: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    preview2: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    preview1: "/images/blog-preview1.jpg",
+    preview2: "/images/blog-preview2.jpg",
   },
   testimonials: {
-    student1: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-    student2: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-    student3: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+    // Используются локальные изображения из /images/testimonials/
+    student1: "/images/testimonials/ekaterina.jpg",
+    student2: "/images/testimonials/natalya.jpg",
+    student3: "/images/testimonials/yulia.jpg",
   }
 } as const;
