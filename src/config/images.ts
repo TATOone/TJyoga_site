@@ -3,11 +3,11 @@
 
 export const IMAGES = {
   hero: {
-    main: "https://i.imgur.com/2uwQXeS.jpeg",
+    main: "/images/hero-main.jpg",
     alt: 'TJ Yoga - Женя и Тим, преподаватели классической хатха йоги'
   },
   about: {
-    teachers: "https://i.imgur.com/h0EvQaf.jpeg",
+    teachers: "/images/about-teachers.jpg",
     alt: 'Женя Старовойтова и Тим - основатели TJ Yoga'
   },
   services: {
