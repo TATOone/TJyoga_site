@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Предотвращаем горизонтальный скролл при push-эффекте меню */
+body {
+  overflow-x: hidden;
+}
+
 /* Accessibility: Skip Links */
 .sr-only {
   position: absolute;

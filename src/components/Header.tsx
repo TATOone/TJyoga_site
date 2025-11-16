@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { MobileMenuContext } from '../../App';
 
 const Header: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isMobileMenuOpen, setIsMobileMenuOpen } = useContext(MobileMenuContext);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -83,91 +85,84 @@ const Header: React.FC = () => {
           ))}
         </ul>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-dark-brown p-2 focus:outline-none focus:ring-2 focus:ring-olive-green focus:ring-offset-2 rounded"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
-          aria-expanded={isMobileMenuOpen}
-        >
-          {isMobileMenuOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
+        {/* Mobile Menu Button - скрываем когда меню открыто */}
+        {!isMobileMenuOpen && (
+          <button
+            className="md:hidden text-dark-brown p-2 focus:outline-none focus:ring-2 focus:ring-olive-green focus:ring-offset-2 rounded"
+            onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Открыть меню"
+            aria-expanded={false}
+          >
             <Menu className="w-6 h-6" />
-          )}
-        </button>
+          </button>
+        )}
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="fixed inset-0 bg-dark-brown/50 backdrop-blur-sm z-40 md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-hidden="true"
-            />
+      {/* Mobile Menu Panel - rendered via portal to body */}
+      {createPortal(
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+              <motion.div
+                className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-cream shadow-2xl border-l-4 border-light-sandy z-[9999] md:hidden"
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              >
+                <div className="flex flex-col h-full justify-between p-8 pt-20 bg-cream">
+                  {/* Close button */}
+                  <button
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="absolute top-6 right-6 text-dark-brown p-2 focus:outline-none focus:ring-2 focus:ring-olive-green rounded-full hover:bg-light-sandy/50 transition-colors z-10"
+                    aria-label="Закрыть меню"
+                  >
+                    <X className="w-7 h-7" />
+                  </button>
 
-            {/* Menu Panel */}
-            <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-xs bg-gradient-to-b from-cream via-light-text to-light-sandy shadow-2xl border-l border-light-sandy z-50 md:hidden"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
-            >
-              <div className="flex flex-col h-full pt-20 px-6 pb-10 overflow-y-auto">
-                <div className="mb-8 text-left">
-                  <p className="text-sm uppercase tracking-[0.25em] text-gray-brown mb-2">TJ Yoga</p>
-                  <p className="text-2xl font-semibold text-dark-brown leading-tight">
-                    Практикуй осознанно
-                  </p>
-                  <p className="text-gray-brown mt-3 text-sm">
-                    Онлайн-клуб, ретриты и персональные занятия для твоей внутренней опоры.
-                  </p>
-                </div>
-                <ul className="flex flex-col space-y-3">
-                  {menuItems.map((item, index) => (
-                    <motion.li
-                      key={item.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
+                  {/* Navigation */}
+                  <nav className="flex-1 flex flex-col justify-center">
+                    <ul className="space-y-4">
+                      {menuItems.map((item) => (
+                        <li key={item.id}>
+                          <button
+                            onClick={() => scrollToSection(item.id)}
+                            className="w-full text-left text-dark-brown hover:text-olive-green transition-colors duration-300 py-3 text-xl font-medium focus:outline-none focus:ring-2 focus:ring-olive-green rounded-lg"
+                            aria-label={`Перейти к разделу ${item.label}`}
+                          >
+                            {item.label}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+
+                  {/* CTA Buttons */}
+                  <div className="space-y-3 mt-8">
+                    <a
+                      href="https://t.me/your_channel"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full bg-terracotta text-white text-center py-3.5 rounded-lg font-medium hover:bg-terracotta/90 transition-colors shadow-md"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <button
-                        onClick={() => scrollToSection(item.id)}
-                        className="w-full text-left text-dark-brown hover:text-olive-green transition-colors duration-300 py-3 border-b border-light-sandy/70 focus:outline-none focus:ring-2 focus:ring-olive-green focus:ring-offset-2 rounded px-2 bg-white/40 backdrop-blur-sm"
-                        aria-label={`Перейти к разделу ${item.label}`}
-                      >
-                        {item.label}
-                      </button>
-                    </motion.li>
-                  ))}
-                </ul>
-                <div className="mt-8 space-y-3">
-                  <a
-                    href="https://t.me/TJyoga"
-                    className="block w-full text-center bg-terracotta text-light-text py-3 rounded-lg font-semibold shadow-md hover:bg-golden-sandy transition-colors"
-                  >
-                    Вступить в клуб
-                  </a>
-                  <a
-                    href="https://t.me/starovoitovae"
-                    className="block w-full text-center border border-terracotta text-terracotta py-3 rounded-lg font-semibold hover:bg-cream transition-colors"
-                  >
-                    Написать Жене
-                  </a>
+                      Присоединиться к клубу
+                    </a>
+                    <a
+                      href="https://t.me/your_channel"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full border-2 border-terracotta text-terracotta text-center py-3.5 rounded-lg font-medium hover:bg-terracotta/10 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Написать Жене
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </header>
   );
 };
