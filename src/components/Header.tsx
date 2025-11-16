@@ -115,14 +115,23 @@ const Header: React.FC = () => {
 
             {/* Menu Panel */}
             <motion.div
-              className="fixed top-0 right-0 bottom-0 w-64 bg-light-text shadow-xl z-50 md:hidden"
+              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-xs bg-gradient-to-b from-cream via-light-text to-light-sandy shadow-2xl border-l border-light-sandy z-50 md:hidden"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
             >
-              <div className="flex flex-col h-full pt-20 px-6">
-                <ul className="flex flex-col space-y-4">
+              <div className="flex flex-col h-full pt-20 px-6 pb-10 overflow-y-auto">
+                <div className="mb-8 text-left">
+                  <p className="text-sm uppercase tracking-[0.25em] text-gray-brown mb-2">TJ Yoga</p>
+                  <p className="text-2xl font-semibold text-dark-brown leading-tight">
+                    Практикуй осознанно
+                  </p>
+                  <p className="text-gray-brown mt-3 text-sm">
+                    Онлайн-клуб, ретриты и персональные занятия для твоей внутренней опоры.
+                  </p>
+                </div>
+                <ul className="flex flex-col space-y-3">
                   {menuItems.map((item, index) => (
                     <motion.li
                       key={item.id}
@@ -132,7 +141,7 @@ const Header: React.FC = () => {
                     >
                       <button
                         onClick={() => scrollToSection(item.id)}
-                        className="w-full text-left text-dark-brown hover:text-olive-green transition-colors duration-300 py-3 border-b border-light-sandy focus:outline-none focus:ring-2 focus:ring-olive-green focus:ring-offset-2 rounded px-2"
+                        className="w-full text-left text-dark-brown hover:text-olive-green transition-colors duration-300 py-3 border-b border-light-sandy/70 focus:outline-none focus:ring-2 focus:ring-olive-green focus:ring-offset-2 rounded px-2 bg-white/40 backdrop-blur-sm"
                         aria-label={`Перейти к разделу ${item.label}`}
                       >
                         {item.label}
@@ -140,6 +149,20 @@ const Header: React.FC = () => {
                     </motion.li>
                   ))}
                 </ul>
+                <div className="mt-8 space-y-3">
+                  <a
+                    href="https://t.me/TJyoga"
+                    className="block w-full text-center bg-terracotta text-light-text py-3 rounded-lg font-semibold shadow-md hover:bg-golden-sandy transition-colors"
+                  >
+                    Вступить в клуб
+                  </a>
+                  <a
+                    href="https://t.me/starovoitovae"
+                    className="block w-full text-center border border-terracotta text-terracotta py-3 rounded-lg font-semibold hover:bg-cream transition-colors"
+                  >
+                    Написать Жене
+                  </a>
+                </div>
               </div>
             </motion.div>
           </>
