@@ -122,8 +122,13 @@ const Header: React.FC = () => {
                   {/* Navigation */}
                   <nav className="flex-1 flex flex-col justify-center">
                     <ul className="space-y-4">
-                      {menuItems.map((item) => (
-                        <li key={item.id}>
+                      {menuItems.map((item, index) => (
+                        <motion.li
+                          key={item.id}
+                          initial={{ opacity: 0, x: 30 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 + index * 0.05, type: 'spring', stiffness: 300 }}
+                        >
                           <button
                             onClick={() => scrollToSection(item.id)}
                             className="w-full text-left text-dark-brown hover:text-olive-green transition-colors duration-300 py-3 text-xl font-medium focus:outline-none focus:ring-2 focus:ring-olive-green rounded-lg"
@@ -131,31 +136,37 @@ const Header: React.FC = () => {
                           >
                             {item.label}
                           </button>
-                        </li>
+                        </motion.li>
                       ))}
                     </ul>
                   </nav>
 
                   {/* CTA Buttons */}
                   <div className="space-y-3 mt-8">
-                    <a
+                    <motion.a
                       href="https://t.me/your_channel"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block w-full bg-terracotta text-white text-center py-3.5 rounded-lg font-medium hover:bg-terracotta/90 transition-colors shadow-md"
                       onClick={() => setIsMobileMenuOpen(false)}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
                     >
                       Присоединиться к клубу
-                    </a>
-                    <a
+                    </motion.a>
+                    <motion.a
                       href="https://t.me/your_channel"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block w-full border-2 border-terracotta text-terracotta text-center py-3.5 rounded-lg font-medium hover:bg-terracotta/10 transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6 }}
                     >
                       Написать Жене
-                    </a>
+                    </motion.a>
                   </div>
                 </div>
               </motion.div>
