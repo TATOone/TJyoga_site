@@ -103,13 +103,13 @@ const Header: React.FC = () => {
         <AnimatePresence>
           {isMobileMenuOpen && (
               <motion.div
-                className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-cream shadow-2xl border-l-4 border-light-sandy z-[9999] md:hidden"
+                className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-cream shadow-2xl border-l-4 border-light-sandy z-[9999] md:hidden overflow-y-auto"
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               >
-                <div className="flex flex-col h-full justify-between p-8 pt-20 bg-cream">
+                <div className="flex flex-col min-h-full justify-between p-8 pt-20 pb-8 bg-cream">
                   {/* Close button */}
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
