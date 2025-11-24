@@ -61,7 +61,7 @@ const Header: React.FC = () => {
           aria-label="TJ yoga - перейти на главную"
         >
           <img
-            src="/images/logo/tjyoga-logo.svg"
+            src="/images/logo/tjyoga-logo-header.png"
             alt="TJ yoga logo"
             className="h-10 md:h-12 w-auto"
             width="200"
