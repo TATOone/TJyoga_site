@@ -61,11 +61,11 @@ const Header: React.FC = () => {
           aria-label="TJ yoga - перейти на главную"
         >
           <img
-            src="/images/logo/tjyoga-logo-header.png"
+            src="/images/logo/full_logo.png"
             alt="TJ yoga logo"
-            className="h-10 md:h-12 w-auto"
-            width="200"
-            height="50"
+            className="h-12 md:h-16 w-auto"
+            width="250"
+            height="64"
             loading="eager"
           />
         </motion.a>
