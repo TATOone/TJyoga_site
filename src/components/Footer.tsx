@@ -12,6 +12,10 @@ const Footer: React.FC = () => {
             <div className="mb-4 md:mb-0">
               <h3 className="text-xl font-bold text-olive-green">TJ Yoga</h3>
               <p className="text-gray-brown">Классическая Хатха Йога школы Патанджали</p>
+              <p className="text-gray-brown text-sm mt-2">
+                Исполнитель: Старовойтова Евгения Викторовна<br />
+                Ассистент: Аблаев Тимур Эдемович
+              </p>
             </div>
             <div className="text-center md:text-right">
               <p className="mb-2">Telegram: <a href="https://t.me/starovoitovae" className="text-golden-sandy hover:underline">@starovoitovae</a></p>
