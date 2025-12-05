@@ -144,7 +144,7 @@ const Header: React.FC = () => {
                   {/* CTA Buttons */}
                   <div className="space-y-3 mt-8">
                     <motion.a
-                      href="https://t.me/TJyoga"
+                      href="https://payform.ru/t5a23mO/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block w-full bg-terracotta text-white text-center py-3.5 rounded-lg font-medium hover:bg-terracotta/90 transition-colors shadow-md"

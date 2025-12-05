@@ -53,12 +53,13 @@ const Hero: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <a
-            href="https://t.me/TJyoga"
+            href="https://payform.ru/t5a23mO/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
             aria-label="Присоединиться к йога-клубу"
             onClick={() => {
               analyticsEvents.ctaClick('Присоединиться к йога-клубу', 'hero');
-              analyticsEvents.telegramClick('TJyoga', 'hero_cta');
             }}
           >
             Присоединиться к йога-клубу

@@ -45,12 +45,13 @@ const CTA: React.FC = () => {
             Написать Жене
           </a>
           <a
-            href="https://t.me/TJyoga"
+            href="https://payform.ru/t5a23mO/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
             aria-label="Присоединиться к клубу"
             onClick={() => {
               analyticsEvents.ctaClick('Присоединиться к клубу', 'cta');
-              analyticsEvents.telegramClick('TJyoga', 'cta_join');
             }}
           >
             Присоединиться к клубу

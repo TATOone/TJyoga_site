@@ -16,7 +16,7 @@ const Services: React.FC = () => {
       description: 'Закрытый Telegram-канал с полным погружением в практику:\n\n • Онлайн-занятия в прямом эфире\n • Библиотека записанных уроков\n • "Йога вне коврика" — работа с умом\n • Знания о йоге из первоисточников\n • Поддержка сообщества практикующих',
       price: '6 000 ₽/месяц',
       button: 'Вступить в клуб',
-      link: 'https://t.me/TJyoga',
+      link: 'https://payform.ru/t5a23mO/',
       image: IMAGES.services.onlineClub
     },
     {
@@ -25,7 +25,7 @@ const Services: React.FC = () => {
       description: 'Погружение в практику в самых красивых уголках мира. Две поездки в год с полным сопровождением, ежедневными занятиями и духовным обновлением.',
       price: 'от 35 000 ₽',
       button: 'Узнать подробности',
-      link: 'https://t.me/starovoitovae',
+      link: 'https://t.me/+uCnk6bfxiZ4wNThi',
       image: IMAGES.services.retreat
     },
     {
@@ -78,13 +78,15 @@ const Services: React.FC = () => {
                 <p className="text-2xl font-bold text-olive-green mb-4">{service.price}</p>
                 <a
                   href={service.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="bg-terracotta text-light-text px-4 py-2 rounded hover:bg-golden-sandy transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta mt-auto"
                   aria-label={service.button}
                   onClick={() => {
                     analyticsEvents.serviceClick(service.title);
                     analyticsEvents.ctaClick(service.button, 'services');
                     if (service.link.includes('t.me')) {
-                      const channel = service.link.includes('TJyoga') ? 'TJyoga' : 'starovoitovae';
+                      const channel = service.link.includes('TJyoga') ? 'TJyoga' : service.link.includes('+uCnk6bfxiZ4wNThi') ? 'TJyoga.trip' : 'starovoitovae';
                       analyticsEvents.telegramClick(channel, `services_${service.title}`);
                     }
                   }}
