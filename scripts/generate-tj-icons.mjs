@@ -40,7 +40,7 @@ async function generateTJIcons() {
     // 2. Генерируем все размеры фавиконок
     console.log('2️⃣  Генерирую фавиконки разных размеров...');
     
-    const faviconSizes = [16, 32, 64, 128];
+    const faviconSizes = [16, 32, 64, 120, 128];
     for (const size of faviconSizes) {
       await sharp(tjSquare)
         .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
@@ -75,7 +75,7 @@ async function generateTJIcons() {
     console.log('\n🎉 Все иконки с буквами TJ успешно созданы!');
     console.log('\n📋 Создано:');
     console.log('   • tj-icon-base.png - базовая TJ иконка');
-    console.log('   • favicon-*.png (16, 32, 64, 128) - фавиконки');
+    console.log('   • favicon-*.png (16, 32, 64, 120, 128) - фавиконки');
     console.log('   • favicon.ico - для браузеров');
     console.log('   • apple-touch-icon.png - для iOS');
     console.log('   • tjyoga-logo-192.png, tjyoga-logo-512.png - для PWA');

@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const projectRoot = path.resolve(__dirname, '..');
-const logoPath = path.join(projectRoot, 'public', 'images', 'logo', 'full_logo.png');
+const logoPath = path.join(projectRoot, 'public', 'images', 'logo', 'exports', 'TJ_cut.png');
 const outputPath = path.join(projectRoot, 'public', 'images', 'og-image.png');
 
 async function generateOGImage() {
@@ -32,9 +32,9 @@ async function generateOGImage() {
       </svg>
     `;
 
-    // Загружаем логотип
+    // Загружаем фавиконку TJ с прозрачным фоном
     const logo = await sharp(logoPath)
-      .resize({ width: 600, height: 400, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .resize({ width: 600, height: 600, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .toBuffer();
 
     // Создаём финальное изображение: фон + логотип по центру
