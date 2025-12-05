@@ -77,22 +77,41 @@
     <!-- Диагностический скрипт для проверки загрузки -->
     <script>
       (function() {
-        var startTime = Date.now();
         var timeout = setTimeout(function() {
           var root = document.getElementById('root');
           var fallback = document.getElementById('loading-fallback');
-          if (fallback && root && !root.querySelector('.react-root')) {
+          // Если fallback всё ещё существует, значит React не загрузился
+          if (fallback && root && fallback.parentNode === root) {
             fallback.innerHTML = '<div style="text-align: center; padding: 2rem; max-width: 600px; margin: 0 auto;"><h1 style="color: #5C4033; margin-bottom: 1rem;">Проблема с загрузкой</h1><p style="color: #5C4033; margin-bottom: 1rem;">JavaScript файлы не загрузились за 10 секунд.</p><p style="color: #5C4033; margin-bottom: 1rem; font-size: 0.9rem;">Попробуйте обновить страницу или связаться с нами:</p><p style="color: #5C4033;"><a href="https://t.me/starovoitovae" style="color: #C85C3C; text-decoration: underline;">Написать в Telegram</a></p></div>';
           }
         }, 10000);
         
-        // Очищаем таймер когда React загрузится
+        // Очищаем таймер когда React загрузится (fallback будет удалён из DOM)
+        function checkReactLoaded() {
+          var fallback = document.getElementById('loading-fallback');
+          // Если fallback удалён, значит React успешно загрузился
+          if (!fallback) {
+            clearTimeout(timeout);
+            return true;
+          }
+          return false;
+        }
+        
+        // Проверяем периодически после загрузки страницы
         window.addEventListener('load', function() {
-          setTimeout(function() {
-            if (document.getElementById('root').querySelector('.react-root') || document.getElementById('root').children.length > 1) {
-              clearTimeout(timeout);
+          // Проверяем сразу и затем каждые 500мс
+          if (checkReactLoaded()) return;
+          
+          var checkInterval = setInterval(function() {
+            if (checkReactLoaded()) {
+              clearInterval(checkInterval);
             }
-          }, 1000);
+          }, 500);
+          
+          // Останавливаем проверку через 15 секунд
+          setTimeout(function() {
+            clearInterval(checkInterval);
+          }, 15000);
         });
       })();
     </script>
