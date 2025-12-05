@@ -49,7 +49,54 @@
     <link rel="canonical" href="https://tjyoga.ru/" />
   </head>
   <body>
-    <div id="root"></div>
+    <noscript>
+      <div style="padding: 2rem; text-align: center; font-family: system-ui, -apple-system, sans-serif;">
+        <h1 style="color: #5C4033; margin-bottom: 1rem;">TJ Yoga</h1>
+        <p style="color: #5C4033; margin-bottom: 1rem;">Для работы сайта необходимо включить JavaScript в настройках браузера.</p>
+        <p style="color: #5C4033;">
+          <a href="https://t.me/TJyoga" style="color: #C85C3C; text-decoration: underline;">Присоединиться к клубу в Telegram</a>
+        </p>
+      </div>
+    </noscript>
+    <div id="root">
+      <!-- Fallback контент на случай медленной загрузки JS -->
+      <div id="loading-fallback" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #F5E6D3; font-family: system-ui, -apple-system, sans-serif;">
+        <div style="text-align: center; padding: 2rem;">
+          <h1 style="color: #5C4033; margin-bottom: 1rem; font-size: 2rem;">TJ Yoga</h1>
+          <p style="color: #5C4033; margin-bottom: 2rem;">Загрузка...</p>
+          <div style="width: 40px; height: 40px; border: 4px solid #C85C3C; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+        </div>
+      </div>
+      <style>
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      </style>
+    </div>
+    
+    <!-- Диагностический скрипт для проверки загрузки -->
+    <script>
+      (function() {
+        var startTime = Date.now();
+        var timeout = setTimeout(function() {
+          var root = document.getElementById('root');
+          var fallback = document.getElementById('loading-fallback');
+          if (fallback && root && !root.querySelector('.react-root')) {
+            fallback.innerHTML = '<div style="text-align: center; padding: 2rem; max-width: 600px; margin: 0 auto;"><h1 style="color: #5C4033; margin-bottom: 1rem;">Проблема с загрузкой</h1><p style="color: #5C4033; margin-bottom: 1rem;">JavaScript файлы не загрузились за 10 секунд.</p><p style="color: #5C4033; margin-bottom: 1rem; font-size: 0.9rem;">Попробуйте обновить страницу или связаться с нами:</p><p style="color: #5C4033;"><a href="https://t.me/starovoitovae" style="color: #C85C3C; text-decoration: underline;">Написать в Telegram</a></p></div>';
+          }
+        }, 10000);
+        
+        // Очищаем таймер когда React загрузится
+        window.addEventListener('load', function() {
+          setTimeout(function() {
+            if (document.getElementById('root').querySelector('.react-root') || document.getElementById('root').children.length > 1) {
+              clearTimeout(timeout);
+            }
+          }, 1000);
+        });
+      })();
+    </script>
+    
     <script type="module" src="/index.tsx"></script>
     
     <!-- Structured Data for SEO -->
@@ -73,11 +120,11 @@
       "founder": [
         {
           "@type": "Person",
-          "name": "Женя Старовойтова"
+          "name": "Старовойтова Евгения"
         },
         {
           "@type": "Person",
-          "name": "Тим"
+          "name": "Аблаев Тимур"
         }
       ]
     }
