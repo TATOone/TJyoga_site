@@ -7,7 +7,7 @@ import { analyticsEvents } from '../utils/analytics';
 import Countdown from './Countdown';
 
 type Service = {
-  icon: JSX.Element;
+  icon: React.ReactElement;
   title: string;
   description: string;
   price: string;
