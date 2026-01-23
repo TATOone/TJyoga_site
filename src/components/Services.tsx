@@ -4,12 +4,26 @@ import { useRef } from 'react';
 import { MessageCircle, Globe, Star } from 'lucide-react';
 import { IMAGES } from '../config/images';
 import { analyticsEvents } from '../utils/analytics';
+import Countdown from './Countdown';
+
+type Service = {
+  icon: JSX.Element;
+  title: string;
+  description: string;
+  price: string;
+  button: string;
+  link: string;
+  image: string;
+  countdownTarget?: Date;
+};
 
 const Services: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
-  const services = [
+  const retreatDate = new Date('2026-04-02T00:00:00+03:00');
+
+  const services: Service[] = [
     {
       icon: <MessageCircle className="w-8 h-8 text-terracotta" />,
       title: 'Онлайн Йога-Клуб',
@@ -26,7 +40,8 @@ const Services: React.FC = () => {
       price: 'от 35 000 ₽',
       button: 'Узнать подробности',
       link: 'https://t.me/+uCnk6bfxiZ4wNThi',
-      image: IMAGES.services.retreat
+      image: IMAGES.services.retreat,
+      countdownTarget: retreatDate,
     },
     {
       icon: <Star className="w-8 h-8 text-olive-green" />,
@@ -74,8 +89,11 @@ const Services: React.FC = () => {
                   {service.icon}
                   <h3 className="text-xl font-semibold text-terracotta ml-2">{service.title}</h3>
                 </div>
-                <p className="text-dark-brown mb-4 flex-grow whitespace-pre-line">{service.description}</p>
-                <p className="text-2xl font-bold text-olive-green mb-4">{service.price}</p>
+                <p className="text-dark-brown mb-2 flex-grow whitespace-pre-line">{service.description}</p>
+                {service.countdownTarget && (
+                  <Countdown targetDate={service.countdownTarget} />
+                )}
+                <p className="text-2xl font-bold text-olive-green mb-4 mt-1">{service.price}</p>
                 <a
                   href={service.link}
                   target="_blank"
