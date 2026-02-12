@@ -39,7 +39,7 @@ const Services: React.FC = () => {
       description: 'Погружение в практику в самых красивых уголках мира. Две поездки в год с полным сопровождением, ежедневными занятиями и духовным обновлением.',
       price: 'от 35 000 ₽',
       button: 'Узнать подробности',
-      link: 'https://t.me/+uCnk6bfxiZ4wNThi',
+      link: 'https://t.me/TJyogatrip/133',
       image: IMAGES.services.retreat,
       countdownTarget: retreatDate,
     },
@@ -104,7 +104,7 @@ const Services: React.FC = () => {
                     analyticsEvents.serviceClick(service.title);
                     analyticsEvents.ctaClick(service.button, 'services');
                     if (service.link.includes('t.me')) {
-                      const channel = service.link.includes('TJyoga') ? 'TJyoga' : service.link.includes('+uCnk6bfxiZ4wNThi') ? 'TJyoga.trip' : 'starovoitovae';
+                      const channel = service.link.includes('TJyogatrip') ? 'TJyogatrip' : service.link.includes('TJyoga') ? 'TJyoga' : 'starovoitovae';
                       analyticsEvents.telegramClick(channel, `services_${service.title}`);
                     }
                   }}
