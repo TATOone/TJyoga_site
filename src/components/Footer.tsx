@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
                   Отказ от ответственности
                 </button>
               </p>
-              <p className="text-gray-brown">© 2025 TJ Yoga. Все права защищены</p>
+              <p className="text-gray-brown">© 2026 TJ Yoga. Все права защищены</p>
             </div>
           </div>
         </div>

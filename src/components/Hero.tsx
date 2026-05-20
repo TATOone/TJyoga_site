@@ -56,7 +56,7 @@ const Hero: React.FC = () => {
             href="https://payform.ru/t5a23mO/"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
+            className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
             aria-label="Присоединиться к йога-клубу"
             onClick={() => {
               analyticsEvents.ctaClick('Присоединиться к йога-клубу', 'hero');
@@ -66,7 +66,7 @@ const Hero: React.FC = () => {
           </a>
           <a
             href="https://t.me/starovoitovae"
-            className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
+            className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
             aria-label="Бесплатная консультация"
             onClick={() => {
               analyticsEvents.ctaClick('Бесплатная консультация', 'hero');

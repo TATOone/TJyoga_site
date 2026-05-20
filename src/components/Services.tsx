@@ -5,6 +5,7 @@ import { MessageCircle, Globe, Star } from 'lucide-react';
 import { IMAGES } from '../config/images';
 import { analyticsEvents } from '../utils/analytics';
 import Countdown from './Countdown';
+import { RETREAT_START } from '../config/retreat';
 
 type Service = {
   icon: React.ReactElement;
@@ -14,14 +15,13 @@ type Service = {
   button: string;
   link: string;
   image: string;
-  countdownTarget?: Date;
+  showCountdown?: boolean;
+  featured?: boolean;
 };
 
 const Services: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-
-  const retreatDate = new Date('2026-04-02T00:00:00+03:00');
 
   const services: Service[] = [
     {
@@ -41,7 +41,8 @@ const Services: React.FC = () => {
       button: 'Узнать подробности',
       link: 'https://t.me/TJyogatrip/133',
       image: IMAGES.services.retreat,
-      countdownTarget: retreatDate,
+      showCountdown: true,
+      featured: true,
     },
     {
       icon: <Star className="w-8 h-8 text-olive-green" />,
@@ -70,7 +71,11 @@ const Services: React.FC = () => {
           {services.map((service, index) => (
             <motion.div
               key={index}
-              className="bg-light-text rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col border border-light-sandy"
+              className={`service-card bg-light-text rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border ${
+                service.featured
+                  ? 'border-terracotta/30 ring-1 ring-terracotta/10 md:-translate-y-1'
+                  : 'border-light-sandy'
+              }`}
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.2 }}
@@ -90,15 +95,15 @@ const Services: React.FC = () => {
                   <h3 className="text-xl font-semibold text-terracotta ml-2">{service.title}</h3>
                 </div>
                 <p className="text-dark-brown mb-2 flex-grow whitespace-pre-line">{service.description}</p>
-                {service.countdownTarget && (
-                  <Countdown targetDate={service.countdownTarget} />
+                {service.showCountdown && (
+                  <Countdown targetDate={RETREAT_START} />
                 )}
                 <p className="text-2xl font-bold text-olive-green mb-4 mt-1">{service.price}</p>
                 <a
                   href={service.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-terracotta text-light-text px-4 py-2 rounded hover:bg-golden-sandy transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta mt-auto"
+                  className="service-card__cta bg-terracotta text-light-text px-4 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta mt-auto min-h-[44px] flex items-center justify-center font-medium"
                   aria-label={service.button}
                   onClick={() => {
                     analyticsEvents.serviceClick(service.title);
