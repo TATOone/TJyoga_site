@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { IMAGES } from '../config/images';
 import { analyticsEvents } from '../utils/analytics';
 
@@ -30,51 +31,66 @@ const Hero: React.FC = () => {
         />
       )}
       <div className="relative z-10 text-center px-4 max-w-4xl">
+        <motion.p
+          className="text-sm md:text-base uppercase tracking-wide text-terracotta font-semibold mb-3"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Йога-Клуб TJ Yoga
+        </motion.p>
         <motion.h1
           className="text-4xl md:text-6xl font-bold text-dark-brown mb-4"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Хатха Йога из первоисточников
+          Регулярная хатха-практика с поддержкой преподавателя
         </motion.h1>
         <motion.p
-          className="text-lg md:text-xl text-dark-brown mb-8"
+          className="text-lg md:text-xl text-dark-brown mb-6"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Древние знания для современной жизни. Онлайн-клуб, ретриты и персональные занятия с семьёй йогов
+          Прямые эфиры в Zoom, библиотека записей, клубные статьи и сообщество — всё в одном доступе
         </motion.p>
+        <motion.ul
+          className="flex flex-wrap justify-center gap-3 mb-8 text-sm md:text-base text-dark-brown"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+        >
+          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">3+ практики в неделю</li>
+          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Zoom без копируемой ссылки</li>
+          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Записи Kinescope</li>
+        </motion.ul>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <a
-            href="https://payform.ru/t5a23mO/"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/club/rates"
             className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
-            aria-label="Присоединиться к йога-клубу"
+            aria-label="Выбрать тариф Йога-Клуба"
             onClick={() => {
-              analyticsEvents.ctaClick('Присоединиться к йога-клубу', 'hero');
+              analyticsEvents.ctaClick('Выбрать тариф', 'hero');
             }}
           >
-            Присоединиться к йога-клубу
-          </a>
-          <a
-            href="https://t.me/starovoitovae"
+            Выбрать тариф
+          </Link>
+          <Link
+            to="/club"
             className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
-            aria-label="Бесплатная консультация"
+            aria-label="Посмотреть, что внутри клуба"
             onClick={() => {
-              analyticsEvents.ctaClick('Бесплатная консультация', 'hero');
-              analyticsEvents.telegramClick('starovoitovae', 'hero_consultation');
+              analyticsEvents.ctaClick('Что внутри клуба', 'hero');
             }}
           >
-            Бесплатная консультация
-          </a>
+            Посмотреть, что внутри
+          </Link>
         </motion.div>
       </div>
     </section>

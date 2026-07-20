@@ -100,5 +100,23 @@ export const analyticsEvents = {
       category: 'engagement',
     });
   },
+
+  // Старт checkout по продукту
+  checkoutStart: (productId: string, source: string) => {
+    trackEvent({
+      action: 'checkout_start',
+      category: 'conversion',
+      label: `${productId}_${source}`,
+    });
+  },
+
+  // Отправка форм
+  formSubmit: (formName: string, source: string) => {
+    trackEvent({
+      action: 'form_submit',
+      category: 'conversion',
+      label: `${formName}_${source}`,
+    });
+  },
 };
 

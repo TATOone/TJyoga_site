@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
+import { usePageMeta } from '../utils/usePageMeta';
 
 const NotFound: React.FC = () => {
+  usePageMeta('notFound');
+
   return (
     <section className="relative flex py-10 min-h-screen items-center justify-center overflow-hidden bg-cream">
       <div className="mx-auto relative z-30 w-full max-w-[600px] text-center px-4">
@@ -155,36 +158,15 @@ const NotFound: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <a
-            href="#hero"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = '/#hero';
-            }}
-            className="text-olive-green hover:text-golden-sandy transition-colors"
-          >
+          <Link to="/" className="text-olive-green hover:text-golden-sandy transition-colors">
             Главная
-          </a>
-          <a
-            href="#services"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = '/#services';
-            }}
-            className="text-olive-green hover:text-golden-sandy transition-colors"
-          >
-            Услуги
-          </a>
-          <a
-            href="#about"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = '/#about';
-            }}
-            className="text-olive-green hover:text-golden-sandy transition-colors"
-          >
-            О нас
-          </a>
+          </Link>
+          <Link to="/club" className="text-olive-green hover:text-golden-sandy transition-colors">
+            Клуб
+          </Link>
+          <Link to="/how-to-buy" className="text-olive-green hover:text-golden-sandy transition-colors">
+            Как купить
+          </Link>
           <a
             href="https://t.me/TJyoga"
             target="_blank"

@@ -2,18 +2,22 @@ import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { MessageCircle, Globe, Star } from 'lucide-react';
-import { IMAGES } from '../config/images';
 import { analyticsEvents } from '../utils/analytics';
 import Countdown from './Countdown';
 import { RETREAT_START } from '../config/retreat';
+import { Link } from 'react-router-dom';
+import { HOME_SERVICE_PRODUCT_IDS, PRODUCTS } from '../config/products';
+import type { ProductId } from '../config/products';
 
 type Service = {
+  id: ProductId;
   icon: React.ReactElement;
   title: string;
   description: string;
   price: string;
   button: string;
   link: string;
+  checkoutPath: string;
   image: string;
   showCountdown?: boolean;
   featured?: boolean;
@@ -23,37 +27,35 @@ const Services: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
-  const services: Service[] = [
-    {
-      icon: <MessageCircle className="w-8 h-8 text-terracotta" />,
-      title: 'Онлайн Йога-Клуб',
-      description: 'Закрытый Telegram-канал с полным погружением в практику:\n\n • Онлайн-занятия в прямом эфире\n • Библиотека записанных уроков\n • "Йога вне коврика" — работа с умом\n • Знания о йоге из первоисточников\n • Поддержка сообщества практикующих',
-      price: '6 000 ₽/месяц',
-      button: 'Вступить в клуб',
-      link: 'https://payform.ru/t5a23mO/',
-      image: IMAGES.services.onlineClub
-    },
-    {
-      icon: <Globe className="w-8 h-8 text-golden-sandy" />,
-      title: 'Йога-Ретриты',
-      description: 'Погружение в практику в самых красивых уголках мира. Две поездки в год с полным сопровождением, ежедневными занятиями и духовным обновлением.',
-      price: 'от 35 000 ₽',
-      button: 'Узнать подробности',
-      link: 'https://t.me/TJyogatrip/133',
-      image: IMAGES.services.retreat,
-      showCountdown: true,
-      featured: true,
-    },
-    {
-      icon: <Star className="w-8 h-8 text-olive-green" />,
-      title: 'Персональные занятия',
-      description: 'Индивидуальный подход с учётом особенностей вашего тела и целей. Глубокая проработка практики один-на-один с Женей.',
-      price: '8 000 ₽/занятие',
-      button: 'Записаться',
-      link: 'https://t.me/starovoitovae',
-      image: IMAGES.services.personal
-    }
-  ];
+  const iconByProduct: Record<ProductId, React.ReactElement> = {
+    'club-monthly': <MessageCircle className="w-8 h-8 text-terracotta" />,
+    'club-yearly': <MessageCircle className="w-8 h-8 text-terracotta" />,
+    'retreat-pass': <Globe className="w-8 h-8 text-golden-sandy" />,
+    'personal-session': <Star className="w-8 h-8 text-olive-green" />,
+  };
+
+  const services: Service[] = HOME_SERVICE_PRODUCT_IDS.map((id) => {
+    const product = PRODUCTS[id];
+
+    return {
+      id: product.id,
+      icon: iconByProduct[id],
+      title: product.title,
+      description: product.details,
+      price: product.priceLabel,
+      button:
+        id === 'club-monthly'
+          ? 'Вступить в клуб'
+          : id === 'retreat-pass'
+            ? 'Смотреть ретриты'
+            : 'Смотреть персональный формат',
+      link: product.primaryPath,
+      checkoutPath: product.checkoutPath,
+      image: product.image,
+      showCountdown: product.showCountdown,
+      featured: product.featured,
+    };
+  });
 
   return (
     <section id="services" className="py-16 bg-light-sandy">
@@ -70,7 +72,7 @@ const Services: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <motion.div
-              key={index}
+              key={service.id}
               className={`service-card bg-light-text rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border ${
                 service.featured
                   ? 'border-terracotta/30 ring-1 ring-terracotta/10 md:-translate-y-1'
@@ -99,23 +101,27 @@ const Services: React.FC = () => {
                   <Countdown targetDate={RETREAT_START} />
                 )}
                 <p className="text-2xl font-bold text-olive-green mb-4 mt-1">{service.price}</p>
-                <a
-                  href={service.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="service-card__cta bg-terracotta text-light-text px-4 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta mt-auto min-h-[44px] flex items-center justify-center font-medium"
-                  aria-label={service.button}
-                  onClick={() => {
-                    analyticsEvents.serviceClick(service.title);
-                    analyticsEvents.ctaClick(service.button, 'services');
-                    if (service.link.includes('t.me')) {
-                      const channel = service.link.includes('TJyogatrip') ? 'TJyogatrip' : service.link.includes('TJyoga') ? 'TJyoga' : 'starovoitovae';
-                      analyticsEvents.telegramClick(channel, `services_${service.title}`);
-                    }
-                  }}
-                >
-                  {service.button}
-                </a>
+                <div className="mt-auto space-y-2">
+                  <Link
+                    to={service.link}
+                    className="service-card__cta bg-terracotta text-light-text px-4 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                    aria-label={service.button}
+                    onClick={() => {
+                      analyticsEvents.serviceClick(service.title);
+                      analyticsEvents.ctaClick(service.button, 'services');
+                    }}
+                  >
+                    {service.button}
+                  </Link>
+                  <Link
+                    to={service.checkoutPath}
+                    className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                    aria-label={`Купить: ${service.title}`}
+                    onClick={() => analyticsEvents.ctaClick(`Купить ${service.title}`, 'services')}
+                  >
+                    Купить
+                  </Link>
+                </div>
               </div>
             </motion.div>
           ))}

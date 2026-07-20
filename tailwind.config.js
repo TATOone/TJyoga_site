@@ -8,18 +8,32 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        inter: ['Inter', 'sans-serif'],
+        display: ['Fraunces', 'Georgia', 'Times New Roman', 'serif'],
+        body: ['"Source Sans 3"', 'Segoe UI', 'system-ui', 'sans-serif'],
+        inter: ['"Source Sans 3"', 'Segoe UI', 'system-ui', 'sans-serif'],
       },
       colors: {
-        'terracotta': '#C85C3C',
-        'golden-sandy': '#D4A574',
-        'olive-green': '#8B956D',
-        'cream': '#F5EFE7',
-        'light-sandy': '#EDE3D5',
-        'light-olive': '#E8EBE0',
-        'dark-brown': '#3D3229',
-        'light-text': '#FFFFFF',
-        'gray-brown': '#736B5E',
+        'terracotta': 'var(--color-terracotta)',
+        'golden-sandy': 'var(--color-golden-sandy)',
+        'olive-green': 'var(--color-olive-green)',
+        'cream': 'var(--color-cream)',
+        'light-sandy': 'var(--color-light-sandy)',
+        'light-olive': 'var(--color-light-olive)',
+        'dark-brown': 'var(--color-dark-brown)',
+        'light-text': 'var(--color-light-text)',
+        'gray-brown': 'var(--color-gray-brown)',
+        danger: 'var(--color-danger)',
+        success: 'var(--color-success)',
+      },
+      borderRadius: {
+        soft: 'var(--radius-md)',
+        card: 'var(--radius-xl)',
+      },
+      minHeight: {
+        touch: 'var(--space-touch)',
+      },
+      boxShadow: {
+        soft: 'var(--shadow-soft)',
       },
     },
   },

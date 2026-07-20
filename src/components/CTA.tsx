@@ -1,11 +1,14 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
 
 const CTA: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const clubCheckoutPath = PRODUCTS['club-monthly'].checkoutPath;
 
   return (
     <section id="cta" className="py-16 bg-cream">
@@ -44,10 +47,8 @@ const CTA: React.FC = () => {
           >
             Написать Жене
           </a>
-          <a
-            href="https://payform.ru/t5a23mO/"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to={clubCheckoutPath}
             className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
             aria-label="Присоединиться к клубу"
             onClick={() => {
@@ -55,7 +56,7 @@ const CTA: React.FC = () => {
             }}
           >
             Присоединиться к клубу
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

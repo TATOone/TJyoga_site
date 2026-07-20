@@ -1,83 +1,89 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { IMAGES } from '../config/images';
+import { SEED_ARTICLES } from '../config/seedContent';
 import { analyticsEvents } from '../utils/analytics';
 
 const Blog: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
-  const posts = [
-    {
-      title: 'Философия йоги',
-      image: IMAGES.blog.preview1
-    },
-    {
-      title: 'Практические советы',
-      image: IMAGES.blog.preview2
-    }
-  ];
+  const publicPosts = SEED_ARTICLES.filter((article) => article.access === 'public').slice(0, 2);
+  const images = [IMAGES.blog.preview1, IMAGES.blog.preview2];
 
   return (
-    <section id="blog" className="py-16 bg-light-text">
+    <section id="blog" className="bg-light-text py-16">
       <div className="container mx-auto px-4">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-center text-dark-brown mb-8"
+          className="mb-4 text-center font-display text-3xl font-bold text-dark-brown md:text-4xl"
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          Изучай йогу глубже
+          Блог
         </motion.h2>
         <motion.p
-          className="text-center text-dark-brown mb-8"
+          className="mx-auto mb-8 max-w-2xl text-center text-dark-brown"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Мы делимся знаниями о йоге, философией и практическими советами в нашем Telegram-канале и блоге.
+          Открытые заметки о практике — как в канале yogaTJ. Углублённые материалы клуба — в разделе
+          «Знания» внутри кабинета.
         </motion.p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {posts.map((post, index) => (
-            <motion.div
-              key={index}
-              className="bg-light-olive p-4 rounded-lg border border-light-sandy"
+        <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2">
+          {publicPosts.map((post, index) => (
+            <motion.article
+              key={post.id}
+              className="rounded-card border border-light-sandy bg-light-olive p-4 shadow-soft"
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.2 }}
             >
-              <img 
-                src={post.image} 
-                alt={post.title} 
-                className="w-full h-32 object-cover rounded mb-4" 
+              <img
+                src={images[index] ?? images[0]}
+                alt={post.title}
+                className="mb-4 h-32 w-full rounded object-cover"
                 loading="lazy"
                 width="800"
                 height="320"
                 decoding="async"
               />
-              <h3 className="text-lg font-semibold text-terracotta">{post.title}</h3>
-            </motion.div>
+              <h3 className="mb-2 font-display text-lg font-semibold text-terracotta">{post.title}</h3>
+              <p className="mb-3 text-sm text-dark-brown">{post.excerpt}</p>
+              <Link
+                to={`/blog/${post.slug}`}
+                className="text-sm font-medium text-olive-green hover:underline"
+                onClick={() => analyticsEvents.ctaClick('blog_article', 'home_blog')}
+              >
+                Читать
+              </Link>
+            </motion.article>
           ))}
         </div>
         <motion.div
-          className="text-center"
+          className="flex flex-col justify-center gap-3 text-center sm:flex-row"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <a
-            href="https://t.me/TJyoga"
-            className="bg-olive-green text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-olive-green"
-            aria-label="Читать о йоге"
-            onClick={() => {
-              analyticsEvents.ctaClick('Читать о йоге', 'blog');
-              analyticsEvents.telegramClick('TJyoga', 'blog');
-            }}
+          <Link
+            to="/blog"
+            className="inline-flex min-h-touch items-center justify-center rounded-soft bg-olive-green px-6 py-3 text-light-text transition-colors hover:bg-golden-sandy"
+            onClick={() => analyticsEvents.ctaClick('Все записи блога', 'home_blog')}
           >
-            Читать о йоге
-          </a>
+            Все записи блога
+          </Link>
+          <Link
+            to="/account/knowledge"
+            className="inline-flex min-h-touch items-center justify-center rounded-soft border border-olive-green px-6 py-3 text-olive-green transition-colors hover:bg-cream"
+            onClick={() => analyticsEvents.ctaClick('Знания клуба', 'home_blog')}
+          >
+            Знания клуба
+          </Link>
         </motion.div>
       </div>
     </section>
