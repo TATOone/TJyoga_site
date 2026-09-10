@@ -1,47 +1,53 @@
-# 11. Deploy runbook (Yandex Cloud / РФ)
+# 11. Deploy runbook (Jino VPS / tjyoga.ru)
 
 ## Цель
 
-Выкатить MVP на российскую инфраструктуру с Postgres и self-host Auth.
+Выкатить MVP на **уже живой** VPS Jino. Production target: https://tjyoga.ru  
+Не Cloudflare и не Yandex Cloud.
 
-## Компоненты
+Пошаговые скрипты, бэкапы и откат: [`docs/ops/jino-vps-deploy.md`](../ops/jino-vps-deploy.md).
 
-1. Frontend (Vite/React) — nginx / CDN на том же домене или `tjyoga.ru`
-2. Backend (Fastify) — `api.tjyoga.ru`
-3. Postgres — managed Yandex Managed PostgreSQL
-4. Self-host Supabase Auth (опционально) или локальный JWT backend
+## Компоненты (факт на сервере)
+
+1. Frontend — nginx root `/var/www/tjyoga/app/dist`
+2. Backend Fastify — `127.0.0.1:8787`, pm2, nginx проксирует `/api/` и `/health`
+3. Postgres — подключается через `DATABASE_URL` в серверном `.env` (не в git). Пока URL нет, эта ветка не должна стартовать с `NODE_ENV=production`
+4. Auth — текущий self-host JWT; Supabase опционален
 
 ## Перед deploy
 
-1. Применить миграции (`DATABASE_URL=... npm run migrate` из `backend/`):
-   - `backend/db/migrations/001_stage3_foundation.sql`
-   - `backend/db/migrations/002_stage4_checkout.sql`
-   - `backend/db/migrations/003_stage5_content_admin.sql`
-   - `backend/db/migrations/004_stage6_postgres_store.sql`
-   Backend с заданным `DATABASE_URL` также применяет их при старте.
-2. Заполнить env backend:
-   - `NODE_ENV=production`
+1. Inspect: `./scripts/jino/inspect.sh` (нужен `JINO_SSH_PRIVATE_KEY`).
+2. Frontend: `VITE_API_BASE_URL=https://tjyoga.ru/api/v1` (same-origin, не `api.tjyoga.ru`).
+3. Backend env на сервере (файл `.env`, chmod 600), не в репозитории:
+   - `NODE_ENV=production` только вместе с `DATABASE_URL`
    - `AUTH_DEV_BYPASS_ENABLED=false`
-   - `DATABASE_URL=...`
-   - `PRODAMUS_STUB_ENABLED=false`
-   - `PRODAMUS_PAYFORM_URL`, `PRODAMUS_PAYFORM_SECRET`, `PRODAMUS_WEBHOOK_SECRET`
-   - `KINESCOPE_AUTH_SECRET`
-   - `ZOOM_ROOM_MAIN_URL`
-   - `SUPABASE_JWT_SECRET` (+ issuer/audience)
-3. Frontend:
-   - `VITE_API_BASE_URL=https://api.tjyoga.ru/api/v1`
-4. Заменить `OPERATOR_INFO.inn` в `src/config/legalDocuments.ts` на фактический ИНН.
-5. Добавить реальные Kinescope video IDs через `/admin`.
+   - `APP_ALLOWED_ORIGINS=https://tjyoga.ru`
+   - Prodamus / Kinescope / Zoom / JWT secrets как сейчас на сервере
+4. Миграции при наличии `DATABASE_URL`: `npm run migrate` в cwd backend **или** авто-apply на старте Postgres-store (`001`–`004`).
+5. Не копировать GitHub Pages workflow: он не деплоит этот VPS.
+
+## Команды
+
+```bash
+./scripts/jino/inspect.sh
+./scripts/jino/deploy.sh --frontend
+# backend только после inspect и DATABASE_URL / безопасного NODE_ENV:
+./scripts/jino/deploy.sh --backend
+```
+
+Релизы: `/var/www/tjyoga/releases/{frontend,backend}/<stamp>`  
+Бэкапы: `/var/www/tjyoga/backups/*-<stamp>.tgz`
 
 ## Smoke после выкладки
 
-1. `GET /health`
-2. Регистрация → login → checkout session
-3. Тестовая оплата Prodamus → webhook → `/auth/me` показывает active
-4. `/account` → Zoom JSON redirect → видео/статьи
-5. `/admin` под admin-ролью
+1. `GET https://tjyoga.ru/health`
+2. `GET https://tjyoga.ru/api/v1`
+3. Регистрация → login → checkout session (если платежный контур включён)
+4. Кабинет / Zoom JSON redirect / статьи
+5. При Postgres: повторный webhook не дублирует оплату
 
 ## Бэкапы
 
-- Ежедневный snapshot Postgres
-- Хранить webhook secrets и JWT secret вне git
+- Перед каждой выкладкой скрипт пишет tar в `/var/www/tjyoga/backups`
+- Не трогать `/var/www/tjyoga/uploads`
+- Секреты и JWT/webhook только в `.env` на диске VPS

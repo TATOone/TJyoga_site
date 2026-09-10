@@ -124,45 +124,13 @@ backend/
 - Запрет кэширования для endpoint'ов авторизации (`Cache-Control: no-store`).
 - Логи решений доступа для Kinescope/Zoom.
 
-## Yandex Cloud deploy checklist (production scaffold)
+## Jino VPS (боевой контур)
 
-> Этот шаг не делает реальный деплой, только готовит production-ready scaffold и runbook.
+Живой сайт: https://tjyoga.ru. Канон: `docs/ops/jino-vps-deploy.md` и `docs/mvp/11-deploy-runbook.md`.
 
-### 1. Containerization и runtime
+- nginx отдаёт `/var/www/tjyoga/app/dist`, `/api/` и `/health` → `127.0.0.1:8787`
+- Выкладка: `./scripts/jino/inspect.sh`, затем `./scripts/jino/deploy.sh --frontend` / `--backend`
+- `DATABASE_URL` только в серверном `.env` (chmod 600). При `NODE_ENV=production` без URL эта сборка не стартует
+- Миграции: `npm run migrate` на VPS или авто-apply при старте Postgres-store
 
-- [ ] Добавить `Dockerfile` и healthcheck на `/health`.
-- [ ] Подготовить запуск через YC Serverless Containers или Managed Kubernetes.
-- [ ] Включить graceful shutdown и readiness probe.
-
-### 2. Data layer
-
-- [x] Реализовать `PostgresBackendStore` по контракту `BackendStore`.
-- [ ] Подключить Managed PostgreSQL в Yandex Cloud.
-- [x] Применить миграции из `db/migrations` (`npm run migrate` или авто-migrate на старте).
-- [ ] Бэкапы/restore drill на managed Postgres.
-
-### 3. Auth и секреты
-
-- [ ] Подключить self-host Supabase Auth (GoTrue + Postgres).
-- [ ] Настроить JWT verify через реальные `iss/aud`.
-- [ ] Хранить секреты в YC Lockbox/Secret Manager.
-- [ ] Включить регулярную ротацию секретов.
-
-### 4. Observability
-
-- [ ] Отправка JSON-логов в централизованное хранилище.
-- [ ] Метрики latency/error-rate для webhook/kinescope/zoom.
-- [ ] Алерты по SLA (webhook 5xx, zoom 5xx, video auth 5xx).
-
-### 5. Networking и hardening
-
-- [ ] TLS termination + только HTTPS.
-- [ ] Ограничить CORS production-доменами.
-- [ ] Настроить WAF/rate-limits на ingress.
-- [ ] Ограничить доступ к admin endpoint'ам.
-
-### 6. Release process
-
-- [ ] Stage/prod окружения с независимыми секретами.
-- [ ] CI: lint + tests + build + migration checks.
-- [ ] Rollback план и runbook инцидентов.
+GitHub Pages и Yandex Cloud — не текущий production.
