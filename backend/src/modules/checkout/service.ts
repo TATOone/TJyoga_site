@@ -38,7 +38,7 @@ export const createCheckoutSession = async (params: {
   payload: CheckoutSessionRequest;
 }): Promise<{ statusCode: 200 | 201; body: CheckoutSessionResponse; isReplay: boolean }> => {
   const requestHash = hashRequestBody(params.payload);
-  const existing = params.store.getIdempotencyRecord(params.idempotencyKey);
+  const existing = await params.store.getIdempotencyRecord(params.idempotencyKey);
 
   if (existing) {
     if (isIdempotencyExpired(existing.expiresAt)) {
@@ -63,12 +63,12 @@ export const createCheckoutSession = async (params: {
 
   validateConsents(params.payload.accept_consents);
 
-  const user = params.store.getUserById(params.userId);
+  const user = await params.store.getUserById(params.userId);
   if (!user) {
     throw new ApiError('UNAUTHORIZED', 'Пользователь не найден');
   }
 
-  params.store.saveUserConsents(
+  await params.store.saveUserConsents(
     params.payload.accept_consents.map((consent) => ({
       userId: params.userId,
       docType: consent.doc_type,
@@ -89,7 +89,7 @@ export const createCheckoutSession = async (params: {
     returnUrlError: params.payload.return_url_error,
   });
 
-  const order = params.store.createOrder({
+  const order = await params.store.createOrder({
     userId: params.userId,
     planCode: plan.code,
     amountRub: plan.amountRub,
@@ -107,7 +107,7 @@ export const createCheckoutSession = async (params: {
     expires_at: paymentLink.expiresAt,
   };
 
-  params.store.saveIdempotencyRecord({
+  await params.store.saveIdempotencyRecord({
     key: params.idempotencyKey,
     requestHash,
     responseBody: responseBody as unknown as Record<string, unknown>,
@@ -116,7 +116,7 @@ export const createCheckoutSession = async (params: {
     expiresAt: buildIdempotencyExpiry(),
   });
 
-  params.store.saveAudit({
+  await params.store.saveAudit({
     actorUserId: params.userId,
     actorRole: user.role,
     action: 'checkout_session_created',
@@ -140,11 +140,11 @@ export const createCheckoutSession = async (params: {
   };
 };
 
-export const getCheckoutOrderStatus = (
+export const getCheckoutOrderStatus = async (
   store: BackendStore,
   orderId: string,
   userId: string,
-): {
+): Promise<{
   order_id: string;
   status: string;
   plan_code: string;
@@ -153,13 +153,13 @@ export const getCheckoutOrderStatus = (
   payment_url: string | null;
   expires_at: string | null;
   subscription_status: string | null;
-} => {
-  const order = store.getOrderById(orderId);
+}> => {
+  const order = await store.getOrderById(orderId);
   if (!order || order.userId !== userId) {
     throw new ApiError('NOT_FOUND', 'Заказ не найден');
   }
 
-  const subscription = store.getSubscriptionByUserId(userId);
+  const subscription = await store.getSubscriptionByUserId(userId);
 
   return {
     order_id: order.id,

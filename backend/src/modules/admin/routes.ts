@@ -44,39 +44,51 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
   };
 
   app.get('/admin/overview', adminGuard, async (request) => {
+    const [users, subscriptions, orders, payments, videos, articles] = await Promise.all([
+      app.store.listUsers(),
+      app.store.listSubscriptions(),
+      app.store.listOrders(),
+      app.store.listPayments(),
+      app.store.listVideos({ includeDrafts: true }),
+      app.store.listArticles({ includeDrafts: true }),
+    ]);
+
     return success(request, {
-      users_count: app.store.listUsers().length,
-      subscriptions_count: app.store.listSubscriptions().length,
-      orders_count: app.store.listOrders().length,
-      payments_count: app.store.listPayments().length,
-      videos_count: app.store.listVideos({ includeDrafts: true }).length,
-      articles_count: app.store.listArticles({ includeDrafts: true }).length,
+      users_count: users.length,
+      subscriptions_count: subscriptions.length,
+      orders_count: orders.length,
+      payments_count: payments.length,
+      videos_count: videos.length,
+      articles_count: articles.length,
       plans: Object.values(PLAN_CATALOG),
     });
   });
 
   app.get('/admin/users', adminGuard, async (request) => {
-    const users = app.store.listUsers().map((user) => {
-      const subscription = app.store.getSubscriptionByUserId(user.id);
-      return {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        status: user.status,
-        subscription: subscription
-          ? {
-              status: subscription.status,
-              plan_code: subscription.planCode,
-              ends_at: subscription.endsAt,
-            }
-          : null,
-      };
-    });
-    return success(request, { users });
+    const users = await app.store.listUsers();
+    const payload = await Promise.all(
+      users.map(async (user) => {
+        const subscription = await app.store.getSubscriptionByUserId(user.id);
+        return {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          status: user.status,
+          subscription: subscription
+            ? {
+                status: subscription.status,
+                plan_code: subscription.planCode,
+                ends_at: subscription.endsAt,
+              }
+            : null,
+        };
+      }),
+    );
+    return success(request, { users: payload });
   });
 
   app.get('/admin/subscriptions', adminGuard, async (request) => {
-    const subscriptions = app.store.listSubscriptions().map((item) => ({
+    const subscriptions = (await app.store.listSubscriptions()).map((item) => ({
       id: item.id,
       user_id: item.userId,
       plan_code: item.planCode,
@@ -97,12 +109,16 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
     async (request) => {
       const payload = extendSubscriptionSchema.parse(request.body);
       const auth = request.auth;
-      const updated = app.store.extendSubscription(payload.user_id, payload.ends_at, auth?.userId ?? null);
+      const updated = await app.store.extendSubscription(
+        payload.user_id,
+        payload.ends_at,
+        auth?.userId ?? null,
+      );
       if (!updated) {
         throw new ApiError('NOT_FOUND', 'Подписка пользователя не найдена');
       }
 
-      app.store.saveAudit({
+      await app.store.saveAudit({
         actorUserId: auth?.userId ?? null,
         actorRole: auth?.role ?? 'system',
         action: 'subscription.extend',
@@ -129,7 +145,7 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
 
   app.get('/admin/videos', adminGuard, async (request) => {
     return success(request, {
-      videos: app.store.listVideos({ includeDrafts: true }).map((video) => ({
+      videos: (await app.store.listVideos({ includeDrafts: true })).map((video) => ({
         id: video.id,
         kinescope_id: video.kinescopeId,
         title: video.title,
@@ -146,7 +162,7 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
   app.post('/admin/videos', adminGuard, async (request, reply) => {
     const payload = videoUpsertSchema.parse(request.body);
     const now = new Date().toISOString();
-    const video = app.store.upsertVideo({
+    const video = await app.store.upsertVideo({
       id: payload.id ?? randomUUID(),
       kinescopeId: payload.kinescope_id,
       title: payload.title,
@@ -164,7 +180,7 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
 
   app.get('/admin/articles', adminGuard, async (request) => {
     return success(request, {
-      articles: app.store.listArticles({ includeDrafts: true }).map((article) => ({
+      articles: (await app.store.listArticles({ includeDrafts: true })).map((article) => ({
         id: article.id,
         slug: article.slug,
         title: article.title,
@@ -180,7 +196,7 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
   app.post('/admin/articles', adminGuard, async (request, reply) => {
     const payload = articleUpsertSchema.parse(request.body);
     const now = new Date().toISOString();
-    const article = app.store.upsertArticle({
+    const article = await app.store.upsertArticle({
       id: payload.id ?? randomUUID(),
       slug: payload.slug,
       title: payload.title,
@@ -197,7 +213,7 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
   });
 
   app.get('/admin/zoom', adminGuard, async (request) => {
-    const link = app.store.getActiveZoomLink('main');
+    const link = await app.store.getActiveZoomLink('main');
     return success(request, {
       room: 'main',
       link: link
@@ -219,10 +235,10 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
     },
     async (request) => {
       const payload = zoomUpsertSchema.parse(request.body);
-      const link = app.store.upsertZoomLink(payload.room, payload.target_url, payload.status);
+      const link = await app.store.upsertZoomLink(payload.room, payload.target_url, payload.status);
       const auth = request.auth;
 
-      app.store.saveAudit({
+      await app.store.saveAudit({
         actorUserId: auth?.userId ?? null,
         actorRole: auth?.role ?? 'system',
         action: 'zoom.upsert',
@@ -249,7 +265,7 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
 
   app.get('/admin/orders', adminGuard, async (request) => {
     return success(request, {
-      orders: app.store.listOrders().map((order) => ({
+      orders: (await app.store.listOrders()).map((order) => ({
         id: order.id,
         user_id: order.userId,
         plan_code: order.planCode,

@@ -4,7 +4,7 @@ const now = '2026-06-11T10:00:00.000Z';
 
 export const SEED_VIDEOS: VideoRecord[] = [
   {
-    id: 'vid-practice-1',
+    id: '11111111-1111-4111-8111-111111111001',
     kinescopeId: 'demo-practice-morning',
     title: 'Утренняя хатха: мягкий старт',
     description: '60 минут практики для пробуждения тела и внимания.',
@@ -16,7 +16,7 @@ export const SEED_VIDEOS: VideoRecord[] = [
     updatedAt: now,
   },
   {
-    id: 'vid-practice-2',
+    id: '11111111-1111-4111-8111-111111111002',
     kinescopeId: 'demo-practice-evening',
     title: 'Вечернее восстановление',
     description: 'Практика на снятие напряжения и подготовку ко сну.',
@@ -28,7 +28,7 @@ export const SEED_VIDEOS: VideoRecord[] = [
     updatedAt: now,
   },
   {
-    id: 'vid-seminar-1',
+    id: '11111111-1111-4111-8111-111111111003',
     kinescopeId: 'demo-seminar-alignment',
     title: 'Семинар: выравнивание в асанах',
     description: 'Разбор ключевых точек внимания в базовых асанах.',
@@ -40,7 +40,7 @@ export const SEED_VIDEOS: VideoRecord[] = [
     updatedAt: now,
   },
   {
-    id: 'vid-philosophy-1',
+    id: '11111111-1111-4111-8111-111111111004',
     kinescopeId: 'demo-philosophy-yoga-sutra',
     title: 'Йога-сутры: введение',
     description: 'Короткий разбор базовых понятий из первоисточников.',
@@ -55,7 +55,7 @@ export const SEED_VIDEOS: VideoRecord[] = [
 
 export const SEED_ARTICLES: ArticleRecord[] = [
   {
-    id: 'art-open-1',
+    id: '22222222-2222-4222-8222-222222222001',
     slug: 'kak-nachat-praktikovat',
     title: 'Как начать практиковать хатха-йогу дома',
     excerpt: 'Простые шаги для регулярной практики без перегруза.',
@@ -67,7 +67,7 @@ export const SEED_ARTICLES: ArticleRecord[] = [
     updatedAt: now,
   },
   {
-    id: 'art-tech-1',
+    id: '22222222-2222-4222-8222-222222222002',
     slug: 'dyhanie-v-asane',
     title: 'Дыхание в асане: базовые ориентиры',
     excerpt: 'Клубный материал о связи дыхания и устойчивости в практике.',
@@ -79,7 +79,7 @@ export const SEED_ARTICLES: ArticleRecord[] = [
     updatedAt: now,
   },
   {
-    id: 'art-life-1',
+    id: '22222222-2222-4222-8222-222222222003',
     slug: 'yoga-vne-kovrika',
     title: 'Йога вне коврика: внимание в быту',
     excerpt: 'Как перенести качество практики в повседневные действия.',
@@ -91,7 +91,7 @@ export const SEED_ARTICLES: ArticleRecord[] = [
     updatedAt: now,
   },
   {
-    id: 'art-news-1',
+    id: '22222222-2222-4222-8222-222222222004',
     slug: 'raspisanie-iyun',
     title: 'Расписание клуба: ориентиры июня',
     excerpt: 'Ближайшие практики и семинары для участников клуба.',

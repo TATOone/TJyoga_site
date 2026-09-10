@@ -13,10 +13,12 @@
 
 ## Перед deploy
 
-1. Применить миграции:
+1. Применить миграции (`DATABASE_URL=... npm run migrate` из `backend/`):
    - `backend/db/migrations/001_stage3_foundation.sql`
    - `backend/db/migrations/002_stage4_checkout.sql`
    - `backend/db/migrations/003_stage5_content_admin.sql`
+   - `backend/db/migrations/004_stage6_postgres_store.sql`
+   Backend с заданным `DATABASE_URL` также применяет их при старте.
 2. Заполнить env backend:
    - `NODE_ENV=production`
    - `AUTH_DEV_BYPASS_ENABLED=false`

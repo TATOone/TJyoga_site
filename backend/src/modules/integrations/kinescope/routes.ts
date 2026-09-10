@@ -37,7 +37,7 @@ export const kinescopeRoutes: FastifyPluginAsync = async (app) => {
         });
       }
 
-      const user = app.store.getUserById(payload.user_id);
+      const user = await app.store.getUserById(payload.user_id);
       if (!user) {
         throw new ApiError('FORBIDDEN', 'Пользователь не найден');
       }
@@ -52,7 +52,7 @@ export const kinescopeRoutes: FastifyPluginAsync = async (app) => {
         });
       }
 
-      const subscription = app.store.getSubscriptionByUserId(user.id);
+      const subscription = await app.store.getSubscriptionByUserId(user.id);
       const decision = evaluateSubscriptionAccess(subscription, env.SUBSCRIPTION_GRACE_HOURS);
       const allowed = decision.allowed;
 

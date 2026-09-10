@@ -31,7 +31,13 @@ const envSchema = z.object({
   PRODAMUS_API_KEY_TEST: z.string().optional(),
   PRODAMUS_API_KEY_LIVE: z.string().optional(),
 
-  DATABASE_URL: z.string().optional(),
+  DATABASE_URL: z
+    .string()
+    .optional()
+    .transform((value) => {
+      const trimmed = value?.trim();
+      return trimmed ? trimmed : undefined;
+    }),
 
   KINESCOPE_AUTH_SECRET: z.string().default('dev-kinescope-auth-secret'),
   ZOOM_REDIRECT_ENCRYPTION_KEY: z.string().default('dev-zoom-encryption-key-32-chars'),

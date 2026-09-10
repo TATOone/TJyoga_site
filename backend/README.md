@@ -11,10 +11,11 @@ Backend для MVP-платформы TJ Yoga: auth, checkout/Prodamus, каби
 - Zoom redirect (`?format=json` для SPA)
 - Kinescope authorization backend
 - Admin API: overview, users, videos, articles, zoom, extend subscription
-- Migrations: `001`, `002`, `003` (Postgres-ready; runtime пока in-memory fallback)
-- Tests: foundation + checkout + content/admin
+- Persistence: Postgres при `DATABASE_URL`, иначе in-memory fallback (local/dev/tests)
+- Migrations: `001`–`004` в `db/migrations` (источник правды схемы; применяются при старте Postgres-store и через `npm run migrate`)
+- Tests: foundation + checkout + content/admin + Postgres store (если задан `POSTGRES_TEST_URL`)
 
-## Локальный запуск
+## Локальный запуск без БД
 
 ```bash
 cd backend
@@ -23,7 +24,39 @@ cp .env.example .env
 npm run dev
 ```
 
-Backend стартует на `http://localhost:8787` (если не переопределено в `.env`).
+Backend стартует на `http://localhost:8787` (если не переопределено в `.env`). Без `DATABASE_URL` используется in-memory store с демо-пользователями.
+
+## Локальный запуск с Postgres
+
+```bash
+cd backend
+docker compose up -d
+# в .env:
+# DATABASE_URL=postgres://tjyoga:tjyoga@127.0.0.1:5432/tjyoga
+npm run migrate   # идемпотентно; при старте backend миграции тоже применяются
+npm run dev
+```
+
+В production `DATABASE_URL` обязателен: in-memory туда не поднимается.
+
+### Миграции
+
+Схема живёт только в `db/migrations/*.sql`. Порядок:
+
+1. `001_stage3_foundation.sql`
+2. `002_stage4_checkout.sql`
+3. `003_stage5_content_admin.sql`
+4. `004_stage6_postgres_store.sql` — `users.password_hash`, уникальность согласий и 1:1 subscription/user
+
+Применить:
+
+```bash
+DATABASE_URL=postgres://... npm run migrate
+```
+
+Либо просто стартовать backend с `DATABASE_URL` — `buildStore` прогоняет миграции сам.
+
+Для Managed PostgreSQL нужны права на `CREATE EXTENSION` (`pgcrypto`, `citext`).
 
 ## Проверка endpoint'ов локально
 
@@ -50,14 +83,22 @@ curl -i http://localhost:8787/health
 
 Нужна авторизация. При активной подписке вернется `302`, без доступа — `403 SUBSCRIPTION_REQUIRED`.
 
-## Dev users в in-memory store
+## Dev users (in-memory и Postgres вне production)
 
 | Role | Email | Password | UUID |
 |------|-------|----------|------|
 | student | student@example.com | `student-demo-pass` | `00000000-0000-4000-8000-000000000002` |
 | admin | admin@example.com | `admin-demo-pass` | `00000000-0000-4000-8000-000000000001` |
 
-Только для локальной отладки. В production `AUTH_DEV_BYPASS_ENABLED=false`.
+Только для локальной отладки. В production `AUTH_DEV_BYPASS_ENABLED=false`, демо-пользователи не сидируются.
+
+## Тесты
+
+```bash
+cd backend
+npm test                          # in-memory + skip Postgres, если нет POSTGRES_TEST_URL
+POSTGRES_TEST_URL=postgres://tjyoga:tjyoga@127.0.0.1:5432/tjyoga_test npm test
+```
 
 ## Структура backend
 
@@ -72,6 +113,7 @@ backend/
     persistence/
   db/migrations/
   tests/
+  docker-compose.yml
 ```
 
 ## Security baseline (foundation)
@@ -94,9 +136,10 @@ backend/
 
 ### 2. Data layer
 
-- [ ] Подключить Managed PostgreSQL.
-- [ ] Применить миграции из `db/migrations`.
-- [ ] Перевести `InMemoryBackendStore` на реальный repository слой (SQL/ORM).
+- [x] Реализовать `PostgresBackendStore` по контракту `BackendStore`.
+- [ ] Подключить Managed PostgreSQL в Yandex Cloud.
+- [x] Применить миграции из `db/migrations` (`npm run migrate` или авто-migrate на старте).
+- [ ] Бэкапы/restore drill на managed Postgres.
 
 ### 3. Auth и секреты
 

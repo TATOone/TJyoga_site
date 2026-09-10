@@ -18,6 +18,16 @@ import type {
 import { PLAN_CATALOG } from '../config/plans.js';
 import { SEED_ARTICLES, SEED_VIDEOS } from '../config/seedContent.js';
 import { hashPassword, verifyPassword } from '../security/password.js';
+import { addDays } from './dates.js';
+import {
+  DEMO_ADMIN_EMAIL,
+  DEMO_ADMIN_ID,
+  DEMO_ADMIN_PASSWORD,
+  DEMO_PROVIDER_ORDER_ID,
+  DEMO_STUDENT_EMAIL,
+  DEMO_STUDENT_ID,
+  DEMO_STUDENT_PASSWORD,
+} from './demo.js';
 
 export interface RecordPaymentEventInput {
   dedupKey: string;
@@ -59,9 +69,9 @@ export interface SaveConsentInput {
 }
 
 export interface BackendStore {
-  getUserById(userId: string): UserRecord | null;
-  getUserByEmail(email: string): UserRecord | null;
-  createUser(input: CreateUserInput): UserRecord;
+  getUserById(userId: string): Promise<UserRecord | null>;
+  getUserByEmail(email: string): Promise<UserRecord | null>;
+  createUser(input: CreateUserInput): Promise<UserRecord>;
   saveLocalCredentials(userId: string, password: string): Promise<void>;
   verifyLocalCredentials(
     userId: string,
@@ -69,56 +79,65 @@ export interface BackendStore {
   ): Promise<{ ok: boolean; needsRehash: boolean }>;
   rehashLocalCredentials(userId: string, password: string): Promise<void>;
 
-  getSubscriptionByUserId(userId: string): SubscriptionRecord | null;
-  getOrderById(orderId: string): OrderRecord | null;
-  getOrderByProviderOrderId(providerOrderId: string): OrderRecord | null;
-  createOrder(input: CreateOrderInput): OrderRecord;
-  getConsentByUserId(userId: string): ConsentRecord[];
-  saveUserConsents(inputs: SaveConsentInput[]): ConsentRecord[];
-  getActiveZoomLink(room: string): ZoomLinkRecord | null;
-  upsertZoomLink(room: string, targetUrl: string, status?: ZoomLinkRecord['status']): ZoomLinkRecord;
+  getSubscriptionByUserId(userId: string): Promise<SubscriptionRecord | null>;
+  getOrderById(orderId: string): Promise<OrderRecord | null>;
+  getOrderByProviderOrderId(providerOrderId: string): Promise<OrderRecord | null>;
+  createOrder(input: CreateOrderInput): Promise<OrderRecord>;
+  getConsentByUserId(userId: string): Promise<ConsentRecord[]>;
+  saveUserConsents(inputs: SaveConsentInput[]): Promise<ConsentRecord[]>;
+  getActiveZoomLink(room: string): Promise<ZoomLinkRecord | null>;
+  upsertZoomLink(
+    room: string,
+    targetUrl: string,
+    status?: ZoomLinkRecord['status'],
+  ): Promise<ZoomLinkRecord>;
 
-  listVideos(options?: { includeDrafts?: boolean }): VideoRecord[];
-  getVideoById(videoId: string): VideoRecord | null;
-  upsertVideo(video: Omit<VideoRecord, 'updatedAt'> & { updatedAt?: string }): VideoRecord;
+  listVideos(options?: { includeDrafts?: boolean }): Promise<VideoRecord[]>;
+  getVideoById(videoId: string): Promise<VideoRecord | null>;
+  upsertVideo(video: Omit<VideoRecord, 'updatedAt'> & { updatedAt?: string }): Promise<VideoRecord>;
 
-  listArticles(options?: { includeDrafts?: boolean; access?: ArticleRecord['access'] }): ArticleRecord[];
-  getArticleBySlug(slug: string): ArticleRecord | null;
-  upsertArticle(article: Omit<ArticleRecord, 'updatedAt'> & { updatedAt?: string }): ArticleRecord;
+  listArticles(
+    options?: { includeDrafts?: boolean; access?: ArticleRecord['access'] },
+  ): Promise<ArticleRecord[]>;
+  getArticleBySlug(slug: string): Promise<ArticleRecord | null>;
+  upsertArticle(
+    article: Omit<ArticleRecord, 'updatedAt'> & { updatedAt?: string },
+  ): Promise<ArticleRecord>;
 
-  listUsers(): UserRecord[];
-  listSubscriptions(): SubscriptionRecord[];
-  listOrders(): OrderRecord[];
-  listPayments(): PaymentRecord[];
+  listUsers(): Promise<UserRecord[]>;
+  listSubscriptions(): Promise<SubscriptionRecord[]>;
+  listOrders(): Promise<OrderRecord[]>;
+  listPayments(): Promise<PaymentRecord[]>;
   extendSubscription(
     userId: string,
     endsAtIso: string,
     actorUserId: string | null,
-  ): SubscriptionRecord | null;
+  ): Promise<SubscriptionRecord | null>;
 
-  getIdempotencyRecord(key: string): IdempotencyRecord | null;
-  saveIdempotencyRecord(record: IdempotencyRecord): IdempotencyRecord;
+  getIdempotencyRecord(key: string): Promise<IdempotencyRecord | null>;
+  saveIdempotencyRecord(record: IdempotencyRecord): Promise<IdempotencyRecord>;
 
-  saveRefreshToken(record: Omit<RefreshTokenRecord, 'revokedAt' | 'createdAt'>): RefreshTokenRecord;
-  getRefreshToken(token: string): RefreshTokenRecord | null;
-  revokeRefreshToken(token: string): RefreshTokenRecord | null;
+  saveRefreshToken(
+    record: Omit<RefreshTokenRecord, 'revokedAt' | 'createdAt'>,
+  ): Promise<RefreshTokenRecord>;
+  getRefreshToken(token: string): Promise<RefreshTokenRecord | null>;
+  revokeRefreshToken(token: string): Promise<RefreshTokenRecord | null>;
 
-  recordPaymentEvent(input: RecordPaymentEventInput): RecordPaymentEventResult;
-  markOrderPaid(orderId: string): OrderRecord | null;
-  upsertSubscriptionForOrder(order: OrderRecord, paidAtIso: string): SubscriptionRecord;
-  savePayment(record: Omit<PaymentRecord, 'id' | 'createdAt' | 'updatedAt'>): PaymentRecord;
+  recordPaymentEvent(input: RecordPaymentEventInput): Promise<RecordPaymentEventResult>;
+  markOrderPaid(orderId: string): Promise<OrderRecord | null>;
+  upsertSubscriptionForOrder(order: OrderRecord, paidAtIso: string): Promise<SubscriptionRecord>;
+  savePayment(record: Omit<PaymentRecord, 'id' | 'createdAt' | 'updatedAt'>): Promise<PaymentRecord>;
   saveSubscriptionEvent(
     record: Omit<SubscriptionEventRecord, 'id' | 'createdAt'>,
-  ): SubscriptionEventRecord;
-  saveAudit(record: Omit<AuditRecord, 'id' | 'createdAt'>): AuditRecord;
-  saveZoomRedirectLog(record: Omit<ZoomRedirectLogRecord, 'id' | 'createdAt'>): ZoomRedirectLogRecord;
-}
+  ): Promise<SubscriptionEventRecord>;
+  saveAudit(record: Omit<AuditRecord, 'id' | 'createdAt'>): Promise<AuditRecord>;
+  saveZoomRedirectLog(
+    record: Omit<ZoomRedirectLogRecord, 'id' | 'createdAt'>,
+  ): Promise<ZoomRedirectLogRecord>;
 
-const addDays = (dateIso: string, days: number): string => {
-  const date = new Date(dateIso);
-  date.setUTCDate(date.getUTCDate() + days);
-  return date.toISOString();
-};
+  runInTransaction<T>(fn: (store: BackendStore) => Promise<T>): Promise<T>;
+  close(): Promise<void>;
+}
 
 export class InMemoryBackendStore implements BackendStore {
   private readonly users = new Map<string, UserRecord>();
@@ -149,8 +168,8 @@ export class InMemoryBackendStore implements BackendStore {
     }
 
     const demoStudent: UserRecord = {
-      id: '00000000-0000-4000-8000-000000000002',
-      email: 'student@example.com',
+      id: DEMO_STUDENT_ID,
+      email: DEMO_STUDENT_EMAIL,
       role: 'student',
       status: 'active',
       createdAt: now,
@@ -158,8 +177,8 @@ export class InMemoryBackendStore implements BackendStore {
     };
 
     const demoAdmin: UserRecord = {
-      id: '00000000-0000-4000-8000-000000000001',
-      email: 'admin@example.com',
+      id: DEMO_ADMIN_ID,
+      email: DEMO_ADMIN_EMAIL,
       role: 'admin',
       status: 'active',
       createdAt: now,
@@ -177,7 +196,7 @@ export class InMemoryBackendStore implements BackendStore {
       planCode: 'club-month',
       amountRub: 600000,
       status: 'pending_payment',
-      providerOrderId: 'order_abc',
+      providerOrderId: DEMO_PROVIDER_ORDER_ID,
       idempotencyKey: null,
       paymentUrl: null,
       paymentExpiresAt: null,
@@ -228,11 +247,11 @@ export class InMemoryBackendStore implements BackendStore {
     ]);
   }
 
-  public getUserById(userId: string): UserRecord | null {
+  public async getUserById(userId: string): Promise<UserRecord | null> {
     return this.users.get(userId) ?? null;
   }
 
-  public getUserByEmail(email: string): UserRecord | null {
+  public async getUserByEmail(email: string): Promise<UserRecord | null> {
     const userId = this.usersByEmail.get(email.trim().toLowerCase());
     if (!userId) {
       return null;
@@ -240,7 +259,7 @@ export class InMemoryBackendStore implements BackendStore {
     return this.users.get(userId) ?? null;
   }
 
-  public createUser(input: CreateUserInput): UserRecord {
+  public async createUser(input: CreateUserInput): Promise<UserRecord> {
     const now = new Date().toISOString();
     const user: UserRecord = {
       id: input.id ?? randomUUID(),
@@ -275,15 +294,15 @@ export class InMemoryBackendStore implements BackendStore {
     await this.saveLocalCredentials(userId, password);
   }
 
-  public getSubscriptionByUserId(userId: string): SubscriptionRecord | null {
+  public async getSubscriptionByUserId(userId: string): Promise<SubscriptionRecord | null> {
     return this.subscriptions.get(userId) ?? null;
   }
 
-  public getOrderById(orderId: string): OrderRecord | null {
+  public async getOrderById(orderId: string): Promise<OrderRecord | null> {
     return this.orders.get(orderId) ?? null;
   }
 
-  public getOrderByProviderOrderId(providerOrderId: string): OrderRecord | null {
+  public async getOrderByProviderOrderId(providerOrderId: string): Promise<OrderRecord | null> {
     for (const order of this.orders.values()) {
       if (order.providerOrderId === providerOrderId) {
         return order;
@@ -292,7 +311,7 @@ export class InMemoryBackendStore implements BackendStore {
     return null;
   }
 
-  public createOrder(input: CreateOrderInput): OrderRecord {
+  public async createOrder(input: CreateOrderInput): Promise<OrderRecord> {
     const now = new Date().toISOString();
     const order: OrderRecord = {
       id: randomUUID(),
@@ -312,11 +331,11 @@ export class InMemoryBackendStore implements BackendStore {
     return order;
   }
 
-  public getConsentByUserId(userId: string): ConsentRecord[] {
+  public async getConsentByUserId(userId: string): Promise<ConsentRecord[]> {
     return this.consentsByUser.get(userId) ?? [];
   }
 
-  public saveUserConsents(inputs: SaveConsentInput[]): ConsentRecord[] {
+  public async saveUserConsents(inputs: SaveConsentInput[]): Promise<ConsentRecord[]> {
     const saved: ConsentRecord[] = [];
 
     for (const input of inputs) {
@@ -337,7 +356,7 @@ export class InMemoryBackendStore implements BackendStore {
     return saved;
   }
 
-  public getActiveZoomLink(room: string): ZoomLinkRecord | null {
+  public async getActiveZoomLink(room: string): Promise<ZoomLinkRecord | null> {
     const link = this.zoomLinksByRoom.get(room);
     if (!link || link.status !== 'active') {
       return null;
@@ -345,11 +364,11 @@ export class InMemoryBackendStore implements BackendStore {
     return link;
   }
 
-  public upsertZoomLink(
+  public async upsertZoomLink(
     room: string,
     targetUrl: string,
     status: ZoomLinkRecord['status'] = 'active',
-  ): ZoomLinkRecord {
+  ): Promise<ZoomLinkRecord> {
     const existing = this.zoomLinksByRoom.get(room);
     const next: ZoomLinkRecord = {
       id: existing?.id ?? randomUUID(),
@@ -362,17 +381,17 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public listVideos(options: { includeDrafts?: boolean } = {}): VideoRecord[] {
+  public async listVideos(options: { includeDrafts?: boolean } = {}): Promise<VideoRecord[]> {
     return [...this.videos.values()]
       .filter((video) => options.includeDrafts || video.status === 'published')
       .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
   }
 
-  public getVideoById(videoId: string): VideoRecord | null {
+  public async getVideoById(videoId: string): Promise<VideoRecord | null> {
     return this.videos.get(videoId) ?? null;
   }
 
-  public upsertVideo(video: Omit<VideoRecord, 'updatedAt'> & { updatedAt?: string }): VideoRecord {
+  public async upsertVideo(video: Omit<VideoRecord, 'updatedAt'> & { updatedAt?: string }): Promise<VideoRecord> {
     const next: VideoRecord = {
       ...video,
       updatedAt: video.updatedAt ?? new Date().toISOString(),
@@ -381,16 +400,16 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public listArticles(
+  public async listArticles(
     options: { includeDrafts?: boolean; access?: ArticleRecord['access'] } = {},
-  ): ArticleRecord[] {
+  ): Promise<ArticleRecord[]> {
     return [...this.articles.values()]
       .filter((article) => options.includeDrafts || article.status === 'published')
       .filter((article) => !options.access || article.access === options.access)
       .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
   }
 
-  public getArticleBySlug(slug: string): ArticleRecord | null {
+  public async getArticleBySlug(slug: string): Promise<ArticleRecord | null> {
     for (const article of this.articles.values()) {
       if (article.slug === slug) {
         return article;
@@ -399,9 +418,9 @@ export class InMemoryBackendStore implements BackendStore {
     return null;
   }
 
-  public upsertArticle(
+  public async upsertArticle(
     article: Omit<ArticleRecord, 'updatedAt'> & { updatedAt?: string },
-  ): ArticleRecord {
+  ): Promise<ArticleRecord> {
     const next: ArticleRecord = {
       ...article,
       updatedAt: article.updatedAt ?? new Date().toISOString(),
@@ -410,27 +429,27 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public listUsers(): UserRecord[] {
+  public async listUsers(): Promise<UserRecord[]> {
     return [...this.users.values()].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   }
 
-  public listSubscriptions(): SubscriptionRecord[] {
+  public async listSubscriptions(): Promise<SubscriptionRecord[]> {
     return [...this.subscriptions.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   }
 
-  public listOrders(): OrderRecord[] {
+  public async listOrders(): Promise<OrderRecord[]> {
     return [...this.orders.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 
-  public listPayments(): PaymentRecord[] {
+  public async listPayments(): Promise<PaymentRecord[]> {
     return [...this.payments.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 
-  public extendSubscription(
+  public async extendSubscription(
     userId: string,
     endsAtIso: string,
     actorUserId: string | null,
-  ): SubscriptionRecord | null {
+  ): Promise<SubscriptionRecord | null> {
     const existing = this.subscriptions.get(userId);
     if (!existing) {
       return null;
@@ -445,7 +464,7 @@ export class InMemoryBackendStore implements BackendStore {
       updatedAt: new Date().toISOString(),
     };
     this.subscriptions.set(userId, next);
-    this.saveSubscriptionEvent({
+    await this.saveSubscriptionEvent({
       subscriptionId: next.id,
       eventType: 'renewed',
       actorType: actorUserId ? 'admin' : 'system',
@@ -455,7 +474,7 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public getIdempotencyRecord(key: string): IdempotencyRecord | null {
+  public async getIdempotencyRecord(key: string): Promise<IdempotencyRecord | null> {
     const record = this.idempotencyRecords.get(key);
     if (!record) {
       return null;
@@ -469,12 +488,12 @@ export class InMemoryBackendStore implements BackendStore {
     return record;
   }
 
-  public saveIdempotencyRecord(record: IdempotencyRecord): IdempotencyRecord {
+  public async saveIdempotencyRecord(record: IdempotencyRecord): Promise<IdempotencyRecord> {
     this.idempotencyRecords.set(record.key, record);
     return record;
   }
 
-  public saveRefreshToken(record: Omit<RefreshTokenRecord, 'revokedAt' | 'createdAt'>): RefreshTokenRecord {
+  public async saveRefreshToken(record: Omit<RefreshTokenRecord, 'revokedAt' | 'createdAt'>): Promise<RefreshTokenRecord> {
     const next: RefreshTokenRecord = {
       ...record,
       revokedAt: null,
@@ -484,11 +503,11 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public getRefreshToken(token: string): RefreshTokenRecord | null {
+  public async getRefreshToken(token: string): Promise<RefreshTokenRecord | null> {
     return this.refreshTokens.get(token) ?? null;
   }
 
-  public revokeRefreshToken(token: string): RefreshTokenRecord | null {
+  public async revokeRefreshToken(token: string): Promise<RefreshTokenRecord | null> {
     const existing = this.refreshTokens.get(token);
     if (!existing) {
       return null;
@@ -502,7 +521,7 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public recordPaymentEvent(input: RecordPaymentEventInput): RecordPaymentEventResult {
+  public async recordPaymentEvent(input: RecordPaymentEventInput): Promise<RecordPaymentEventResult> {
     const existingEvent = this.paymentEventsByDedupKey.get(input.dedupKey);
     if (existingEvent) {
       return {
@@ -531,7 +550,7 @@ export class InMemoryBackendStore implements BackendStore {
     };
   }
 
-  public markOrderPaid(orderId: string): OrderRecord | null {
+  public async markOrderPaid(orderId: string): Promise<OrderRecord | null> {
     const order = this.orders.get(orderId);
     if (!order) {
       return null;
@@ -546,7 +565,7 @@ export class InMemoryBackendStore implements BackendStore {
     return updatedOrder;
   }
 
-  public upsertSubscriptionForOrder(order: OrderRecord, paidAtIso: string): SubscriptionRecord {
+  public async upsertSubscriptionForOrder(order: OrderRecord, paidAtIso: string): Promise<SubscriptionRecord> {
     const existing = this.subscriptions.get(order.userId);
     const plan = PLAN_CATALOG[order.planCode];
     const durationDays = plan?.durationDays ?? 30;
@@ -569,7 +588,7 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public savePayment(record: Omit<PaymentRecord, 'id' | 'createdAt' | 'updatedAt'>): PaymentRecord {
+  public async savePayment(record: Omit<PaymentRecord, 'id' | 'createdAt' | 'updatedAt'>): Promise<PaymentRecord> {
     const now = new Date().toISOString();
     const next: PaymentRecord = {
       ...record,
@@ -581,9 +600,9 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public saveSubscriptionEvent(
+  public async saveSubscriptionEvent(
     record: Omit<SubscriptionEventRecord, 'id' | 'createdAt'>,
-  ): SubscriptionEventRecord {
+  ): Promise<SubscriptionEventRecord> {
     const next: SubscriptionEventRecord = {
       ...record,
       id: randomUUID(),
@@ -593,7 +612,7 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public saveAudit(record: Omit<AuditRecord, 'id' | 'createdAt'>): AuditRecord {
+  public async saveAudit(record: Omit<AuditRecord, 'id' | 'createdAt'>): Promise<AuditRecord> {
     const next: AuditRecord = {
       ...record,
       id: randomUUID(),
@@ -603,7 +622,7 @@ export class InMemoryBackendStore implements BackendStore {
     return next;
   }
 
-  public saveZoomRedirectLog(record: Omit<ZoomRedirectLogRecord, 'id' | 'createdAt'>): ZoomRedirectLogRecord {
+  public async saveZoomRedirectLog(record: Omit<ZoomRedirectLogRecord, 'id' | 'createdAt'>): Promise<ZoomRedirectLogRecord> {
     const next: ZoomRedirectLogRecord = {
       ...record,
       id: randomUUID(),
@@ -612,11 +631,19 @@ export class InMemoryBackendStore implements BackendStore {
     this.zoomRedirectLogs.push(next);
     return next;
   }
+
+  public async runInTransaction<T>(fn: (store: BackendStore) => Promise<T>): Promise<T> {
+    return fn(this);
+  }
+
+  public async close(): Promise<void> {
+    return;
+  }
 }
 
 export const buildInMemoryStore = async (): Promise<BackendStore> => {
   const store = new InMemoryBackendStore();
-  await store.saveLocalCredentials('00000000-0000-4000-8000-000000000002', 'student-demo-pass');
-  await store.saveLocalCredentials('00000000-0000-4000-8000-000000000001', 'admin-demo-pass');
+  await store.saveLocalCredentials(DEMO_STUDENT_ID, DEMO_STUDENT_PASSWORD);
+  await store.saveLocalCredentials(DEMO_ADMIN_ID, DEMO_ADMIN_PASSWORD);
   return store;
 };

@@ -35,11 +35,11 @@ export const zoomAccessRoutes: FastifyPluginAsync = async (app) => {
       const params = zoomParamsSchema.parse(request.params);
       const query = querySchema.parse(request.query);
 
-      const subscription = app.store.getSubscriptionByUserId(auth.userId);
+      const subscription = await app.store.getSubscriptionByUserId(auth.userId);
       const accessDecision = evaluateSubscriptionAccess(subscription, env.SUBSCRIPTION_GRACE_HOURS);
 
       if (!accessDecision.allowed) {
-        app.store.saveZoomRedirectLog({
+        await app.store.saveZoomRedirectLog({
           userId: auth.userId,
           zoomLinkId: null,
           room: params.room,
@@ -56,14 +56,14 @@ export const zoomAccessRoutes: FastifyPluginAsync = async (app) => {
         });
       }
 
-      const zoomLink = app.store.getActiveZoomLink(params.room);
+      const zoomLink = await app.store.getActiveZoomLink(params.room);
       if (!zoomLink) {
         throw new ApiError('NOT_FOUND', 'Активная Zoom-комната не найдена', {
           room: params.room,
         });
       }
 
-      app.store.saveZoomRedirectLog({
+      await app.store.saveZoomRedirectLog({
         userId: auth.userId,
         zoomLinkId: zoomLink.id,
         room: params.room,
