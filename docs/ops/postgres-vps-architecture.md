@@ -9,10 +9,10 @@
 
 | Ресурс | Наблюдение |
 |---|---|
-| RAM | 1.5GiB, swap 0. Занято ~260Mi idle, available ~1.2Gi |
-| Диск | ~9.8G, занято ~37% (~5.9G свободно). Ранее звучало «70% / shedule-bot ~1GB» — сейчас Docker images/containers **0**. Не удалять чужие приложения «на всякий случай». |
-| Node | pm2 `tjyoga-api`, cwd `/var/www/tjyoga/app/backend`, `dist/server.js`, `max_memory_restart: 350M`, uptime процесса был ~20 суток |
-| `.env` | `DATABASE_URL` задан (localhost), `NODE_ENV=production`. В **окружении старого процесса** URL не было: dotenv читается только при старте → живой API до cutover — in-memory |
+| RAM | 1.5GiB, swap 0. После cutover ~230Mi used, available ~1.3Gi |
+| Диск | ~9.8G, занято ~37% (~5.9G свободно). Docker-стек `shedule-bot` / образ `shedule-reminder-bot` **снят с разрешения оператора** (~+1GiB). Контейнеры и images сейчас 0. Лишний гигабайт не меняет модель: всё ещё один Node + локальный Postgres, без второго контейнера БД. |
+| Node | pm2 `tjyoga-api`, cwd `/var/www/tjyoga/app/backend`, `dist/server.js`, `max_memory_restart: 350M`. После cutover процесс на `PostgresBackendStore` |
+| `.env` | `DATABASE_URL` задан (localhost), `NODE_ENV=production`. До cutover URL был только в файле, не в окружении 20-дневного процесса → in-memory |
 | Postgres | 16, `127.0.0.1:5432`, БД `tjyoga` (~8.6MB), роль `tjyoga`. `shared_buffers=128MB`, `work_mem=4MB`, `max_connections=100` (это **не** свободный запас) |
 | Данные | 2 пользователя (admin + editor) в `local_credentials`; 4 видео / 4 статьи / 1 Zoom `main`; подписок 0. Ночные dump: cron `15 3 * * * /usr/local/bin/tjyoga-backup-db.sh` (7 дней) |
 
@@ -133,4 +133,4 @@ sudo -u postgres pg_restore --clean --if-exists -d tjyoga /var/www/tjyoga/backup
 
 ## Диск и соседи
 
-Не трогать `shedule-bot` / Python, если они снова появятся. Давление по диску: `app/.puppeteer-cache`, `app/.lighthouseci`, старые `releases/` — чистить только после подтверждения. Uploads (`/var/www/tjyoga/uploads`) деплой не трогает.
+`shedule-bot` снимать больше не нужно — стек уже удалён. Оставшееся давление по диску: `app/.puppeteer-cache`, `app/.lighthouseci`, старые `releases/` — чистить только после подтверждения. Uploads (`/var/www/tjyoga/uploads`) деплой не трогает. Не поднимать Postgres/Node в Docker на этой же машине: выигрыш по диску не отменяет лимит 1.5GiB RAM.
