@@ -1,5 +1,32 @@
 import { z } from 'zod';
 
+/** dotenv flags are strings; z.coerce.boolean() treats "false" as true. */
+export const envBoolean = z.preprocess((value) => {
+  if (typeof value === 'boolean') {
+    return value;
+  }
+  if (typeof value === 'number') {
+    if (value === 1) {
+      return true;
+    }
+    if (value === 0) {
+      return false;
+    }
+    return value;
+  }
+  if (typeof value !== 'string') {
+    return value;
+  }
+  const normalized = value.trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) {
+    return true;
+  }
+  if (['0', 'false', 'no', 'off', ''].includes(normalized)) {
+    return false;
+  }
+  return value;
+}, z.boolean());
+
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   HOST: z.string().default('0.0.0.0'),
@@ -8,7 +35,7 @@ const envSchema = z.object({
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   APP_ALLOWED_ORIGINS: z.string().default('http://localhost:5173'),
 
-  AUTH_DEV_BYPASS_ENABLED: z.coerce.boolean().default(false),
+  AUTH_DEV_BYPASS_ENABLED: envBoolean.default(false),
   DEV_DEFAULT_USER_ID: z.string().default('00000000-0000-4000-8000-000000000002'),
   DEV_DEFAULT_USER_ROLE: z.enum(['user', 'student', 'support', 'editor', 'admin']).default('student'),
 
@@ -19,12 +46,12 @@ const envSchema = z.object({
   SUPABASE_ANON_KEY: z.string().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
 
-  PRODMODE: z.coerce.boolean().default(false),
+  PRODMODE: envBoolean.default(false),
   PRODAMUS_WEBHOOK_SECRET: z.string().default('dev-prodamus-webhook-secret'),
   PRODAMUS_SIGNATURE_HEADER: z.string().default('x-prodamus-signature'),
   PRODAMUS_SIGNATURE_ALGO: z.enum(['sha256']).default('sha256'),
   PRODAMUS_MODE: z.enum(['test', 'live']).default('test'),
-  PRODAMUS_STUB_ENABLED: z.coerce.boolean().default(true),
+  PRODAMUS_STUB_ENABLED: envBoolean.default(true),
   PRODAMUS_PAYFORM_URL: z.string().url().default('https://payform.ru/t5a23mO/'),
   PRODAMUS_PAYFORM_SECRET: z.string().optional(),
   PRODAMUS_SYS_CODE: z.string().optional(),

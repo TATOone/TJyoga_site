@@ -35,6 +35,8 @@ postgres 16  (local, не Docker)
 
 `HOST=127.0.0.1` — API не торчит наружу. Production без `DATABASE_URL` **не стартует** (fail closed).
 
+Флаги из `.env` (`AUTH_DEV_BYPASS_ENABLED=false`, `PRODAMUS_STUB_ENABLED=false`) нельзя читать через `z.coerce.boolean()`: строка `"false"` становится `true`. Используется `envBoolean` в `backend/src/config/env.ts`. Ошибка старта должна завершать процесс (`process.exit(1)`), иначе pm2 показывает `online` без `listen`.
+
 ## Домены → таблицы
 
 | Поток | Таблицы | Инварианты |

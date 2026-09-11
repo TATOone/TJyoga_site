@@ -347,10 +347,11 @@ if [[ -f "\$LIVE/.env" && ! -f "\$RELEASE/.env" ]]; then
 fi
 cd "\$RELEASE"
 if [[ -f package-lock.json ]]; then
-  npm ci --omit=dev --no-audit --no-fund
+  npm ci --omit=dev --no-audit --no-fund > /tmp/tjyoga-npm-ci.log 2>&1
 else
-  npm install --omit=dev --no-audit --no-fund
+  npm install --omit=dev --no-audit --no-fund > /tmp/tjyoga-npm-ci.log 2>&1
 fi
+tail -n 20 /tmp/tjyoga-npm-ci.log
 if [[ ! -f dist/scripts/migrate.js ]]; then
   echo "dist/scripts/migrate.js missing after sync; refusing cutover"
   exit 6
