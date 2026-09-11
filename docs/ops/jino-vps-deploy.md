@@ -35,6 +35,17 @@ scripts/jino/ssh.sh 'echo SSH_OK'
 
 SSH всегда: `BatchMode=yes`, `IdentitiesOnly=yes`, `PreferredAuthentications=publickey`.
 
+Проверка без утечки ключа:
+
+```bash
+test -n "$JINO_SSH_PRIVATE_KEY" && echo KEY=SET || echo KEY=MISSING
+test -n "$JINO_SSH_HOST" && echo HOST=SET || echo HOST=MISSING
+test -n "$JINO_SSH_PORT" && echo PORT=SET || echo PORT=MISSING
+test -n "$JINO_SSH_USER" && echo USER=SET || echo USER=MISSING
+```
+
+Runtime Secrets подхватываются при **старте** Cloud Agent. Follow-up на уже запущенной VM может видеть `MISSING`, даже если repo-scope секрета уже починен. В этом случае нужен новый агент, а не повтор на том же процессе.
+
 ## 2. Сначала inspect
 
 ```bash
