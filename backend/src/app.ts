@@ -28,6 +28,10 @@ export const buildApp = async (options: BuildAppOptions = {}): Promise<FastifyIn
 
   app.decorate('store', options.store ?? (await buildStore()));
 
+  app.addHook('onClose', async () => {
+    await app.store.close();
+  });
+
   await app.register(rawBody, {
     field: 'rawBody',
     encoding: 'utf8',

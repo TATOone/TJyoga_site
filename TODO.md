@@ -1,185 +1,37 @@
-# TODO - Йога-сайт: Production Ready Status
+# TODO — TJ Yoga MVP
 
-**Последнее обновление:** 16.11.2025  
-**Статус:** ✅ Готов к production (кроме платежей)
+**Последнее обновление:** 2026-09-10  
+**Статус:** платформенный MVP закодирован. Боевой хостинг — VPS Jino (`tjyoga.ru`), не Cloudflare и не Yandex Cloud. Следующий пробел: `DATABASE_URL` + миграции на сервере, затем безопасный backend deploy.
 
----
-
-## ✅ ЧТО СДЕЛАНО
-
-### 🎨 Frontend & UX
-- ✅ Адаптивный дизайн для всех устройств
-- ✅ Мобильное меню с push-эффектом и анимациями
-- ✅ Плавные анимации (Framer Motion)
-- ✅ Современный UI с Tailwind CSS
-- ✅ Оптимизированная цветовая схема
-- ✅ Все секции: Hero, About, Services, ForWhom, Testimonials, Blog, CTA, Footer
-- ✅ 404 страница с брендингом и навигацией
-
-### 🚀 Производительность
-- ✅ Code splitting (React.lazy, Suspense)
-- ✅ Vite bundle optimization (manual chunks)
-- ✅ Удалены неиспользуемые зависимости
-- ✅ Lazy loading для изображений
-- ✅ Оптимизация LCP (hero image с `loading="eager"` и `fetchPriority="high"`)
-- ✅ Добавлены `width` и `height` для всех изображений (CLS optimization)
-- ✅ Preconnect для Google Fonts
-- ✅ Локальные изображения (вместо внешних CDN)
-
-### 🔍 SEO
-- ✅ Правильные meta-теги (title, description, keywords, author, robots)
-- ✅ Open Graph теги для социальных сетей
-- ✅ Twitter Cards
-- ✅ Structured Data (Schema.org): Organization, WebSite, Service
-- ✅ Sitemap.xml
-- ✅ Robots.txt с ссылкой на sitemap
-- ✅ Canonical URLs
-- ✅ Alt теги для всех изображений
-- ✅ Язык страницы (lang="ru")
-
-### ♿ Accessibility (A11y)
-- ✅ Skip Links для быстрой навигации
-- ✅ ARIA labels для интерактивных элементов
-- ✅ Семантическая разметка (header, nav, main, section, footer)
-- ✅ Keyboard navigation support
-- ✅ Focus-visible стили
-- ✅ Контрастность цветов (проверена)
-
-### 📊 Аналитика
-- ✅ Модульная система аналитики (`src/utils/analytics.ts`)
-- ✅ Поддержка Google Analytics 4
-- ✅ Поддержка Яндекс.Метрики
-- ✅ Event tracking для CTA, Telegram ссылок, просмотров сервисов
-- ⏳ Нужно добавить ID в `.env` для активации
-
-### 🎨 Контент
-- ✅ Уникальные изображения для Blog (Unsplash)
-- ✅ Аватары для отзывов (3 фото)
-- ✅ Все тексты на русском
-- ✅ Favicon и иконки для всех платформ
-
-### 🛠️ Техническое
-- ✅ TypeScript для type safety
-- ✅ ESLint настроен
-- ✅ Git репозиторий (локальный + GitHub)
-- ✅ Clean git history
-- ✅ React 19.1.1 (latest)
-- ✅ Vite 7.1.12 (latest)
+Канонические решения — в `docs/mvp/` (`07-execution-plan-dod.md`, `03-api-contracts.md`, `02-domain-model-erd.md`, `backend/README.md`). Этот файл не заменяет их.
 
 ---
 
-## ⏳ ЧТО ОСТАЛОСЬ
+## Сделано
 
-### 💳 Платежная интеграция (ЕДИНСТВЕННАЯ ЗАДАЧА)
-**Выбран провайдер:** Prodamus
-
-#### Что нужно сделать:
-1. [ ] Зарегистрироваться в Prodamus
-2. [ ] Получить API ключи (тестовые и продакшн)
-3. [ ] Создать компонент Checkout
-4. [ ] Интегрировать Prodamus Widget/API
-5. [ ] Добавить страницу успешной оплаты (`/payment/success`)
-6. [ ] Добавить страницу ошибки оплаты (`/payment/error`)
-7. [ ] Настроить webhook'и для подтверждения платежей
-8. [ ] Тестирование платежей (тестовый режим)
-9. [ ] Добавить логирование транзакций (опционально)
-10. [ ] Финальное тестирование на production
-
-**Примерное время:** 1-2 дня
-
-**Документация Prodamus:** https://help.prodamus.ru/
+- Публичная IA: club, rates, retreats, personal, legal, blog, payment success/error.
+- Кабинет и админка: `account/*`, `admin`.
+- Backend Fastify `/api/v1`: auth (self-host JWT), checkout, Prodamus webhook, content, Zoom redirect, Kinescope auth, admin.
+- Persistence: контракт `BackendStore`; **Postgres при `DATABASE_URL`**, in-memory fallback без БД.
+- Миграции `backend/db/migrations/001`–`004`.
+- Продуктовые инварианты: grace 72h, renewal SLA до 2ч (10:00–22:00 МСК), Zoom только backend redirect, Kinescope 200/403. Живой сайт на VPS Jino (РФ).
 
 ---
 
-## 🌐 DEPLOYMENT
+## Сейчас важно (не «остались только платежи»)
 
-### Готовность к деплою: ✅ 95%
+Prodamus-контур в коде уже есть (session + webhook + идемпотентность + активация подписки). Дальше:
 
-#### Что уже готово:
-- ✅ Production build работает
-- ✅ Environment variables подготовлены
-- ✅ SEO оптимизирован
-- ✅ Производительность оптимизирована
-- ✅ Мобильная версия работает отлично
-- ✅ Git репозиторий настроен
-
-#### Checklist перед деплоем:
-- [ ] Добавить GA4 и Yandex.Metrica ID в `.env`
-- [ ] Обновить Telegram ссылки на реальные
-- [ ] Проверить все изображения на месте
-- [ ] Финальный тест на всех устройствах
-- [ ] Backup базы данных (если будет)
-- [ ] Настроить HTTPS сертификат
-- [ ] Настроить DNS для `tjyoga.ru`
-- [ ] Добавить домен в Prodamus настройки
-- [ ] Провести Lighthouse аудит
-- [ ] Настроить Google Search Console
-- [ ] Настроить Яндекс.Вебмастер
+1. **Postgres на VPS** — задать `DATABASE_URL` в серверном `.env`, `npm run migrate`, проверить webhook/idempotency.
+2. **Deploy Jino** — `scripts/jino/*`, бэкапы в `/var/www/tjyoga/backups`. Не GitHub Pages.
+3. **Секреты и провайдеры** — боевые Prodamus/Kinescope/Zoom URL, `AUTH_DEV_BYPASS_ENABLED=false`.
+4. **Self-host Supabase Auth** (опционально поверх текущего JWT) и admin-пользователь без demo seed.
+5. **Наблюдаемость** — логи/метрики/алерты по SLA webhook и доступа.
 
 ---
 
-## 📊 ТЕКУЩИЕ МЕТРИКИ
+## Не делать в этом контуре
 
-### Ожидаемые показатели Lighthouse:
-- **Performance:** 85-95/100 ✅
-- **Accessibility:** 95+/100 ✅
-- **Best Practices:** 90+/100 ✅
-- **SEO:** 95+/100 ✅
-
-### Bundle Size (примерно):
-- **JS:** ~150-200 KB (gzipped) ✅
-- **CSS:** ~50-80 KB (gzipped) ✅
-
----
-
-## 🎯 ПРИОРИТЕТЫ
-
-### Высокий (До запуска):
-1. **Платежи Prodamus** - единственная критическая задача
-2. **Добавить Analytics ID** - 5 минут
-3. **Обновить Telegram ссылки** - 5 минут
-4. **Финальное тестирование** - 1 час
-
-### Средний (После запуска):
-- Мониторинг производительности
-- Сбор обратной связи
-- A/B тестирование CTA
-- Анализ конверсий
-
-### Низкий (Будущие улучшения):
-- PWA функционал
-- Email рассылка
-- Блог с админкой
-- Мультиязычность
-- Темная тема
-
----
-
-## 📞 КОНТАКТЫ И ДОСТУПЫ
-
-### Заполнить перед деплоем:
-- [ ] Домен: tjyoga.ru (в процессе)
-- [ ] Хостинг: [Выбрать]
-- [ ] Prodamus: [Зарегистрироваться]
-- [ ] GA4: [Создать]
-- [ ] Яндекс.Метрика: [Создать]
-- [ ] Telegram канал: [Указать ссылку]
-
-### Ссылки:
-- **GitHub:** https://github.com/TATOone/TJyoga_site
-- **Production:** https://tjyoga.ru (скоро)
-- **Local dev:** http://localhost:5173
-
----
-
-## 🎉 ИТОГ
-
-**Проект на 95% готов к production!**
-
-Осталось только:
-1. ✅ Интегрировать Prodamus
-2. ✅ Добавить Analytics
-3. ✅ Финальные тесты
-4. ✅ Deploy!
-
-**Отличная работа! Сайт получился современным, быстрым и красивым! 🚀**
+- Менять платёжного провайдера или ломать HMAC/idempotency webhook.
+- Хранить секреты в git (только `.env.example`).
+- Считать корневой чеклист лендинга 2025 года источником правды.

@@ -127,7 +127,7 @@ describe('Stage 4 checkout and auth', () => {
   it('returns idempotency conflict for same key with different body', async () => {
     const userId = randomUUID();
     const accessToken = await issueAccessToken(userId);
-    app.store.createUser({
+    await app.store.createUser({
       id: userId,
       email: `conflict-${randomUUID()}@example.com`,
       role: 'student',
@@ -214,7 +214,7 @@ describe('Stage 4 checkout and auth', () => {
     });
 
     const orderId = checkoutResponse.json().data.order_id as string;
-    const order = app.store.getOrderById(orderId);
+    const order = await app.store.getOrderById(orderId);
     expect(order?.providerOrderId).toBeTruthy();
 
     const webhookPayload = JSON.stringify({

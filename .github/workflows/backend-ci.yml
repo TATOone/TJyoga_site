@@ -18,6 +18,20 @@ jobs:
     defaults:
       run:
         working-directory: backend
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: tjyoga
+          POSTGRES_PASSWORD: tjyoga
+          POSTGRES_DB: tjyoga_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tjyoga -d tjyoga_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,4 +41,6 @@ jobs:
           cache-dependency-path: backend/package-lock.json
       - run: npm ci
       - run: npm test
+        env:
+          POSTGRES_TEST_URL: postgres://tjyoga:tjyoga@127.0.0.1:5432/tjyoga_test
       - run: npm run build

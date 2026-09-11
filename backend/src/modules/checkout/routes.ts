@@ -54,7 +54,7 @@ export const checkoutRoutes: FastifyPluginAsync = async (app) => {
       }
 
       const params = request.params as { orderId: string };
-      const data = getCheckoutOrderStatus(app.store, params.orderId, auth.userId);
+      const data = await getCheckoutOrderStatus(app.store, params.orderId, auth.userId);
       return success(request, data);
     },
   );

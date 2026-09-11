@@ -27,7 +27,7 @@ export const contentRoutes: FastifyPluginAsync = async (app) => {
         await app.authenticate(request, reply);
         const auth = request.auth;
         if (auth) {
-          const subscription = app.store.getSubscriptionByUserId(auth.userId);
+          const subscription = await app.store.getSubscriptionByUserId(auth.userId);
           hasClubAccess = evaluateSubscriptionAccess(subscription, env.SUBSCRIPTION_GRACE_HOURS).allowed;
         }
       } catch {
@@ -35,8 +35,7 @@ export const contentRoutes: FastifyPluginAsync = async (app) => {
       }
     }
 
-    const articles = app.store
-      .listArticles()
+    const articles = (await app.store.listArticles())
       .filter((article) => article.access === 'public' || hasClubAccess)
       .map((article) => ({
         id: article.id,
@@ -53,7 +52,7 @@ export const contentRoutes: FastifyPluginAsync = async (app) => {
 
   app.get('/content/articles/:slug', async (request, reply) => {
     const params = articleSlugSchema.parse(request.params);
-    const article = app.store.getArticleBySlug(params.slug);
+    const article = await app.store.getArticleBySlug(params.slug);
     if (!article || article.status !== 'published') {
       throw new ApiError('NOT_FOUND', 'Статья не найдена');
     }
@@ -64,7 +63,7 @@ export const contentRoutes: FastifyPluginAsync = async (app) => {
       if (!auth) {
         throw new ApiError('UNAUTHORIZED', 'Требуется авторизация');
       }
-      const subscription = app.store.getSubscriptionByUserId(auth.userId);
+      const subscription = await app.store.getSubscriptionByUserId(auth.userId);
       const access = evaluateSubscriptionAccess(subscription, env.SUBSCRIPTION_GRACE_HOURS);
       if (!access.allowed) {
         throw new ApiError('SUBSCRIPTION_REQUIRED', 'Требуется активная подписка');
@@ -95,13 +94,13 @@ export const contentRoutes: FastifyPluginAsync = async (app) => {
         throw new ApiError('UNAUTHORIZED', 'Требуется авторизация');
       }
 
-      const subscription = app.store.getSubscriptionByUserId(auth.userId);
+      const subscription = await app.store.getSubscriptionByUserId(auth.userId);
       const access = evaluateSubscriptionAccess(subscription, env.SUBSCRIPTION_GRACE_HOURS);
       if (!access.allowed) {
         throw new ApiError('SUBSCRIPTION_REQUIRED', 'Требуется активная подписка');
       }
 
-      const videos = app.store.listVideos().map((video) => ({
+      const videos = (await app.store.listVideos()).map((video) => ({
         id: video.id,
         kinescope_id: video.kinescopeId,
         title: video.title,
@@ -128,13 +127,13 @@ export const contentRoutes: FastifyPluginAsync = async (app) => {
       }
 
       const params = videoIdSchema.parse(request.params);
-      const video = app.store.getVideoById(params.videoId);
+      const video = await app.store.getVideoById(params.videoId);
       if (!video || video.status !== 'published') {
         throw new ApiError('NOT_FOUND', 'Видео не найдено');
       }
 
       if (video.accessLevel === 'club_active') {
-        const subscription = app.store.getSubscriptionByUserId(auth.userId);
+        const subscription = await app.store.getSubscriptionByUserId(auth.userId);
         const access = evaluateSubscriptionAccess(subscription, env.SUBSCRIPTION_GRACE_HOURS);
         if (!access.allowed) {
           throw new ApiError('SUBSCRIPTION_REQUIRED', 'Требуется активная подписка');
