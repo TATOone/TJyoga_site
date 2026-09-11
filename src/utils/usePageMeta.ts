@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { PAGE_META, SITE_URL } from '../config/pageMeta';
 import type { PageMetaKey } from '../config/pageMeta';
 
@@ -32,8 +32,15 @@ const upsertCanonical = (href: string): void => {
   element.setAttribute('href', href);
 };
 
+const removeMetaByName = (name: string): void => {
+  const element = document.querySelector(`meta[name="${name}"]`);
+  if (element) {
+    element.remove();
+  }
+};
+
 export const usePageMeta = (pageKey: PageMetaKey): void => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const meta = PAGE_META[pageKey];
     const canonicalUrl = `${SITE_URL}${meta.path}`;
 
@@ -44,6 +51,8 @@ export const usePageMeta = (pageKey: PageMetaKey): void => {
     upsertMetaByName('robots', meta.robots);
     if (meta.keywords) {
       upsertMetaByName('keywords', meta.keywords);
+    } else {
+      removeMetaByName('keywords');
     }
 
     upsertMetaByProperty('og:type', meta.ogType ?? 'website');

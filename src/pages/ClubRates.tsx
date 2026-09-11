@@ -1,18 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PublicPageLayout from '../components/PublicPageLayout';
-import { Button, StatusBadge } from '../components/ui';
+import { Button } from '../components/ui';
+import { getActiveAccent } from '../config/campaignAccent';
 import { CLUB_RATE_PRODUCT_IDS, PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
 import { usePageMeta } from '../utils/usePageMeta';
 
 const ClubRates: React.FC = () => {
   usePageMeta('clubRates');
+  const accent = getActiveAccent();
+  const monthly = PRODUCTS['club-monthly'];
+  const yearly = PRODUCTS['club-yearly'];
 
   return (
     <PublicPageLayout
       title="Тарифы Йога-Клуба"
-      subtitle="Выберите удобный формат доступа к клубу: помесячно или сразу на год с выгодой."
+      subtitle={`${accent.ctaHint}. Месяц — ${monthly.priceLabel}, год — ${yearly.priceLabel}. Наполнение одно, доплат нет.`}
+      eyebrow={accent.label}
     >
       <div className="mx-auto max-w-5xl space-y-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -29,9 +34,7 @@ const ClubRates: React.FC = () => {
                 }`}
               >
                 {product.featured ? (
-                  <div className="mb-3">
-                    <StatusBadge label="Выгоднее" tone="warning" />
-                  </div>
+                  <p className="mb-3 text-sm font-medium text-terracotta">На 12 000 ₽ меньше за год</p>
                 ) : null}
                 <h2 className="mb-2 font-display text-2xl font-semibold text-terracotta">
                   {product.shortTitle}
@@ -55,7 +58,7 @@ const ClubRates: React.FC = () => {
                       analyticsEvents.ctaClick(`Оформить ${product.shortTitle}`, 'club_rates')
                     }
                   >
-                    Оформить подписку
+                    {product.ctaLabel}
                   </Button>
                 </Link>
               </article>
@@ -64,18 +67,17 @@ const ClubRates: React.FC = () => {
         </div>
 
         <div className="rounded-card bg-light-olive p-6 text-dark-brown">
-          <h3 className="mb-3 font-display text-xl font-semibold">Важно перед оплатой</h3>
+          <h3 className="mb-3 font-display text-xl font-semibold">После оплаты</h3>
           <p className="mb-3">
-            Доступ в клуб открывается после подтверждения оплаты. Если доступ не активировался
-            автоматически, мы вручную обновим статус в течение 2 часов (ежедневно с 10:00 до 22:00
-            МСК).
+            Кабинет открывается после подтверждения платежа — обычно за несколько минут. Если доступ
+            не появился, мы включим его вручную в течение 2 часов (ежедневно 10:00–22:00 МСК).
           </p>
           <Link
             to="/how-to-buy"
             className="inline-flex min-h-touch items-center font-medium text-terracotta transition-colors hover:text-golden-sandy"
             onClick={() => analyticsEvents.ctaClick('Перейти в как купить', 'club_rates')}
           >
-            Подробнее о процессе покупки
+            Как проходит оформление
           </Link>
         </div>
       </div>
