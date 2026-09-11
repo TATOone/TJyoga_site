@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FREE_CTA_LABEL, FREE_PAGE_PATH } from '../config/freePractices';
 import { LEGAL_LINKS, OPERATOR_INFO } from '../config/legalDocuments';
 import { analyticsEvents } from '../utils/analytics';
 
@@ -7,6 +8,7 @@ const Footer: React.FC = () => {
   const publicLinks = [
     { label: 'Главная', to: '/' },
     { label: 'Клуб', to: '/club' },
+    { label: FREE_CTA_LABEL, to: FREE_PAGE_PATH },
     { label: 'Блог', to: '/blog' },
     { label: 'Тарифы', to: '/club/rates' },
     { label: 'Ретриты', to: '/retreats' },

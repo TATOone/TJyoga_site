@@ -11,6 +11,7 @@ export type PageMetaKey =
   | 'home'
   | 'club'
   | 'clubRates'
+  | 'free'
   | 'retreats'
   | 'personal'
   | 'about'
@@ -56,6 +57,14 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
     path: '/club/rates',
     robots: 'index,follow',
     keywords: 'тарифы йога клуба, цена подписки на хатха йогу, годовая подписка йога',
+  },
+  free: {
+    title: 'Бесплатные практики хатха-йоги на YouTube — TJ Yoga',
+    description:
+      'Три открытые практики TJ Yoga на YouTube: утро 60 минут, вечер 60 минут и короткая утренняя. Без кабинета и без оплаты.',
+    path: '/free',
+    robots: 'index,follow',
+    keywords: 'бесплатная йога онлайн, хатха йога youtube, йога утро, йога вечер, TJ Yoga',
   },
   retreats: {
     title: 'Йога-ретриты TJ Yoga',
@@ -187,6 +196,7 @@ export const getPageMetaKeyForPath = (pathname: string): PageMetaKey => {
   if (normalized === '/') return 'home';
   if (normalized === '/club') return 'club';
   if (normalized === '/club/rates') return 'clubRates';
+  if (normalized === '/free') return 'free';
   if (normalized === '/retreats') return 'retreats';
   if (normalized === '/personal') return 'personal';
   if (normalized === '/about') return 'about';

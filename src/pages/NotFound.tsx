@@ -164,6 +164,9 @@ const NotFound: React.FC = () => {
           <Link to="/club" className="text-olive-green hover:text-golden-sandy transition-colors">
             Клуб
           </Link>
+          <Link to="/free" className="text-olive-green hover:text-golden-sandy transition-colors">
+            Бесплатные практики
+          </Link>
           <Link to="/how-to-buy" className="text-olive-green hover:text-golden-sandy transition-colors">
             Как купить
           </Link>
