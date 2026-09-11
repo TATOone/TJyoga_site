@@ -9,6 +9,7 @@ import {
   CLUB_SUPPORT,
   ZOOM_SCHEDULE,
 } from '../config/clubContent';
+import { FREE_CTA_LABEL, FREE_PAGE_PATH } from '../config/freePractices';
 import { PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
 import { usePageMeta } from '../utils/usePageMeta';
@@ -28,6 +29,15 @@ const Club: React.FC = () => {
     >
       <div className="max-w-5xl mx-auto space-y-10">
         <p className="max-w-3xl mx-auto text-center text-dark-brown">{accent.clubEmphasis}</p>
+        <div className="flex justify-center">
+          <Link
+            to={FREE_PAGE_PATH}
+            className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg border border-terracotta text-terracotta hover:bg-cream transition-colors"
+            onClick={() => analyticsEvents.ctaClick(FREE_CTA_LABEL, 'club_page')}
+          >
+            {FREE_CTA_LABEL}
+          </Link>
+        </div>
 
         <ul className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {CLUB_SOCIAL_PROOF.map((item) => (

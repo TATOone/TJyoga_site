@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { getActiveAccent } from '../config/campaignAccent';
+import { FREE_CTA_LABEL, FREE_PAGE_PATH } from '../config/freePractices';
 import { IMAGES } from '../config/images';
 import { analyticsEvents } from '../utils/analytics';
 
@@ -83,14 +84,14 @@ const Hero: React.FC = () => {
             Выбрать тариф
           </Link>
           <Link
-            to="/club"
+            to={FREE_PAGE_PATH}
             className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
-            aria-label={accent.ctaHint}
+            aria-label="Посмотреть бесплатные практики на YouTube"
             onClick={() => {
-              analyticsEvents.ctaClick('Как устроен клуб', 'hero');
+              analyticsEvents.ctaClick(FREE_CTA_LABEL, 'hero');
             }}
           >
-            Как устроен клуб
+            {FREE_CTA_LABEL}
           </Link>
         </motion.div>
       </div>
