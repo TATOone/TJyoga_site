@@ -2,13 +2,16 @@ import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { getActiveAccent } from '../config/campaignAccent';
 import { PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
 
 const CTA: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  const clubCheckoutPath = PRODUCTS['club-monthly'].checkoutPath;
+  const accent = getActiveAccent();
+  const monthly = PRODUCTS['club-monthly'];
+  const yearly = PRODUCTS['club-yearly'];
 
   return (
     <section id="cta" className="py-16 bg-cream">
@@ -20,15 +23,16 @@ const CTA: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          Начни свой путь сегодня
+          {accent.ctaHint}
         </motion.h2>
         <motion.p
-          className="text-lg text-dark-brown mb-8"
+          className="text-lg text-dark-brown mb-8 max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Запишись на бесплатную консультацию или сразу присоединяйся к йога-клубу
+          {monthly.priceLabel} или {yearly.priceLabel}. Если остался вопрос про тело или формат —
+          напишите, не нужно решать это в одиночку.
         </motion.p>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"
@@ -36,27 +40,27 @@ const CTA: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
+          <Link
+            to="/club/rates"
+            className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center"
+            aria-label="Выбрать тариф клуба"
+            onClick={() => {
+              analyticsEvents.ctaClick('Выбрать тариф', 'cta');
+            }}
+          >
+            Выбрать тариф
+          </Link>
           <a
             href="https://t.me/starovoitovae"
-            className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
-            aria-label="Написать Жене"
+            className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center"
+            aria-label="Написать преподавателю в Telegram"
             onClick={() => {
-              analyticsEvents.ctaClick('Написать Жене', 'cta');
+              analyticsEvents.ctaClick('Написать в Telegram', 'cta');
               analyticsEvents.telegramClick('starovoitovae', 'cta_write');
             }}
           >
-            Написать Жене
+            Написать в Telegram
           </a>
-          <Link
-            to={clubCheckoutPath}
-            className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta"
-            aria-label="Присоединиться к клубу"
-            onClick={() => {
-              analyticsEvents.ctaClick('Присоединиться к клубу', 'cta');
-            }}
-          >
-            Присоединиться к клубу
-          </Link>
         </motion.div>
       </div>
     </section>

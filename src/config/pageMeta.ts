@@ -33,29 +33,29 @@ export const SITE_URL = 'https://tjyoga.ru';
 
 export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   home: {
-    title: 'TJ Yoga — Онлайн Йога-Клуб, ретриты и персональная практика',
+    title: 'Онлайн Йога-Клуб TJ Yoga — классическая хатха в Zoom и в записях',
     description:
-      'Онлайн Йога-Клуб TJ Yoga: занятия в прямом эфире, библиотека уроков, ретриты и персональные занятия с преподавателем.',
+      'Подписка на клуб: живые практики хатха-йоги из первоисточников, записи занятий, понятные уровни и чат с преподавателем. 6 000 ₽/месяц или 60 000 ₽/год.',
     path: '/',
     robots: 'index,follow',
     keywords:
-      'йога клуб, хатха йога онлайн, онлайн занятия йогой, йога ретрит, персональная йога, TJ Yoga',
+      'йога клуб онлайн, хатха йога из первоисточников, занятия йогой в zoom, йога для начинающих, TJ Yoga',
   },
   club: {
-    title: 'Йога-Клуб TJ Yoga — формат и преимущества',
+    title: 'Что внутри Йога-Клуба TJ Yoga: эфиры, записи, уровни, чат',
     description:
-      'Подробно о формате Йога-Клуба TJ Yoga: что входит в подписку, как проходят занятия и кому подходит клубный формат.',
+      'Как устроен онлайн-клуб TJ Yoga: расписание Zoom, библиотека записей, уровни практики, поддержка преподавателя и кому подходит классическая хатха.',
     path: '/club',
     robots: 'index,follow',
-    keywords: 'йога клуб онлайн, подписка на йогу, занятия в телеграм',
+    keywords: 'йога клуб онлайн, расписание хатха йоги, подписка на йогу, йога с преподавателем',
   },
   clubRates: {
-    title: 'Тарифы Йога-Клуба TJ Yoga',
+    title: 'Тарифы Йога-Клуба: 6 000 ₽/месяц или 60 000 ₽/год — TJ Yoga',
     description:
-      'Месячная и годовая подписка TJ Yoga: сравнение тарифов, наполнение и удобный переход к оформлению покупки.',
+      'Месячная подписка 6 000 ₽ и годовая 60 000 ₽. Одно наполнение: Zoom, записи, чат. Цена на экране — та же при оплате, без доплат.',
     path: '/club/rates',
     robots: 'index,follow',
-    keywords: 'тарифы йога клуба, цена подписки на йогу',
+    keywords: 'тарифы йога клуба, цена подписки на хатха йогу, годовая подписка йога',
   },
   retreats: {
     title: 'Йога-ретриты TJ Yoga',
@@ -74,20 +74,20 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
     keywords: 'персональные занятия йогой, индивидуальная йога',
   },
   about: {
-    title: 'О проекте TJ Yoga',
+    title: 'Женя и Тим — TJ Yoga, классическая хатха из первоисточников',
     description:
-      'История TJ Yoga, подход к преподаванию и опыт команды: классическая хатха-йога из первоисточников.',
+      'Семья йогов Женя Старовойтова и Тим передают хатха-йогу школы Патанджали: практика из Ришикеша, без фитнес-хайпа и без обещания идеального тела.',
     path: '/about',
     robots: 'index,follow',
-    keywords: 'о школе йоги TJ Yoga, преподаватели йоги',
+    keywords: 'Женя Старовойтова йога, преподаватели хатха йоги, TJ Yoga о нас',
   },
   howToBuy: {
-    title: 'Как купить доступ — TJ Yoga',
+    title: 'Как оформить подписку на Йога-Клуб TJ Yoga',
     description:
-      'Пошаговый регламент покупки доступа в TJ Yoga: оформление, подтверждение, выдача доступа и поддержка.',
+      'Как оплатить месяц или год клуба: тариф, кабинет, оплата, когда открывается доступ и куда писать, если что-то не пришло.',
     path: '/how-to-buy',
     robots: 'index,follow',
-    keywords: 'как купить подписку на йогу, оформление доступа',
+    keywords: 'как купить подписку на йогу, оплата йога клуба, TJ Yoga доступ',
   },
   checkout: {
     title: 'Оформление заказа — TJ Yoga',
@@ -174,4 +174,34 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
     path: '/404',
     robots: 'noindex,nofollow',
   },
+};
+
+/**
+ * Сопоставляет URL с ключом PAGE_META, чтобы каждая публичная страница
+ * получала свой title/description ещё до загрузки lazy-чанка.
+ */
+export const getPageMetaKeyForPath = (pathname: string): PageMetaKey => {
+  const normalized =
+    pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+
+  if (normalized === '/') return 'home';
+  if (normalized === '/club') return 'club';
+  if (normalized === '/club/rates') return 'clubRates';
+  if (normalized === '/retreats') return 'retreats';
+  if (normalized === '/personal') return 'personal';
+  if (normalized === '/about') return 'about';
+  if (normalized === '/how-to-buy') return 'howToBuy';
+  if (normalized === '/checkout' || normalized.startsWith('/checkout/')) return 'checkout';
+  if (normalized === '/payment/success') return 'paymentSuccess';
+  if (normalized === '/payment/error') return 'paymentError';
+  if (normalized === '/offer') return 'offer';
+  if (normalized === '/policy') return 'policy';
+  if (normalized === '/refund') return 'refund';
+  if (normalized === '/medical-disclaimer') return 'medicalDisclaimer';
+  if (normalized === '/account/login') return 'accountLogin';
+  if (normalized === '/account/register') return 'accountRegister';
+  if (normalized === '/admin' || normalized.startsWith('/admin/')) return 'admin';
+  if (normalized === '/account' || normalized.startsWith('/account/')) return 'account';
+  if (normalized === '/blog' || normalized.startsWith('/blog/')) return 'blog';
+  return 'notFound';
 };

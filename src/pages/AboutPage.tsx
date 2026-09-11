@@ -10,8 +10,8 @@ const AboutPage: React.FC = () => {
 
   return (
     <PublicPageLayout
-      title="О проекте TJ Yoga"
-      subtitle="Классическая хатха-йога из первоисточников и бережный подход к практике."
+      title="О нас"
+      subtitle="Женя и Тим передают классическую хатха-йогу из первоисточников — тепло, без фитнес-хайпа и без обещания идеального тела."
     >
       <div className="max-w-6xl mx-auto space-y-8">
         <Suspense fallback={<div className="py-8 text-center text-gray-brown">Загрузка...</div>}>

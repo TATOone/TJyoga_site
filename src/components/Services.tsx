@@ -20,7 +20,6 @@ type Service = {
   checkoutPath: string;
   image: string;
   showCountdown?: boolean;
-  featured?: boolean;
 };
 
 const Services: React.FC = () => {
@@ -43,17 +42,11 @@ const Services: React.FC = () => {
       title: product.title,
       description: product.details,
       price: product.priceLabel,
-      button:
-        id === 'club-monthly'
-          ? 'Вступить в клуб'
-          : id === 'retreat-pass'
-            ? 'Смотреть ретриты'
-            : 'Смотреть персональный формат',
+      button: product.ctaLabel,
       link: product.primaryPath,
       checkoutPath: product.checkoutPath,
       image: product.image,
       showCountdown: product.showCountdown,
-      featured: product.featured,
     };
   });
 
@@ -67,14 +60,14 @@ const Services: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          Практикуй с нами
+          Практикуйте в клубе. Ретриты и персональные — рядом.
         </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <motion.div
               key={service.id}
               className={`service-card bg-light-text rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border ${
-                service.featured
+                service.id === 'club-monthly'
                   ? 'border-terracotta/30 ring-1 ring-terracotta/10 md:-translate-y-1'
                   : 'border-light-sandy'
               }`}
@@ -94,7 +87,12 @@ const Services: React.FC = () => {
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center mb-4">
                   {service.icon}
-                  <h3 className="text-xl font-semibold text-terracotta ml-2">{service.title}</h3>
+                  <div className="ml-2">
+                    {service.id === 'club-monthly' ? (
+                      <p className="text-xs font-medium text-terracotta mb-0.5">Основной формат</p>
+                    ) : null}
+                    <h3 className="text-xl font-semibold text-terracotta">{service.title}</h3>
+                  </div>
                 </div>
                 <p className="text-dark-brown mb-2 flex-grow whitespace-pre-line">{service.description}</p>
                 {service.showCountdown && (

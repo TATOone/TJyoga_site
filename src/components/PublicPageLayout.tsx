@@ -5,16 +5,29 @@ import Footer from './Footer';
 interface PublicPageLayoutProps {
   title: string;
   subtitle: string;
+  eyebrow?: string;
   children: React.ReactNode;
 }
 
-const PublicPageLayout: React.FC<PublicPageLayoutProps> = ({ title, subtitle, children }) => {
+const PublicPageLayout: React.FC<PublicPageLayoutProps> = ({
+  title,
+  subtitle,
+  eyebrow,
+  children,
+}) => {
   return (
     <div className="min-h-screen bg-light-text">
       <Header />
       <main className="pt-28 pb-16">
         <section className="container mx-auto px-4 mb-10">
           <div className="max-w-4xl mx-auto text-center">
+            {eyebrow ? (
+              <p className="mb-4">
+                <span className="inline-flex items-center rounded-full border border-terracotta/30 bg-cream px-3 py-1 text-sm font-medium text-terracotta">
+                  {eyebrow}
+                </span>
+              </p>
+            ) : null}
             <h1 className="text-3xl md:text-5xl font-bold text-dark-brown mb-4">{title}</h1>
             <p className="text-lg text-gray-brown">{subtitle}</p>
           </div>

@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { getActiveAccent } from '../config/campaignAccent';
 import { IMAGES } from '../config/images';
 import { analyticsEvents } from '../utils/analytics';
 
-
 const Hero: React.FC = () => {
   const [imageError, setImageError] = React.useState(false);
+  const accent = getActiveAccent();
 
   return (
     <section id="hero" className="relative h-screen flex items-center justify-center bg-cream">
@@ -32,12 +33,12 @@ const Hero: React.FC = () => {
       )}
       <div className="relative z-10 text-center px-4 max-w-4xl">
         <motion.p
-          className="text-sm md:text-base uppercase tracking-wide text-terracotta font-semibold mb-3"
+          className="text-sm md:text-base text-terracotta font-semibold mb-3"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          Йога-Клуб TJ Yoga
+          {accent.heroEyebrow}
         </motion.p>
         <motion.h1
           className="text-4xl md:text-6xl font-bold text-dark-brown mb-4"
@@ -45,7 +46,7 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Регулярная хатха-практика с поддержкой преподавателя
+          {accent.heroHeadline}
         </motion.h1>
         <motion.p
           className="text-lg md:text-xl text-dark-brown mb-6"
@@ -53,7 +54,7 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Прямые эфиры в Zoom, библиотека записей, клубные статьи и сообщество — всё в одном доступе
+          {accent.heroSubhead}
         </motion.p>
         <motion.ul
           className="flex flex-wrap justify-center gap-3 mb-8 text-sm md:text-base text-dark-brown"
@@ -61,9 +62,9 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
         >
-          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">3+ практики в неделю</li>
-          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Zoom без копируемой ссылки</li>
-          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Записи Kinescope</li>
+          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Живые практики + записи</li>
+          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Уровни на виду</li>
+          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Преподаватель в чате</li>
         </motion.ul>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"
@@ -84,12 +85,12 @@ const Hero: React.FC = () => {
           <Link
             to="/club"
             className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
-            aria-label="Посмотреть, что внутри клуба"
+            aria-label={accent.ctaHint}
             onClick={() => {
-              analyticsEvents.ctaClick('Что внутри клуба', 'hero');
+              analyticsEvents.ctaClick('Как устроен клуб', 'hero');
             }}
           >
-            Посмотреть, что внутри
+            Как устроен клуб
           </Link>
         </motion.div>
       </div>

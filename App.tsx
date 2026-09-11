@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import Home from './src/pages/Home.tsx';
 import SkipLinks from './src/components/SkipLinks';
 import Analytics from './src/components/Analytics';
+import RoutePageMeta from './src/components/RoutePageMeta';
 import { MobileMenuContext } from './src/context/mobileMenuContext';
 import RequireAuth from './src/components/RequireAuth';
 const NotFound = lazy(() => import('./src/pages/NotFound.tsx'));
@@ -50,6 +51,7 @@ const App: React.FC = () => {
       <Analytics />
       <SkipLinks />
       <Router>
+        <RoutePageMeta />
         <motion.main 
           id="main-content" 
           className="min-h-screen font-body overflow-x-hidden" 
