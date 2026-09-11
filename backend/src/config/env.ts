@@ -39,6 +39,12 @@ const envSchema = z.object({
       return trimmed ? trimmed : undefined;
     }),
 
+  // 1.5GiB VPS: keep the Node pool tiny. Postgres max_connections=100 is not free headroom.
+  PG_POOL_MAX: z.coerce.number().int().min(1).max(20).default(4),
+  PG_IDLE_TIMEOUT_MS: z.coerce.number().int().min(1000).default(10_000),
+  PG_CONNECTION_TIMEOUT_MS: z.coerce.number().int().min(500).default(5_000),
+  PG_STATEMENT_TIMEOUT_MS: z.coerce.number().int().min(0).default(5_000),
+
   KINESCOPE_AUTH_SECRET: z.string().default('dev-kinescope-auth-secret'),
   ZOOM_REDIRECT_ENCRYPTION_KEY: z.string().default('dev-zoom-encryption-key-32-chars'),
   ZOOM_ROOM_MAIN_URL: z.string().url().default('https://zoom.us/j/123456789?pwd=replace-me'),
@@ -59,6 +65,12 @@ export const assertSecureEnvironment = (): void => {
   if (env.NODE_ENV === 'production' && env.AUTH_DEV_BYPASS_ENABLED) {
     throw new Error(
       'AUTH_DEV_BYPASS_ENABLED запрещён в production. Отключите bypass и используйте Supabase JWT.',
+    );
+  }
+
+  if (env.NODE_ENV === 'production' && !env.DATABASE_URL) {
+    throw new Error(
+      'DATABASE_URL обязателен в production. In-memory store остаётся только для local/dev/tests.',
     );
   }
 };

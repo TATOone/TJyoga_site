@@ -1,7 +1,7 @@
 # TODO — TJ Yoga MVP
 
 **Последнее обновление:** 2026-09-10  
-**Статус:** платформенный MVP закодирован. Боевой хостинг — VPS Jino (`tjyoga.ru`), не Cloudflare и не Yandex Cloud. Следующий пробел: `DATABASE_URL` + миграции на сервере, затем безопасный backend deploy.
+**Статус:** платформенный MVP закодирован. Боевой хостинг — VPS Jino (`tjyoga.ru`). Схема и cutover: `docs/ops/postgres-vps-architecture.md`, `scripts/jino/deploy.sh --backend`.
 
 Канонические решения — в `docs/mvp/` (`07-execution-plan-dod.md`, `03-api-contracts.md`, `02-domain-model-erd.md`, `backend/README.md`). Этот файл не заменяет их.
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Reversible deploy to Jino VPS. Default is inspect + frontend.
-# Backend is opt-in because the live process has long uptime and this branch
-# refuses to start in NODE_ENV=production without DATABASE_URL.
+# Backend cutover: pg_dump → migrate while the old API stays up → brief pm2 reload.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -10,6 +9,8 @@ REMOTE_ROOT="/var/www/tjyoga"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 MODE="frontend"
 SKIP_BUILD=0
+LIVE_CWD=""
+PM2_NAME=""
 
 usage() {
   cat <<'EOF'
@@ -17,7 +18,7 @@ Usage: scripts/jino/deploy.sh [--inspect-only] [--frontend] [--backend] [--all] 
 
   --inspect-only  SSH + dump server layout, then exit
   --frontend      backup app/dist and sync a new Vite build (default)
-  --backend       copy backend sources into a release, build on server, pm2 reload
+  --backend       safe Postgres cutover: dump → migrate → promote → pm2 reload
   --all           frontend + backend
   --skip-build    reuse already built dist/ and backend/dist
 
@@ -116,13 +117,12 @@ PY
 REMOTE
 }
 
-deploy_backend() {
-  echo "== backend safety checks =="
+read_backend_safety() {
   local safety
   safety="$(remote "bash -s" <<'REMOTE'
 set -euo pipefail
 python3 - <<'PY'
-import json, os, pathlib, subprocess
+import json, pathlib, subprocess
 node_env = None
 database_set = False
 cwd = ""
@@ -140,6 +140,7 @@ for app in apps:
 
 for env_path in [
     pathlib.Path(cwd) / ".env" if cwd else None,
+    pathlib.Path("/var/www/tjyoga/app/backend/.env"),
     pathlib.Path("/var/www/tjyoga/backend/.env"),
     pathlib.Path("/var/www/tjyoga/.env"),
 ]:
@@ -165,53 +166,211 @@ REMOTE
   echo "$safety"
   if echo "$safety" | grep -q 'BLOCK_BACKEND=1'; then
     echo "Refusing backend deploy: NODE_ENV=production and DATABASE_URL is not set."
-    echo "This branch will not start without Postgres. Set DATABASE_URL on the server, migrate, then retry."
+    echo "This branch will not start without Postgres. Set DATABASE_URL on the server, then retry."
     exit 3
   fi
-
-  build_backend_local
-  local live_cwd
-  live_cwd="$(echo "$safety" | awk -F= '/^cwd=/{print $2; exit}')"
-  if [[ -z "$live_cwd" || "$live_cwd" == "" ]]; then
-    live_cwd="$REMOTE_ROOT/backend"
+  LIVE_CWD="$(echo "$safety" | awk -F= '/^cwd=/{print $2; exit}')"
+  PM2_NAME="$(echo "$safety" | awk -F= '/^pm2_name=/{print $2; exit}')"
+  if [[ -z "$LIVE_CWD" ]]; then
+    LIVE_CWD="$REMOTE_ROOT/app/backend"
   fi
+  if [[ -z "$PM2_NAME" ]]; then
+    PM2_NAME="tjyoga-api"
+  fi
+}
+
+dump_postgres() {
+  echo "== postgres dump (API still running) =="
+  remote "bash -s" <<REMOTE
+set -euo pipefail
+LIVE='$LIVE_CWD'
+STAMP='$STAMP'
+DEST='$REMOTE_ROOT/backups/pg-predeploy-'"\$STAMP"'.dump'
+python3 - "\$LIVE" "\$DEST" <<'PY'
+import os, pathlib, subprocess, sys
+from urllib.parse import unquote, urlparse
+live = pathlib.Path(sys.argv[1])
+dest = pathlib.Path(sys.argv[2])
+url = None
+env_path = live / ".env"
+if env_path.is_file():
+    for line in env_path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if line.startswith("DATABASE_URL="):
+            value = line.split("=", 1)[1].strip().strip('"').strip("'")
+            if value:
+                url = value
+            break
+if not url:
+    print("PG_DUMP_SKIP DATABASE_URL missing")
+    sys.exit(0)
+parsed = urlparse(url)
+user = unquote(parsed.username or "tjyoga")
+password = unquote(parsed.password or "")
+database = (parsed.path or "/tjyoga").lstrip("/").split("?")[0]
+dest.parent.mkdir(parents=True, exist_ok=True)
+env = os.environ.copy()
+env["PGPASSWORD"] = password
+subprocess.check_call(
+    [
+        "pg_dump",
+        "-h", parsed.hostname or "127.0.0.1",
+        "-p", str(parsed.port or 5432),
+        "-U", user,
+        "-d", database,
+        "-Fc",
+        "-f", str(dest),
+    ],
+    env=env,
+    stdout=subprocess.DEVNULL,
+)
+print("PG_DUMP", dest, "bytes", dest.stat().st_size)
+PY
+REMOTE
+}
+
+rollback_backend() {
+  echo "== ROLLBACK backend tree $STAMP =="
+  remote "bash -s" <<REMOTE
+set -euo pipefail
+LIVE='$LIVE_CWD'
+STAMP='$STAMP'
+PM2_NAME='$PM2_NAME'
+BACKUP='$REMOTE_ROOT/backups/backend-tree-'"\$STAMP"'.tgz'
+if [[ ! -f "\$BACKUP" ]]; then
+  echo "ROLLBACK_MISSING \$BACKUP"
+  exit 4
+fi
+python3 - "\$LIVE" "\$BACKUP" <<'PY'
+import shutil, tarfile, pathlib, sys, tempfile
+live = pathlib.Path(sys.argv[1])
+backup = pathlib.Path(sys.argv[2])
+keep_env = None
+env_path = live / ".env"
+if env_path.is_file():
+    keep_env = env_path.read_bytes()
+parent = live.parent
+name = live.name
+with tempfile.TemporaryDirectory(dir=str(parent)) as tmp:
+    with tarfile.open(backup, "r:gz") as tar:
+        tar.extractall(tmp)
+    extracted = pathlib.Path(tmp) / name
+    if not extracted.exists():
+        children = list(pathlib.Path(tmp).iterdir())
+        extracted = children[0] if children else extracted
+    if live.exists():
+        shutil.rmtree(live)
+    shutil.move(str(extracted), str(live))
+if keep_env is not None:
+    (live / ".env").write_bytes(keep_env)
+    (live / ".env").chmod(0o600)
+print("RESTORED", live)
+PY
+if [[ -f /var/www/tjyoga/ecosystem.config.cjs ]]; then
+  pm2 reload /var/www/tjyoga/ecosystem.config.cjs --update-env || pm2 start /var/www/tjyoga/ecosystem.config.cjs
+else
+  pm2 reload "\$PM2_NAME" || pm2 restart "\$PM2_NAME"
+fi
+sleep 2
+curl -sS -m 8 -o /tmp/tjyoga-health-rollback.out -w 'ROLLBACK_HEALTH=%{http_code}\n' http://127.0.0.1:8787/health || true
+head -c 400 /tmp/tjyoga-health-rollback.out; echo
+REMOTE
+}
+
+wait_local_health() {
+  local require_store="${1:-}"
+  remote "bash -s" <<REMOTE || return 1
+set -euo pipefail
+REQUIRE_STORE='$require_store'
+ok=0
+for i in 1 2 3 4 5 6 8 10 12 15; do
+  code="\$(curl -sS -m 5 -o /tmp/tjyoga-health.out -w '%{http_code}' http://127.0.0.1:8787/health || true)"
+  echo "HEALTH_TRY=\$i HTTP=\$code"
+  if [[ "\$code" == "200" ]] && python3 - "\$REQUIRE_STORE" <<'PY'
+import json, pathlib, sys
+require = sys.argv[1]
+text = pathlib.Path("/tmp/tjyoga-health.out").read_text(encoding="utf-8", errors="replace")
+print(text[:400])
+payload = json.loads(text)
+data = payload["data"]
+assert data["status"] == "ok"
+if require:
+    store = data.get("store")
+    database = data.get("database")
+    if store != require:
+        raise SystemExit(f"store={store!r} expected {require!r}")
+    if require == "postgres" and database != "up":
+        raise SystemExit(f"database={database!r} expected up")
+print("HEALTH_OK")
+PY
+  then
+    ok=1
+    break
+  fi
+  sleep 1
+done
+if [[ "\$ok" -ne 1 ]]; then
+  echo "HEALTH_FAILED"
+  exit 5
+fi
+REMOTE
+}
+
+deploy_backend() {
+  echo "== backend safety checks =="
+  read_backend_safety
+  echo "live_cwd=$LIVE_CWD pm2_name=$PM2_NAME"
+
+  echo "== backend local build (avoid tsc RAM on 1.5GiB VPS) =="
+  build_backend_local
+
   local release="$REMOTE_ROOT/releases/backend/$STAMP"
-  backup_remote_path "$live_cwd" "backend-tree"
+  dump_postgres
+  backup_remote_path "$LIVE_CWD" "backend-tree"
   remote "mkdir -p '$release'"
-  echo "== sync backend sources to $release (no .env, no node_modules) =="
+  echo "== sync backend (dist included, no .env, no node_modules) to $release =="
   tar -C "$ROOT_DIR/backend" \
     --exclude node_modules \
-    --exclude dist \
     --exclude .env \
     --exclude .env.* \
     -czf - . | remote "tar -C '$release' -xzf -"
 
+  echo "== install prod deps + migrate (old API still serving) =="
   remote "bash -s" <<REMOTE
 set -euo pipefail
 RELEASE='$release'
-LIVE='$live_cwd'
+LIVE='$LIVE_CWD'
+export NODE_OPTIONS='--max-old-space-size=384'
 mkdir -p "\$LIVE"
 if [[ -f "\$LIVE/.env" && ! -f "\$RELEASE/.env" ]]; then
   cp -a "\$LIVE/.env" "\$RELEASE/.env"
+  chmod 600 "\$RELEASE/.env"
 fi
 cd "\$RELEASE"
 if [[ -f package-lock.json ]]; then
-  npm ci
+  npm ci --omit=dev --no-audit --no-fund
 else
-  npm install
+  npm install --omit=dev --no-audit --no-fund
 fi
-npm run build
+if [[ ! -f dist/scripts/migrate.js ]]; then
+  echo "dist/scripts/migrate.js missing after sync; refusing cutover"
+  exit 6
+fi
 if [[ -f .env ]] && grep -qE '^DATABASE_URL=.+' .env; then
   echo 'RUN_MIGRATE=1'
-  npm run migrate
+  node dist/scripts/migrate.js
 else
   echo 'RUN_MIGRATE=0'
 fi
+REMOTE
+
+  echo "== promote release into live cwd (preserve .env) =="
+  remote "bash -s" <<REMOTE
+set -euo pipefail
 python3 - <<'PY'
 import shutil
 from pathlib import Path
 src = Path("$release")
-dst = Path("$live_cwd")
+dst = Path("$LIVE_CWD")
 dst.mkdir(parents=True, exist_ok=True)
 skip = {".env", ".env.local", ".env.production"}
 for item in src.iterdir():
@@ -229,34 +388,53 @@ for item in src.iterdir():
         shutil.copy2(item, target)
 print("PROMOTED_BACKEND", dst)
 PY
-if command -v pm2 >/dev/null 2>&1; then
-  if [[ -f /var/www/tjyoga/ecosystem.config.cjs ]]; then
-    pm2 reload /var/www/tjyoga/ecosystem.config.cjs --update-env || pm2 start /var/www/tjyoga/ecosystem.config.cjs
-  else
-    pm2 reload all || pm2 restart all
-  fi
-  pm2 save || true
-fi
-sleep 1
-curl -sS -m 5 -o /tmp/tjyoga-health.out -w 'HEALTH_HTTP=%{http_code}\n' http://127.0.0.1:8787/health || true
-head -c 400 /tmp/tjyoga-health.out; echo
 REMOTE
+
+  echo "== pm2 reload (single fork, no dual Node) =="
+  remote "bash -s" <<REMOTE
+set -euo pipefail
+PM2_NAME='$PM2_NAME'
+if [[ -f /var/www/tjyoga/ecosystem.config.cjs ]]; then
+  pm2 reload /var/www/tjyoga/ecosystem.config.cjs --update-env || pm2 start /var/www/tjyoga/ecosystem.config.cjs
+else
+  pm2 reload "\$PM2_NAME" || pm2 restart "\$PM2_NAME"
+fi
+pm2 save || true
+REMOTE
+
+  if ! wait_local_health postgres; then
+    rollback_backend
+    echo "Backend health failed after reload. Rolled back code. DB migrations are additive; see docs/ops/postgres-vps-architecture.md"
+    exit 7
+  fi
 }
 
 smoke_public() {
+  local require_store="${1:-}"
   echo "== public smoke =="
-  curl -sS -m 10 -o /tmp/tjyoga-public-health.json -w 'PUBLIC_HEALTH=%{http_code}\n' https://tjyoga.ru/health || true
-  python3 - <<'PY'
-import json, pathlib
+  local code
+  code="$(curl -sS -m 10 -o /tmp/tjyoga-public-health.json -w '%{http_code}' https://tjyoga.ru/health || true)"
+  echo "PUBLIC_HEALTH=$code"
+  python3 - "$code" "$require_store" <<'PY'
+import json, pathlib, sys
+http = sys.argv[1]
+require = sys.argv[2]
 text = pathlib.Path("/tmp/tjyoga-public-health.json").read_text(encoding="utf-8", errors="replace")
 print(text[:400])
-try:
-    payload = json.loads(text)
-    assert payload["data"]["status"] == "ok"
-    print("SMOKE_HEALTH_OK")
-except Exception as exc:
-    print("SMOKE_HEALTH_PARSE", type(exc).__name__)
+if http != "200":
+    raise SystemExit(f"public /health HTTP {http}")
+payload = json.loads(text)
+data = payload["data"]
+assert data["status"] == "ok"
+if require:
+    store = data.get("store")
+    if store != require:
+        raise SystemExit(f"public store={store!r} expected {require!r}")
+    if require == "postgres" and data.get("database") != "up":
+        raise SystemExit(f"public database={data.get('database')!r} expected up")
+print("SMOKE_HEALTH_OK")
 PY
+  curl -sS -m 10 -o /tmp/tjyoga-public-api.json -w 'PUBLIC_API=%{http_code}\n' https://tjyoga.ru/api/v1 >/dev/null || true
 }
 
 ensure_ssh
@@ -274,14 +452,15 @@ case "$MODE" in
   backend)
     "$ROOT_DIR/scripts/jino/inspect.sh"
     deploy_backend
-    smoke_public
+    smoke_public postgres
     echo "Backend release $STAMP. Rollback: restore $REMOTE_ROOT/backups/backend-tree-${STAMP}.tgz and pm2 reload."
+    echo "Postgres dump: $REMOTE_ROOT/backups/pg-predeploy-${STAMP}.dump"
     ;;
   all)
     "$ROOT_DIR/scripts/jino/inspect.sh"
     deploy_frontend
     deploy_backend
-    smoke_public
+    smoke_public postgres
     ;;
   *)
     echo "Unknown mode $MODE" >&2

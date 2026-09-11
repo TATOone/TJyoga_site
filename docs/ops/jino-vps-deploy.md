@@ -90,11 +90,14 @@ tar -xzf /var/www/tjyoga/backups/frontend-dist-<stamp>.tgz
 
 `uploads/` скрипт не трогает.
 
-## 4. Backend (только если inspect безопасен)
+## 4. Backend (безопасный cutover на Postgres)
 
-Живой `/health` уже отвечает `tj-yoga-backend-foundation` (долгий uptime). Эта ветка **не стартует** при `NODE_ENV=production` без `DATABASE_URL`.
+Живой `/health` до выкладки может быть in-memory (долгий uptime, `DATABASE_URL` только в `.env`). Эта ветка **не стартует** при `NODE_ENV=production` без `DATABASE_URL`.
+
+Каноническая архитектура: [`postgres-vps-architecture.md`](./postgres-vps-architecture.md).
 
 ```bash
+export JINO_SSH_PRIVATE_KEY="${JINO_SSH_PRIVATE_KEY:-$SSH_PRIVATE_KEY}"
 ./scripts/jino/deploy.sh --backend
 ```
 
@@ -102,15 +105,17 @@ tar -xzf /var/www/tjyoga/backups/frontend-dist-<stamp>.tgz
 
 Иначе:
 
-1. Бэкап текущего cwd pm2 (обычно `/var/www/tjyoga/backend`).
-2. Исходники в `/var/www/tjyoga/releases/backend/<stamp>/` без `.env`.
-3. На сервере `npm ci && npm run build`. Существующий `.env` копируется в релиз, не перетирается.
-4. Если `DATABASE_URL` задан — `npm run migrate` (идемпотентно, `001`–`004`).
-5. Promote в live cwd **без замены `.env`**.
-6. `pm2 reload` существующего `ecosystem.config.cjs` (fallback: `pm2 reload all`).
-7. Локальный `curl 127.0.0.1:8787/health`.
+1. Inspect.
+2. Сборка backend **локально** (не `tsc` на 1.5GiB).
+3. `pg_dump -Fc` → `/var/www/tjyoga/backups/pg-predeploy-<stamp>.dump`.
+4. tar cwd pm2 → `backups/backend-tree-<stamp>.tgz`.
+5. Релиз без `.env`; на сервере `npm ci --omit=dev`.
+6. `node dist/scripts/migrate.js` (**пока старый процесс ещё жив**).
+7. Promote в live cwd **без замены `.env`**.
+8. `pm2 reload` существующего `ecosystem.config.cjs` (один fork, без dual-running).
+9. Локальный `curl 127.0.0.1:8787/health` — HTTP 200, `"store":"postgres"`, `"database":"up"`. Иначе автоматический откат кода из tar.
 
-Откат: распаковать `backups/backend-tree-<stamp>.tgz` в cwd и `pm2 reload`.
+Откат кода: распаковать `backups/backend-tree-<stamp>.tgz` в cwd и `pm2 reload`. Схему не откатывать без повреждения данных — 001–006 аддитивны.
 
 Полный прогон: `./scripts/jino/deploy.sh --all`.
 
@@ -120,28 +125,21 @@ tar -xzf /var/www/tjyoga/backups/frontend-dist-<stamp>.tgz
 2. Создать роль/БД. Строку подключения записать только в серверный файл:
 
 ```bash
-# на VPS, не в репозитории
-install -m 600 /dev/null /var/www/tjyoga/backend/.env
+# на VPS, не в репозитории — фактический путь live cwd:
+# /var/www/tjyoga/app/backend/.env
+install -m 600 /dev/null /var/www/tjyoga/app/backend/.env
 # вписать DATABASE_URL=postgres://...  и остальные ключи из backend/.env.example
 # NODE_ENV=production
 # AUTH_DEV_BYPASS_ENABLED=false
 # APP_ALLOWED_ORIGINS=https://tjyoga.ru
 # HOST=127.0.0.1
 # PORT=8787
+# PG_POOL_MAX=4
 ```
 
-3. Миграции (достаточно одного способа):
-
-```bash
-cd /var/www/tjyoga/backend   # или cwd из pm2
-# .env уже содержит DATABASE_URL
-npm run migrate
-# либо просто pm2 restart: Postgres-store применяет миграции при старте
-```
-
-4. Не коммитить `.env`. В pm2 не хранить пароль в git-tracked `ecosystem.config.cjs` — dotenv читает `.env` из cwd (`backend/src/server.ts`).
-
-5. После миграции: `curl -i https://tjyoga.ru/health`, регистрация/login, checkout не обязателен сразу, но webhook Prodamus должен остаться с тем же секретом, что в `.env`.
+3. Если `DATABASE_URL` задан — `node dist/scripts/migrate.js` (`001`–`006`, идемпотентно).
+4. Не коммитить `.env`. В pm2 не хранить пароль в git-tracked `ecosystem.config.cjs` — dotenv читает `.env` из cwd (`backend/src/server.ts`). Пул: `PG_POOL_MAX=4`.
+5. После cutover: `curl -i https://tjyoga.ru/health` — `"store":"postgres"`. Регистрация/login (боевые admin/editor живут в `local_credentials`). Checkout не обязателен сразу, но webhook Prodamus должен остаться с тем же секретом, что в `.env`.
 
 Пока `DATABASE_URL` не задан, оставляйте текущий in-memory процесс (если `NODE_ENV` не `production`) либо не выкладывайте backend этой ветки.
 

@@ -30,7 +30,7 @@ def normalize_pem(raw: str) -> str:
 
 
 def read_key_material() -> str:
-    env_value = os.environ.get("JINO_SSH_PRIVATE_KEY")
+    env_value = os.environ.get("JINO_SSH_PRIVATE_KEY") or os.environ.get("SSH_PRIVATE_KEY")
     if env_value:
         return env_value
 
@@ -38,6 +38,7 @@ def read_key_material() -> str:
     candidates = [
         Path(file_hint) if file_hint else None,
         Path("/run/cursor/secrets/JINO_SSH_PRIVATE_KEY"),
+        Path("/run/cursor/secrets/SSH_PRIVATE_KEY"),
         Path("/run/secrets/JINO_SSH_PRIVATE_KEY"),
         Path.home() / ".cursor" / "secrets" / "JINO_SSH_PRIVATE_KEY",
     ]

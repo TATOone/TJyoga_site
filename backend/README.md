@@ -12,7 +12,8 @@ Backend для MVP-платформы TJ Yoga: auth, checkout/Prodamus, каби
 - Kinescope authorization backend
 - Admin API: overview, users, videos, articles, zoom, extend subscription
 - Persistence: Postgres при `DATABASE_URL`, иначе in-memory fallback (local/dev/tests)
-- Migrations: `001`–`004` в `db/migrations` (источник правды схемы; применяются при старте Postgres-store и через `npm run migrate`)
+- Migrations: `001`–`006` в `db/migrations` (источник правды схемы; применяются при старте Postgres-store и через `npm run migrate`)
+- Production VPS: fail closed без БД, pool `PG_POOL_MAX=4`, `/health` отдаёт `store`/`database`. Архитектура: `docs/ops/postgres-vps-architecture.md`
 - Tests: foundation + checkout + content/admin + Postgres store (если задан `POSTGRES_TEST_URL`)
 
 ## Локальный запуск без БД
@@ -47,6 +48,8 @@ npm run dev
 2. `002_stage4_checkout.sql`
 3. `003_stage5_content_admin.sql`
 4. `004_stage6_postgres_store.sql` — `users.password_hash`, уникальность согласий и 1:1 subscription/user
+5. `005_content_covers.sql` — `cover_url` на videos/articles (уже есть на live Jino)
+6. `006_production_compat.sql` — `local_credentials` / legacy `consents`, копирование хешей с боевой БД
 
 Применить:
 

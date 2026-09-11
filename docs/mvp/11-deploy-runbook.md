@@ -23,7 +23,7 @@
    - `AUTH_DEV_BYPASS_ENABLED=false`
    - `APP_ALLOWED_ORIGINS=https://tjyoga.ru`
    - Prodamus / Kinescope / Zoom / JWT secrets как сейчас на сервере
-4. Миграции при наличии `DATABASE_URL`: `npm run migrate` в cwd backend **или** авто-apply на старте Postgres-store (`001`–`004`).
+4. Миграции при наличии `DATABASE_URL`: `node dist/scripts/migrate.js` в cwd backend **до** pm2 reload (`001`–`006`). Postgres-store также применяет миграции при старте (advisory lock).
 5. Не копировать GitHub Pages workflow: он не деплоит этот VPS.
 
 ## Команды

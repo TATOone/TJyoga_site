@@ -39,6 +39,8 @@ import type {
   RecordPaymentEventInput,
   RecordPaymentEventResult,
   SaveConsentInput,
+  StoreHealth,
+  StoreKind,
 } from './store.js';
 
 const { Pool } = pg;
@@ -376,6 +378,8 @@ export interface PostgresStoreOptions {
 }
 
 export class PostgresBackendStore implements BackendStore {
+  public readonly kind: StoreKind = 'postgres';
+
   constructor(
     private readonly db: SqlExecutor,
     private readonly options: PostgresStoreOptions = {},
@@ -411,10 +415,20 @@ export class PostgresBackendStore implements BackendStore {
 
   private asPool(): pg.Pool | null {
     const candidate = this.db as pg.Pool;
-    if (typeof candidate.connect === 'function' && typeof candidate.end === 'function') {
+    if ('idleCount' in candidate && 'totalCount' in candidate && typeof candidate.connect === 'function') {
       return candidate;
     }
     return null;
+  }
+
+  public async healthCheck(): Promise<StoreHealth> {
+    try {
+      await this.db.query('SELECT 1');
+      return { ok: true };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'postgres_unreachable';
+      return { ok: false, error: message };
+    }
   }
 
   public async getUserById(userId: string): Promise<UserRecord | null> {
@@ -442,13 +456,25 @@ export class PostgresBackendStore implements BackendStore {
   }
 
   public async saveLocalCredentials(userId: string, password: string): Promise<void> {
+    const passwordHash = await hashPassword(password);
     await this.db.query(
       `
         UPDATE users
         SET password_hash = $2, updated_at = NOW()
         WHERE id = $1
       `,
-      [userId, await hashPassword(password)],
+      [userId, passwordHash],
+    );
+    // Dual-write: live Jino DB and the previous binary read local_credentials.
+    await this.db.query(
+      `
+        INSERT INTO local_credentials (user_id, password_hash, updated_at)
+        VALUES ($1, $2, NOW())
+        ON CONFLICT (user_id) DO UPDATE SET
+          password_hash = EXCLUDED.password_hash,
+          updated_at = NOW()
+      `,
+      [userId, passwordHash],
     );
   }
 
@@ -457,7 +483,12 @@ export class PostgresBackendStore implements BackendStore {
     password: string,
   ): Promise<{ ok: boolean; needsRehash: boolean }> {
     const result = await this.db.query<{ password_hash: string | null }>(
-      'SELECT password_hash FROM users WHERE id = $1',
+      `
+        SELECT COALESCE(u.password_hash, lc.password_hash) AS password_hash
+        FROM users u
+        LEFT JOIN local_credentials lc ON lc.user_id = u.id
+        WHERE u.id = $1
+      `,
       [userId],
     );
     const stored = result.rows[0]?.password_hash;
@@ -1048,53 +1079,61 @@ export class PostgresBackendStore implements BackendStore {
       );
     }
 
-    for (const video of SEED_VIDEOS) {
-      await this.db.query(
-        `
-          INSERT INTO videos (
-            id, kinescope_id, title, description, category, access_level,
-            duration_min, status, published_at, updated_at
-          )
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-          ON CONFLICT (id) DO NOTHING
-        `,
-        [
-          video.id,
-          video.kinescopeId,
-          video.title,
-          video.description,
-          video.category,
-          video.accessLevel,
-          video.durationMin,
-          video.status,
-          video.publishedAt,
-          video.updatedAt,
-        ],
-      );
+    const videoCount = await this.db.query<{ count: string }>('SELECT COUNT(*)::text AS count FROM videos');
+    if (videoCount.rows[0]?.count === '0') {
+      for (const video of SEED_VIDEOS) {
+        await this.db.query(
+          `
+            INSERT INTO videos (
+              id, kinescope_id, title, description, category, access_level,
+              duration_min, status, published_at, updated_at
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            ON CONFLICT (id) DO NOTHING
+          `,
+          [
+            video.id,
+            video.kinescopeId,
+            video.title,
+            video.description,
+            video.category,
+            video.accessLevel,
+            video.durationMin,
+            video.status,
+            video.publishedAt,
+            video.updatedAt,
+          ],
+        );
+      }
     }
 
-    for (const article of SEED_ARTICLES) {
-      await this.db.query(
-        `
-          INSERT INTO articles (
-            id, slug, title, excerpt, body, category, access, status, published_at, updated_at
-          )
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-          ON CONFLICT (id) DO NOTHING
-        `,
-        [
-          article.id,
-          article.slug,
-          article.title,
-          article.excerpt,
-          article.body,
-          article.category,
-          article.access,
-          article.status,
-          article.publishedAt,
-          article.updatedAt,
-        ],
-      );
+    const articleCount = await this.db.query<{ count: string }>(
+      'SELECT COUNT(*)::text AS count FROM articles',
+    );
+    if (articleCount.rows[0]?.count === '0') {
+      for (const article of SEED_ARTICLES) {
+        await this.db.query(
+          `
+            INSERT INTO articles (
+              id, slug, title, excerpt, body, category, access, status, published_at, updated_at
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            ON CONFLICT (id) DO NOTHING
+          `,
+          [
+            article.id,
+            article.slug,
+            article.title,
+            article.excerpt,
+            article.body,
+            article.category,
+            article.access,
+            article.status,
+            article.publishedAt,
+            article.updatedAt,
+          ],
+        );
+      }
     }
 
     await this.db.query(
@@ -1122,7 +1161,12 @@ export class PostgresBackendStore implements BackendStore {
     );
 
     const student = await this.db.query<{ password_hash: string | null }>(
-      'SELECT password_hash FROM users WHERE id = $1',
+      `
+        SELECT COALESCE(u.password_hash, lc.password_hash) AS password_hash
+        FROM users u
+        LEFT JOIN local_credentials lc ON lc.user_id = u.id
+        WHERE u.id = $1
+      `,
       [DEMO_STUDENT_ID],
     );
     if (!student.rows[0]?.password_hash) {
@@ -1130,7 +1174,12 @@ export class PostgresBackendStore implements BackendStore {
     }
 
     const admin = await this.db.query<{ password_hash: string | null }>(
-      'SELECT password_hash FROM users WHERE id = $1',
+      `
+        SELECT COALESCE(u.password_hash, lc.password_hash) AS password_hash
+        FROM users u
+        LEFT JOIN local_credentials lc ON lc.user_id = u.id
+        WHERE u.id = $1
+      `,
       [DEMO_ADMIN_ID],
     );
     if (!admin.rows[0]?.password_hash) {
@@ -1166,18 +1215,40 @@ export interface BuildPostgresStoreOptions {
   seedDemo?: boolean;
 }
 
+const runtimePoolOptions = (databaseUrl: string): pg.PoolConfig => {
+  const statementTimeout = env.PG_STATEMENT_TIMEOUT_MS;
+  return {
+    connectionString: databaseUrl,
+    max: env.PG_POOL_MAX,
+    idleTimeoutMillis: env.PG_IDLE_TIMEOUT_MS,
+    connectionTimeoutMillis: env.PG_CONNECTION_TIMEOUT_MS,
+    application_name: 'tjyoga-api',
+    options:
+      statementTimeout > 0
+        ? `-c statement_timeout=${statementTimeout} -c idle_in_transaction_session_timeout=10000`
+        : undefined,
+  };
+};
+
 export const buildPostgresStore = async (
   databaseUrl: string,
   options: BuildPostgresStoreOptions = {},
 ): Promise<PostgresBackendStore> => {
-  const pool = new Pool({
+  const migratePool = new Pool({
     connectionString: databaseUrl,
-    max: 10,
-    idleTimeoutMillis: 30_000,
+    max: 1,
+    application_name: 'tjyoga-migrate',
   });
 
   try {
-    await applyMigrations(pool);
+    await applyMigrations(migratePool);
+  } finally {
+    await migratePool.end();
+  }
+
+  const pool = new Pool(runtimePoolOptions(databaseUrl));
+
+  try {
     const store = new PostgresBackendStore(pool, { ownsPool: true, seedDemo: options.seedDemo });
     await store.seed({ demo: options.seedDemo ?? env.NODE_ENV !== 'production' });
     return store;

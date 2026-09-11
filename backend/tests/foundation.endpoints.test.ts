@@ -34,6 +34,8 @@ describe('Stage 3 foundation endpoints', () => {
     expect(response.statusCode).toBe(200);
     const body = response.json();
     expect(body.data.status).toBe('ok');
+    expect(body.data.store).toBe('memory');
+    expect(body.data.database).toBe('n/a');
     expect(body.meta.request_id).toBe('health-test-request');
   });
 
