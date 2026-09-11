@@ -2,8 +2,18 @@
 -- Target: PostgreSQL 15+
 -- NOTE: This migration is intentionally minimal and production-safe as a starting point.
 
-create extension if not exists "pgcrypto";
-create extension if not exists "citext";
+-- Role `tjyoga` is not superuser. Skip CREATE EXTENSION when already present
+-- (live Jino DB already has pgcrypto + citext).
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pgcrypto') THEN
+    CREATE EXTENSION "pgcrypto";
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'citext') THEN
+    CREATE EXTENSION "citext";
+  END IF;
+END
+$$;
 
 create table if not exists users (
   id uuid primary key default gen_random_uuid(),

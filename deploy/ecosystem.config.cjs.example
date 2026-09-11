@@ -1,19 +1,21 @@
 module.exports = {
   apps: [
     {
-      name: 'tjyoga-backend',
-      cwd: '/var/www/tjyoga/backend',
+      name: 'tjyoga-api',
+      cwd: '/var/www/tjyoga/app/backend',
       script: 'dist/server.js',
       interpreter: 'node',
       instances: 1,
       exec_mode: 'fork',
+      max_memory_restart: '350M',
       env: {
         NODE_ENV: 'production',
         HOST: '127.0.0.1',
-        PORT: 8787,
+        PORT: '8787',
+        PG_POOL_MAX: '4',
       },
-      error_file: '/var/www/tjyoga/logs/backend-error.log',
-      out_file: '/var/www/tjyoga/logs/backend-out.log',
+      error_file: '/var/www/tjyoga/logs/api-error.log',
+      out_file: '/var/www/tjyoga/logs/api-out.log',
       merge_logs: true,
       time: true,
     },

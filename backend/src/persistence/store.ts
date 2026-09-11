@@ -68,7 +68,16 @@ export interface SaveConsentInput {
   source: ConsentRecord['source'];
 }
 
+export type StoreKind = 'memory' | 'postgres';
+
+export type StoreHealth =
+  | { ok: true }
+  | { ok: false; error: string };
+
 export interface BackendStore {
+  readonly kind: StoreKind;
+  healthCheck(): Promise<StoreHealth>;
+
   getUserById(userId: string): Promise<UserRecord | null>;
   getUserByEmail(email: string): Promise<UserRecord | null>;
   createUser(input: CreateUserInput): Promise<UserRecord>;
@@ -140,6 +149,7 @@ export interface BackendStore {
 }
 
 export class InMemoryBackendStore implements BackendStore {
+  public readonly kind: StoreKind = 'memory';
   private readonly users = new Map<string, UserRecord>();
   private readonly usersByEmail = new Map<string, string>();
   private readonly localCredentials = new Map<string, string>();
@@ -634,6 +644,10 @@ export class InMemoryBackendStore implements BackendStore {
 
   public async runInTransaction<T>(fn: (store: BackendStore) => Promise<T>): Promise<T> {
     return fn(this);
+  }
+
+  public async healthCheck(): Promise<StoreHealth> {
+    return { ok: true };
   }
 
   public async close(): Promise<void> {

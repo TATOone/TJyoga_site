@@ -25,6 +25,8 @@ const resetDatabase = async (url: string): Promise<void> => {
         audit_log,
         user_consents,
         consent_documents,
+        consents,
+        local_credentials,
         subscription_events,
         payments,
         payment_events,
@@ -206,6 +208,66 @@ describePostgres('PostgresBackendStore', () => {
       expect(user?.email).toBe(email);
     } finally {
       await reopened.close();
+    }
+  });
+
+  it('reports postgres store on /health', async () => {
+    const response = await app.inject({ method: 'GET', url: '/health' });
+    expect(response.statusCode).toBe(200);
+    expect(response.json().data.store).toBe('postgres');
+    expect(response.json().data.database).toBe('up');
+  });
+
+  it('keeps live local_credentials readable after users.password_hash is empty', async () => {
+    if (!databaseUrl) {
+      return;
+    }
+
+    const email = `pg-legacy-${randomUUID()}@example.com`;
+    const password = 'LegacyPass!23';
+    const user = await store.createUser({
+      email,
+      role: 'student',
+      status: 'active',
+    });
+    await store.saveLocalCredentials(user.id, password);
+
+    const pool = new Pool({ connectionString: databaseUrl });
+    try {
+      const written = await pool.query<{ user_hash: string | null; local_hash: string | null }>(
+        `
+          SELECT u.password_hash AS user_hash, lc.password_hash AS local_hash
+          FROM users u
+          JOIN local_credentials lc ON lc.user_id = u.id
+          WHERE u.id = $1
+        `,
+        [user.id],
+      );
+      expect(written.rows[0]?.user_hash).toBeTruthy();
+      expect(written.rows[0]?.local_hash).toBe(written.rows[0]?.user_hash);
+
+      await pool.query('UPDATE users SET password_hash = NULL WHERE id = $1', [user.id]);
+      const verify = await store.verifyLocalCredentials(user.id, password);
+      expect(verify.ok).toBe(true);
+    } finally {
+      await pool.end();
+    }
+  });
+
+  it('records numbered migrations including production compat', async () => {
+    if (!databaseUrl) {
+      return;
+    }
+
+    const pool = new Pool({ connectionString: databaseUrl });
+    try {
+      const result = await pool.query<{ id: string }>('SELECT id FROM schema_migrations ORDER BY id');
+      const ids = result.rows.map((row) => row.id);
+      expect(ids.some((id) => id.startsWith('001'))).toBe(true);
+      expect(ids.some((id) => id.startsWith('005'))).toBe(true);
+      expect(ids.some((id) => id.startsWith('006'))).toBe(true);
+    } finally {
+      await pool.end();
     }
   });
 });

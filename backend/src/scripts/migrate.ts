@@ -10,7 +10,11 @@ if (!databaseUrl) {
   process.exit(1);
 }
 
-const pool = new Pool({ connectionString: databaseUrl });
+const pool = new Pool({
+  connectionString: databaseUrl,
+  max: 1,
+  application_name: 'tjyoga-migrate',
+});
 
 try {
   const applied = await applyMigrations(pool);
