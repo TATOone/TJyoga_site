@@ -90,7 +90,7 @@ describe('Admin email allowlist', () => {
     expect(editorResponse.statusCode).toBe(403);
 
     const supportResponse = await app.inject({
-      method: 'GET',
+      method: 'POST',
       url: '/api/v1/admin/subscriptions/extend',
       headers: {
         'content-type': 'application/json',
