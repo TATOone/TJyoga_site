@@ -1,75 +1,97 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { TESTIMONIALS, TESTIMONIALS_TITLE } from '../config/testimonials';
 
-const Testimonials: React.FC = () => {
+interface TestimonialsProps {
+  variant?: 'full' | 'compact';
+}
+
+const TestimonialCard: React.FC<{
+  name: string;
+  text: string;
+  image: string;
+  compact: boolean;
+}> = ({ name, text, image, compact }) => {
+  return (
+    <article
+      className={`flex min-w-0 flex-col items-center border border-light-sandy bg-light-text text-center ${
+        compact ? 'rounded-card p-4 shadow-soft' : 'rounded-lg p-6 shadow-lg'
+      }`}
+    >
+      <div className={compact ? 'mb-3' : 'mb-4'}>
+        <img
+          src={image}
+          alt={name}
+          className="mx-auto h-20 w-20 rounded-full border-2 border-light-sandy object-cover"
+          loading="lazy"
+          width="80"
+          height="80"
+          decoding="async"
+          onError={(event) => {
+            const target = event.target as HTMLImageElement;
+            target.style.display = 'none';
+          }}
+        />
+        <p className="mt-3 font-semibold text-olive-green">{name}</p>
+      </div>
+      <p className="text-dark-brown">«{text}»</p>
+    </article>
+  );
+};
+
+const Testimonials: React.FC<TestimonialsProps> = ({ variant = 'full' }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const compact = variant === 'compact';
 
-  const testimonials = [
-    {
-      text: 'Ещё как помогают ваши знания и практики!!! С вами больше полугода! Прошла боль в спине, и с каждой практикой ощущаю маленькие шажочки вперёд! Это как чудо, наблюдать за изменениями, которые происходят в теле, уме, благодаря вам!!!',
-      name: 'Наталья',
-      image: '/images/testimonials/natalya.jpg'
-    },
-    {
-      text: 'Ребята, практика с вами стала для меня очень важной частью жизни! Вот без преувеличения. Каждую практику жду, это время — святое время моего развития. И хоть и кажется, что это занятие только для себя, но эффект от практик ощущают и мои близкие 🥰 я стала устойчивее и сильнее, и делюсь этим с ними.'+ 
-'Вы так много дарите другим! И я в том числе ценю вашу человечность и самоиронию. А разве кого-то вдохновляют образы идеальных людей? Мне кажется, тут как в асанах — не важно, как выглядит снаружи, важно, как ощущается внутри.'+ 
-'Пусть и у вас будет место для несовершенства. Вы уже супер и точно на верном пути, раз столько людей идёт вместе с вами ❤️',
-      name: 'Юлия',
-      image: '/images/testimonials/yulia.jpg'
-    },
-    {
-      text: 'Я понимала , что в нашем онлайн клубе , вы передаёте знания от первоисточников.' + 
-'Но я вообще не догадывалась, что обучение будет в тысячу раз понятнее именно потому , что я уже столько времени с вами . '+ 
-'Вы так круто , без лишней воды , понятно , интересно и даже в формате какой-то игры иногда ( когда даёте задания на неделю ) даете нам таааааааааак много информации . Сейчас я это так чётко осознаю )' +
-'Люблю вас очень, и так круто, что вы есть! Нам всем с вами очень повезло',
-      name: 'Екатерина',
-      image: '/images/testimonials/ekaterina.jpg'
-    }
-  ];
+  if (compact) {
+    return (
+      <section id="testimonials" className="min-w-0">
+        <h2 className="mb-4 text-center font-display text-2xl font-semibold text-dark-brown">
+          {TESTIMONIALS_TITLE}
+        </h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {TESTIMONIALS.map((testimonial) => (
+            <TestimonialCard
+              key={testimonial.name}
+              name={testimonial.name}
+              text={testimonial.text}
+              image={testimonial.image}
+              compact
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section id="testimonials" className="py-16 bg-cream">
+    <section id="testimonials" className="bg-cream py-16">
       <div className="container mx-auto px-4">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-center text-dark-brown mb-12"
+          className="mb-12 text-center font-display text-3xl font-bold text-dark-brown md:text-4xl"
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          Что говорят наши ученики
+          {TESTIMONIALS_TITLE}
         </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {TESTIMONIALS.map((testimonial, index) => (
             <motion.div
-              key={index}
-              className="bg-light-text p-6 rounded-lg shadow-lg border border-light-sandy flex flex-col items-center text-center"
+              key={testimonial.name}
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.2 }}
             >
-              {/* Аватарка над комментарием */}
-              <div className="mb-4">
-                <img 
-                  src={testimonial.image} 
-                  alt={testimonial.name} 
-                  className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-light-sandy" 
-                  loading="lazy"
-                  width="80"
-                  height="80"
-                  decoding="async"
-                  onError={(e) => {
-                    // Fallback на прозрачный placeholder, если изображение не найдено
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                  }}
-                />
-                <p className="font-semibold text-olive-green mt-3">{testimonial.name}</p>
-              </div>
-              {/* Текст комментария */}
-              <p className="text-dark-brown">"{testimonial.text}"</p>
+              <TestimonialCard
+                name={testimonial.name}
+                text={testimonial.text}
+                image={testimonial.image}
+                compact={false}
+              />
             </motion.div>
           ))}
         </div>

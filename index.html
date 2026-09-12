@@ -122,10 +122,11 @@
     <script type="module" src="/index.tsx"></script>
     
     <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
+    <script id="jsonld-organization" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": "https://tjyoga.ru/#organization",
       "name": "TJ Yoga",
       "description": "Классическая Хатха Йога из первоисточников. Онлайн-клуб, йога-ретриты и персональные занятия",
       "url": "https://tjyoga.ru",
@@ -134,9 +135,11 @@
         "https://t.me/TJyoga",
         "https://t.me/starovoitovae"
       ],
+      "email": "support@tjyoga.ru",
       "contactPoint": {
         "@type": "ContactPoint",
-        "contactType": "Customer Service",
+        "contactType": "customer support",
+        "email": "support@tjyoga.ru",
         "availableLanguage": ["Russian"]
       },
       "areaServed": {
@@ -156,31 +159,21 @@
     }
     </script>
     
-    <script type="application/ld+json">
+    <script id="jsonld-website" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": "https://tjyoga.ru/#website",
       "name": "TJ Yoga",
-      "url": "https://tjyoga.ru"
+      "url": "https://tjyoga.ru",
+      "inLanguage": "ru-RU",
+      "publisher": {
+        "@id": "https://tjyoga.ru/#organization"
+      }
     }
     </script>
     
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Главная",
-          "item": "https://tjyoga.ru/"
-        }
-      ]
-    }
-    </script>
-    
-    <script type="application/ld+json">
+    <script id="jsonld-home-service" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Service",

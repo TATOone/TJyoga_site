@@ -6,10 +6,28 @@ import { apiClient, ApiClientError, type ArticleDetail } from '../../lib/apiClie
 import { usePageMeta } from '../../utils/usePageMeta';
 
 const BlogPost: React.FC = () => {
-  usePageMeta('blog');
   const { slug = '' } = useParams();
   const [article, setArticle] = React.useState<ArticleDetail | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+
+  const pageMetaOverrides = React.useMemo(() => {
+    if (article) {
+      return {
+        title: `${article.title} — TJ Yoga`,
+        description: article.excerpt,
+        path: `/blog/${article.slug}`,
+        ogType: 'article' as const,
+      };
+    }
+
+    if (slug) {
+      return { path: `/blog/${slug}`, ogType: 'article' as const };
+    }
+
+    return undefined;
+  }, [article, slug]);
+
+  usePageMeta('blog', pageMetaOverrides);
 
   React.useEffect(() => {
     const load = async () => {

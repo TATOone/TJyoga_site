@@ -1,3 +1,5 @@
+import { SEED_ARTICLES } from './seedContent';
+
 export interface PageMetaConfig {
   title: string;
   description: string;
@@ -31,6 +33,15 @@ export type PageMetaKey =
   | 'notFound';
 
 export const SITE_URL = 'https://tjyoga.ru';
+export const SITE_NAME = 'TJ Yoga';
+export const SITE_LOCALE = 'ru_RU';
+export const OG_IMAGE_PATH = '/images/og-image.png';
+export const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
+export const OG_IMAGE_WIDTH = '1200';
+export const OG_IMAGE_HEIGHT = '630';
+export const OG_IMAGE_ALT = 'TJ Yoga — Женя и Тим, классическая хатха-йога';
+export const OG_IMAGE_TYPE = 'image/png';
+export const TWITTER_CARD = 'summary_large_image';
 
 export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   home: {
@@ -175,7 +186,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
     path: '/blog',
     robots: 'index,follow',
     keywords: 'блог о йоге, статьи о йоге, хатха йога блог',
-    ogType: 'article',
+    ogType: 'website',
   },
   notFound: {
     title: 'Страница не найдена — TJ Yoga',
@@ -185,13 +196,26 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   },
 };
 
-/**
- * Сопоставляет URL с ключом PAGE_META, чтобы каждая публичная страница
- * получала свой title/description ещё до загрузки lazy-чанка.
- */
+export interface PageMetaOverrides {
+  title?: string;
+  description?: string;
+  path?: string;
+  robots?: PageMetaConfig['robots'];
+  keywords?: string;
+  ogType?: PageMetaConfig['ogType'];
+}
+
+export interface ResolvedPageMeta extends PageMetaConfig {
+  canonicalUrl: string;
+  ogType: 'website' | 'article';
+}
+
+const normalizePathname = (pathname: string): string =>
+  pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+
+/** Сопоставляет URL с ключом PAGE_META до загрузки lazy-чанка. */
 export const getPageMetaKeyForPath = (pathname: string): PageMetaKey => {
-  const normalized =
-    pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  const normalized = normalizePathname(pathname);
 
   if (normalized === '/') return 'home';
   if (normalized === '/club') return 'club';
@@ -214,4 +238,50 @@ export const getPageMetaKeyForPath = (pathname: string): PageMetaKey => {
   if (normalized === '/account' || normalized.startsWith('/account/')) return 'account';
   if (normalized === '/blog' || normalized.startsWith('/blog/')) return 'blog';
   return 'notFound';
+};
+
+/**
+ * Собирает итоговые meta для URL: уникальный path у checkout/blog,
+ * известные публичные статьи получают свой title/description.
+ */
+export const resolvePageMeta = (
+  pathname: string,
+  overrides?: PageMetaOverrides,
+): ResolvedPageMeta => {
+  const normalized = normalizePathname(pathname);
+  const key = getPageMetaKeyForPath(normalized);
+  const base = PAGE_META[key];
+
+  let title = base.title;
+  let description = base.description;
+  let path = base.path;
+  const robots = base.robots;
+  const keywords = base.keywords;
+  let ogType: 'website' | 'article' = base.ogType ?? 'website';
+
+  if (key === 'checkout' && normalized.startsWith('/checkout/')) {
+    path = normalized;
+  }
+
+  if (key === 'blog' && normalized.startsWith('/blog/')) {
+    path = normalized;
+    ogType = 'article';
+    const slug = normalized.slice('/blog/'.length);
+    const article = SEED_ARTICLES.find((item) => item.slug === slug && item.access === 'public');
+    if (article) {
+      title = `${article.title} — ${SITE_NAME}`;
+      description = article.excerpt;
+    }
+  }
+
+  return {
+    ...base,
+    title: overrides?.title ?? title,
+    description: overrides?.description ?? description,
+    path: overrides?.path ?? path,
+    robots: overrides?.robots ?? robots,
+    keywords: overrides?.keywords ?? keywords,
+    ogType: overrides?.ogType ?? ogType,
+    canonicalUrl: `${SITE_URL}${overrides?.path ?? path}`,
+  };
 };

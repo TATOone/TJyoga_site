@@ -9,6 +9,9 @@ export interface ProductConfig {
   description: string;
   details: string;
   priceLabel: string;
+  /** Числовая цена в рублях для JSON-LD Offer. Только фиксированные тарифы. */
+  priceAmount?: number;
+  priceCurrency?: 'RUB';
   ctaLabel: string;
   primaryPath: string;
   checkoutPath: string;
@@ -43,6 +46,8 @@ export const PRODUCTS: Record<ProductId, ProductConfig> = {
     details:
       'Закрытый клуб в кабинете: Zoom-эфиры, библиотека записей, материалы по практике и первоисточникам, чат с преподавателем. Ссылка на занятие открывается из кабинета — её не нужно искать в ленте.',
     priceLabel: '6 000 ₽/месяц',
+    priceAmount: 6000,
+    priceCurrency: 'RUB',
     ctaLabel: 'Оформить месяц',
     primaryPath: '/club',
     checkoutPath: '/checkout/club-monthly',
@@ -58,6 +63,8 @@ export const PRODUCTS: Record<ProductId, ProductConfig> = {
     details:
       'Тот же клуб: эфиры, записи, уровни, чат. Год имеет смысл, если хотите держать ритм без ежемесячного решения «оплатить ещё раз».',
     priceLabel: '60 000 ₽/год (5 000 ₽/мес)',
+    priceAmount: 60000,
+    priceCurrency: 'RUB',
     ctaLabel: 'Оформить год',
     primaryPath: '/club/rates',
     checkoutPath: '/checkout/club-yearly',

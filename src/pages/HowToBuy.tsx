@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PublicPageLayout from '../components/PublicPageLayout';
+import PurchaseLegalLinks from '../components/PurchaseLegalLinks';
 import { getActiveAccent } from '../config/campaignAccent';
 import { CONSENT_BASELINE } from '../config/legalDocuments';
 import { PRODUCTS } from '../config/products';
@@ -60,17 +61,7 @@ const HowToBuy: React.FC = () => {
               Короткие тексты, которые нужно принять в форме заказа. Версия документов:{' '}
               {CONSENT_BASELINE.version}.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/offer" className="text-terracotta hover:text-golden-sandy transition-colors">
-                Оферта
-              </Link>
-              <Link to="/policy" className="text-terracotta hover:text-golden-sandy transition-colors">
-                Политика
-              </Link>
-              <Link to="/refund" className="text-terracotta hover:text-golden-sandy transition-colors">
-                Возврат
-              </Link>
-            </div>
+            <PurchaseLegalLinks analyticsLocation="how_to_buy_legal" />
           </article>
         </div>
 

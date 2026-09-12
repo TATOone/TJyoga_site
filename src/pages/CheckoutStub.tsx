@@ -7,6 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import CheckoutProgress, { type CheckoutStepId } from '../components/CheckoutProgress';
 import PublicPageLayout from '../components/PublicPageLayout';
+import PurchaseLegalLinks from '../components/PurchaseLegalLinks';
+import TrustStrip from '../components/TrustStrip';
 import { TextField } from '../components/ui';
 import { CONSENT_BASELINE, LEGAL_DOCUMENTS } from '../config/legalDocuments';
 import { getProductById, type ProductId } from '../config/products';
@@ -257,6 +259,8 @@ const CheckoutStub: React.FC = () => {
           <p className="text-2xl font-bold text-olive-green">{product.priceLabel}</p>
         </article>
 
+        <TrustStrip />
+
         <div className="rounded-card border border-light-sandy bg-light-text px-4 py-4 shadow-soft sm:px-6">
           <CheckoutProgress current={currentStep} />
         </div>
@@ -390,6 +394,8 @@ const CheckoutStub: React.FC = () => {
                 </p>
               ) : null}
             </fieldset>
+
+            <PurchaseLegalLinks analyticsLocation="checkout_legal" />
 
             <fieldset className="space-y-3 rounded-soft border border-dashed border-light-sandy p-4">
               <legend className="px-1 text-sm font-semibold text-gray-brown">Дополнительно</legend>

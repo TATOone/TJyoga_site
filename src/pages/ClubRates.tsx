@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PublicPageLayout from '../components/PublicPageLayout';
+import PurchaseLegalLinks from '../components/PurchaseLegalLinks';
+import TeachersTeaser from '../components/TeachersTeaser';
+import Testimonials from '../components/Testimonials';
+import TrustStrip from '../components/TrustStrip';
 import { Button } from '../components/ui';
 import { getActiveAccent } from '../config/campaignAccent';
 import { CLUB_RATE_PRODUCT_IDS, PRODUCTS } from '../config/products';
@@ -23,6 +27,9 @@ const ClubRates: React.FC = () => {
       eyebrow={accent.label}
     >
       <div className="mx-auto max-w-5xl space-y-8">
+        <TrustStrip />
+        <TeachersTeaser analyticsLocation="club_rates_teachers" />
+
         <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2">
           {plans.map((product) => {
             const featured = Boolean(product.featured);
@@ -87,6 +94,8 @@ const ClubRates: React.FC = () => {
           })}
         </div>
 
+        <Testimonials variant="compact" />
+
         <div className="rounded-card bg-light-olive p-6 text-dark-brown">
           <h3 className="mb-3 font-display text-xl font-semibold">После оплаты</h3>
           <p className="mb-3">
@@ -100,6 +109,9 @@ const ClubRates: React.FC = () => {
           >
             Как проходит оформление
           </Link>
+          <div className="mt-5 border-t border-olive-green/20 pt-4">
+            <PurchaseLegalLinks analyticsLocation="club_rates_legal" />
+          </div>
         </div>
       </div>
     </PublicPageLayout>
