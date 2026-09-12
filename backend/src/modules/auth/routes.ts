@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { success } from '../../lib/http.js';
-import { requireRoles } from '../../security/rbac.js';
+import { requireAdminAccess, requireRoles } from '../../security/rbac.js';
 import {
   loginRequestSchema,
   logoutRequestSchema,
@@ -93,7 +93,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   app.get(
     '/admin/foundation/ping',
     {
-      preHandler: [app.authenticate, requireRoles(['admin'])],
+      preHandler: [app.authenticate, requireAdminAccess],
     },
     async (request) =>
       success(request, {

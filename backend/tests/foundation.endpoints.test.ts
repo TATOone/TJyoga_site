@@ -1,6 +1,7 @@
 import { createHmac } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { FastifyInstance } from 'fastify';
+import { ADMIN_ACCESS_EMAILS } from '../src/config/adminAccess.js';
 import { buildApp } from '../src/app.js';
 
 const PRODMUS_SECRET = 'dev-prodamus-webhook-secret';
@@ -12,10 +13,17 @@ const signPayload = (payload: string): string => createHmac('sha256', PRODMUS_SE
 
 describe('Stage 3 foundation endpoints', () => {
   let app: FastifyInstance;
+  let allowlistedAdminId: string;
 
   beforeAll(async () => {
     app = await buildApp();
     await app.ready();
+    const admin = await app.store.createUser({
+      email: ADMIN_ACCESS_EMAILS[0],
+      role: 'admin',
+      status: 'active',
+    });
+    allowlistedAdminId = admin.id;
   });
 
   afterAll(async () => {
@@ -220,7 +228,7 @@ describe('Stage 3 foundation endpoints', () => {
       method: 'GET',
       url: '/api/v1/admin/foundation/ping',
       headers: {
-        'x-user-id': DEMO_ADMIN_ID,
+        'x-user-id': allowlistedAdminId,
         'x-user-role': 'admin',
       },
     });

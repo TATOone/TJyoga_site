@@ -279,7 +279,7 @@ const App: React.FC = () => {
               path="/admin"
               element={
                 <Suspense fallback={suspenseFallback}>
-                  <RequireAuth roles={['admin', 'editor', 'support']}>
+                  <RequireAuth roles={['admin']} requireAdminEmail>
                     <AdminDashboard />
                   </RequireAuth>
                 </Suspense>

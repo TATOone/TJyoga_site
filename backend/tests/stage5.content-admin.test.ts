@@ -1,16 +1,23 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
+import { ADMIN_ACCESS_EMAILS } from '../src/config/adminAccess.js';
 import { buildApp } from '../src/app.js';
 
 const DEMO_STUDENT_ID = '00000000-0000-4000-8000-000000000002';
-const DEMO_ADMIN_ID = '00000000-0000-4000-8000-000000000001';
 
 describe('Stage 5 content and admin endpoints', () => {
   let app: FastifyInstance;
+  let allowlistedAdminId: string;
 
   beforeAll(async () => {
     app = await buildApp();
     await app.ready();
+    const admin = await app.store.createUser({
+      email: ADMIN_ACCESS_EMAILS[0],
+      role: 'admin',
+      status: 'active',
+    });
+    allowlistedAdminId = admin.id;
   });
 
   afterAll(async () => {
@@ -79,7 +86,7 @@ describe('Stage 5 content and admin endpoints', () => {
       method: 'GET',
       url: '/api/v1/admin/overview',
       headers: {
-        'x-user-id': DEMO_ADMIN_ID,
+        'x-user-id': allowlistedAdminId,
         'x-user-role': 'admin',
       },
     });
@@ -91,7 +98,7 @@ describe('Stage 5 content and admin endpoints', () => {
       url: '/api/v1/admin/videos',
       headers: {
         'content-type': 'application/json',
-        'x-user-id': DEMO_ADMIN_ID,
+        'x-user-id': allowlistedAdminId,
         'x-user-role': 'admin',
       },
       payload: {
