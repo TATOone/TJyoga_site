@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import StickyFunnelCta from './StickyFunnelCta';
 
 interface PublicPageLayoutProps {
   title: string;
@@ -35,6 +36,7 @@ const PublicPageLayout: React.FC<PublicPageLayoutProps> = ({
         <section className="container mx-auto px-4">{children}</section>
       </main>
       <Footer />
+      <StickyFunnelCta />
     </div>
   );
 };
