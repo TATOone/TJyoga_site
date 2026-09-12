@@ -1,6 +1,7 @@
 import React from 'react';
 import { BookOpen, CreditCard, Home, LifeBuoy, PlayCircle } from 'lucide-react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { canAccessAdminPanel } from '../config/adminAccess';
 import { CLUB_SUPPORT } from '../config/clubContent';
 import { apiClient } from '../lib/apiClient';
 import { clearAuthSession, loadAuthSession } from '../lib/authStorage';
@@ -68,7 +69,7 @@ const AccountLayout: React.FC = () => {
             <Link to="/blog" className="text-olive-green hover:underline">
               Блог
             </Link>
-            {session?.user?.role === 'admin' || session?.user?.role === 'editor' ? (
+            {canAccessAdminPanel(session?.user) ? (
               <Link to="/admin" className="text-terracotta hover:underline">
                 Админка
               </Link>

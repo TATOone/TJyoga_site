@@ -1,4 +1,5 @@
 import type { preHandlerHookHandler } from 'fastify';
+import { isAdminEmailAllowed } from '../config/adminAccess.js';
 import { ApiError } from '../lib/http.js';
 import type { UserRole } from '../types/domain.js';
 
@@ -28,4 +29,33 @@ export const requireRoles = (allowedRoles: readonly UserRole[]): preHandlerHookH
   };
 
   return guard;
+};
+
+export const requireAdminAccess: preHandlerHookHandler = async (request) => {
+  if (!request.auth) {
+    throw new ApiError('UNAUTHORIZED', 'Требуется авторизация');
+  }
+
+  if (request.auth.role !== 'admin') {
+    throw new ApiError('FORBIDDEN', 'Недостаточно прав для выполнения операции', {
+      required_roles: ['admin'],
+      actual_role: request.auth.role,
+    });
+  }
+
+  const storedUser = await request.server.store.getUserById(request.auth.userId);
+  if (storedUser && storedUser.role !== 'admin') {
+    throw new ApiError('FORBIDDEN', 'Недостаточно прав для выполнения операции', {
+      required_roles: ['admin'],
+      actual_role: storedUser.role,
+    });
+  }
+
+  const email = storedUser?.email ?? request.auth.email;
+  if (!isAdminEmailAllowed(email)) {
+    throw new ApiError('FORBIDDEN', 'Недостаточно прав для выполнения операции', {
+      required_roles: ['admin'],
+      actual_role: request.auth.role,
+    });
+  }
 };

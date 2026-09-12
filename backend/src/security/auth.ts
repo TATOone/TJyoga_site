@@ -46,9 +46,12 @@ const authPluginImpl: FastifyPluginAsync = async (app) => {
           ? bypassRoleHeader
           : env.DEV_DEFAULT_USER_ROLE;
 
+      const storedUser = await app.store.getUserById(userId);
+
       request.auth = {
         userId,
         role: roleCandidate,
+        email: storedUser?.email ?? null,
         source: 'dev_bypass',
       };
       return;
@@ -71,9 +74,13 @@ const authPluginImpl: FastifyPluginAsync = async (app) => {
         throw new ApiError('UNAUTHORIZED', 'JWT не содержит sub');
       }
 
+      const jwtEmail = typeof payload.email === 'string' ? payload.email : null;
+      const storedUser = await app.store.getUserById(userId);
+
       request.auth = {
         userId,
         role: readRoleFromTokenPayload(payload),
+        email: storedUser?.email ?? jwtEmail,
         source: 'supabase_jwt',
       };
     } catch (error) {

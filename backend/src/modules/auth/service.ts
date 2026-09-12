@@ -28,6 +28,7 @@ const issueLocalTokens = async (user: UserRecord): Promise<{
   const now = Math.floor(Date.now() / 1000);
   const accessToken = await new SignJWT({
     role: user.role,
+    email: user.email,
     app_metadata: {
       role: user.role,
     },
@@ -62,6 +63,7 @@ export interface AuthTokens {
   expiresInSec: number;
   user: {
     id: string;
+    email: string;
     role: UserRecord['role'];
   };
 }
@@ -179,6 +181,7 @@ export const loginUser = async (store: BackendStore, input: { email: string; pas
       expiresInSec: payload.expires_in,
       user: {
         id: user.id,
+        email: user.email,
         role: user.role,
       },
     };
@@ -209,6 +212,7 @@ export const loginUser = async (store: BackendStore, input: { email: string; pas
     ...tokens,
     user: {
       id: user.id,
+      email: user.email,
       role: user.role,
     },
   };
@@ -264,6 +268,7 @@ export const refreshUserSession = async (
       expiresInSec: payload.expires_in,
       user: {
         id: user.id,
+        email: user.email,
         role: user.role,
       },
     };
@@ -281,6 +286,7 @@ export const refreshUserSession = async (
     ...tokens,
     user: {
       id: user.id,
+      email: user.email,
       role: user.role,
     },
   };

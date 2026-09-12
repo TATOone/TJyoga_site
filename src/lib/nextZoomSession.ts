@@ -2,9 +2,13 @@ import { ZOOM_SCHEDULE, type ZoomScheduleItem } from '../config/clubContent';
 
 const MOSCOW_TZ = 'Europe/Moscow';
 
-const DAY_NAME_TO_INDEX: Record<ZoomScheduleItem['dayLabel'], number> = {
+const DAY_NAME_TO_INDEX: Record<string, number> = {
+  Воскресенье: 0,
   Понедельник: 1,
+  Вторник: 2,
   Среда: 3,
+  Четверг: 4,
+  Пятница: 5,
   Суббота: 6,
 };
 
@@ -44,7 +48,8 @@ export const getMoscowClock = (now: Date = new Date()): MoscowClock => {
 };
 
 const sessionMinutesFromMidnight = (item: ZoomScheduleItem): number => {
-  const [hours, minutes] = item.timeLabel.split(':').map(Number);
+  const startLabel = item.timeLabel.split('–')[0]?.trim() ?? item.timeLabel;
+  const [hours, minutes] = startLabel.split(':').map(Number);
   return hours * 60 + minutes;
 };
 
@@ -57,11 +62,14 @@ export const getNextZoomSession = (
   }
 
   const clock = getMoscowClock(now);
-  let best = schedule[0];
+  let best: ZoomScheduleItem | null = null;
   let bestWait = Number.POSITIVE_INFINITY;
 
   for (const item of schedule) {
     const targetDay = DAY_NAME_TO_INDEX[item.dayLabel];
+    if (targetDay === undefined) {
+      continue;
+    }
     const targetMinutes = sessionMinutesFromMidnight(item);
     let dayDelta = (targetDay - clock.weekday + 7) % 7;
     if (dayDelta === 0 && targetMinutes <= clock.minutes) {

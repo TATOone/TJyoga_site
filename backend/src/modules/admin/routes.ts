@@ -3,7 +3,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { PLAN_CATALOG } from '../../config/plans.js';
 import { ApiError, success } from '../../lib/http.js';
-import { requireRoles } from '../../security/rbac.js';
+import { requireAdminAccess } from '../../security/rbac.js';
 
 const videoUpsertSchema = z.object({
   id: z.string().optional(),
@@ -40,7 +40,7 @@ const extendSubscriptionSchema = z.object({
 
 export const adminRoutes: FastifyPluginAsync = async (app) => {
   const adminGuard = {
-    preHandler: [app.authenticate, requireRoles(['admin', 'editor'])],
+    preHandler: [app.authenticate, requireAdminAccess],
   };
 
   app.get('/admin/overview', adminGuard, async (request) => {
@@ -104,7 +104,7 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
   app.post(
     '/admin/subscriptions/extend',
     {
-      preHandler: [app.authenticate, requireRoles(['admin', 'support'])],
+      preHandler: [app.authenticate, requireAdminAccess],
     },
     async (request) => {
       const payload = extendSubscriptionSchema.parse(request.body);
@@ -231,7 +231,7 @@ export const adminRoutes: FastifyPluginAsync = async (app) => {
   app.put(
     '/admin/zoom',
     {
-      preHandler: [app.authenticate, requireRoles(['admin'])],
+      preHandler: [app.authenticate, requireAdminAccess],
     },
     async (request) => {
       const payload = zoomUpsertSchema.parse(request.body);
