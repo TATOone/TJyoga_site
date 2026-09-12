@@ -1,20 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ZOOM_SCHEDULE } from '../../config/clubContent';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, EmptyState, SectionHeader, StatusBadge } from '../../components/ui';
+import { FUNNEL_RATES_PATH } from '../../config/funnel';
 import { apiClient, ApiClientError, type MeResponse } from '../../lib/apiClient';
 import { loadAuthSession } from '../../lib/authStorage';
+import { getNextZoomSession } from '../../lib/nextZoomSession';
+import {
+  formatAccountDate,
+  getPlanLabel,
+  getSubscriptionStatusView,
+  hasPracticeAccess,
+} from '../../lib/subscriptionDisplay';
 import { analyticsEvents } from '../../utils/analytics';
 
 const Dashboard: React.FC = () => {
   const [me, setMe] = React.useState<MeResponse | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [zoomError, setZoomError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(true);
+  const navigate = useNavigate();
+  const nextSession = React.useMemo(() => getNextZoomSession(), []);
 
   React.useEffect(() => {
     const load = async () => {
       const session = loadAuthSession();
       if (!session) {
-        setError('Сессия не найдена');
+        setError('Сессия не найдена. Войдите снова, чтобы открыть кабинет.');
         setLoading(false);
         return;
       }
@@ -23,7 +34,11 @@ const Dashboard: React.FC = () => {
         const data = await apiClient.getMe(session.accessToken);
         setMe(data);
       } catch (err) {
-        setError(err instanceof ApiClientError ? err.message : 'Не удалось загрузить кабинет');
+        setError(
+          err instanceof ApiClientError
+            ? err.message
+            : 'Не удалось загрузить кабинет. Обновите страницу или напишите в поддержку.',
+        );
       } finally {
         setLoading(false);
       }
@@ -32,20 +47,25 @@ const Dashboard: React.FC = () => {
     void load();
   }, []);
 
-  const subscriptionActive =
-    me?.subscription?.status === 'active' || me?.subscription?.status === 'grace';
+  const subscriptionActive = hasPracticeAccess(me?.subscription);
+  const statusView = me?.subscription ? getSubscriptionStatusView(me.subscription.status) : null;
 
   const openZoom = async () => {
     const session = loadAuthSession();
     if (!session) {
       return;
     }
+    setZoomError(null);
     try {
       analyticsEvents.ctaClick('zoom_enter', 'account_dashboard');
       const data = await apiClient.getZoomRedirect(session.accessToken, 'main');
       window.open(data.redirect_url, '_blank', 'noopener,noreferrer');
     } catch (err) {
-      setError(err instanceof ApiClientError ? err.message : 'Не удалось открыть Zoom');
+      setZoomError(
+        err instanceof ApiClientError
+          ? err.message
+          : 'Не удалось открыть Zoom. Попробуйте ещё раз или напишите в поддержку.',
+      );
     }
   };
 
@@ -54,79 +74,131 @@ const Dashboard: React.FC = () => {
   }
 
   if (error) {
-    return <p className="text-red-700">{error}</p>;
+    return (
+      <EmptyState
+        title="Кабинет сейчас недоступен"
+        description={error}
+        actionLabel="Написать в поддержку"
+        actionTo="/account/support"
+      />
+    );
   }
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-dark-brown mb-2">Личный кабинет</h1>
-        <p className="text-gray-brown mb-2">
-          {me?.user?.email ? `Вы вошли как ${me.user.email}` : 'Добро пожаловать в клуб'}
-        </p>
-      </div>
+      <SectionHeader
+        eyebrow="Кабинет"
+        title="Что делать сейчас"
+        subtitle={
+          me?.user?.email
+            ? `Вы вошли как ${me.user.email}`
+            : 'Zoom, записи и статус подписки — в одном месте.'
+        }
+      />
 
-      <section className="bg-light-text border border-light-sandy rounded-2xl p-6">
-        <h2 className="text-xl font-semibold text-dark-brown mb-2">Подписка</h2>
-        {me?.subscription ? (
-          <div className="space-y-1 text-dark-brown">
-            <p>
-              Статус:{' '}
-              <span className="font-semibold text-olive-green">{me.subscription.status}</span>
-            </p>
-            <p>Тариф: {me.subscription.plan_code}</p>
-            <p>Доступ до: {new Date(me.subscription.ends_at).toLocaleString('ru-RU')}</p>
+      <section className="rounded-card border border-light-sandy bg-light-text p-6 shadow-soft">
+        {subscriptionActive ? (
+          <div className="space-y-4">
+            <div>
+              <h2 className="font-display text-xl font-semibold text-dark-brown">Открыть практику</h2>
+              <p className="mt-1 text-sm text-gray-brown">
+                {nextSession
+                  ? `Ближайшее занятие: ${nextSession.dayLabel}, ${nextSession.timeLabel} МСК — ${nextSession.title}.`
+                  : 'Живое занятие открывается через защищённый переход.'}
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Button onClick={() => void openZoom()}>Войти в Zoom</Button>
+              <Link
+                to="/account/videos"
+                className="inline-flex min-h-touch items-center justify-center rounded-soft border border-terracotta px-5 font-medium text-terracotta transition-colors hover:bg-cream"
+                onClick={() => analyticsEvents.ctaClick('first_video', 'account_dashboard')}
+              >
+                Смотреть записи
+              </Link>
+            </div>
+            {zoomError ? (
+              <p className="text-sm text-danger" role="alert">
+                {zoomError}
+              </p>
+            ) : (
+              <p className="text-sm text-gray-brown">
+                Ссылка на комнату не показывается в кабинете — только безопасный переход.
+              </p>
+            )}
           </div>
         ) : (
-          <div className="space-y-3">
-            <p className="text-gray-brown">Активной подписки нет.</p>
-            <Link
-              to="/club/rates"
-              className="inline-flex min-h-[44px] items-center px-4 rounded-lg bg-terracotta text-light-text"
+          <div className="space-y-4">
+            <div>
+              <h2 className="font-display text-xl font-semibold text-dark-brown">Сначала тариф</h2>
+              <p className="mt-1 text-sm text-gray-brown">
+                Без активной подписки Zoom и записи закрыты. После оплаты кабинет откроет практику сразу.
+              </p>
+            </div>
+            <Button
+              onClick={() => {
+                analyticsEvents.ctaClick('renew', 'account_dashboard');
+                navigate(FUNNEL_RATES_PATH);
+              }}
             >
               Выбрать тариф
-            </Link>
+            </Button>
           </div>
         )}
       </section>
 
-      <section className="bg-light-text border border-light-sandy rounded-2xl p-6">
-        <h2 className="text-xl font-semibold text-dark-brown mb-2">Ближайшая практика</h2>
-        <p className="text-dark-brown mb-1">{ZOOM_SCHEDULE[0]?.title}</p>
-        <p className="text-sm text-gray-brown mb-4">
-          {ZOOM_SCHEDULE[0]?.dayLabel} · {ZOOM_SCHEDULE[0]?.timeLabel} МСК
-        </p>
-        <button
-          type="button"
-          onClick={openZoom}
-          disabled={!subscriptionActive}
-          className="min-h-[44px] px-5 rounded-lg bg-olive-green text-light-text disabled:opacity-50"
-        >
-          Войти в занятие
-        </button>
-        {!subscriptionActive ? (
-          <p className="text-sm text-gray-brown mt-2">Кнопка доступна при активной подписке.</p>
-        ) : (
-          <p className="text-sm text-gray-brown mt-2">
-            Ссылка открывается через защищённый redirect и не отображается в интерфейсе.
+      {nextSession ? (
+        <section className="rounded-card border border-light-sandy bg-cream p-6">
+          <h2 className="font-display text-xl font-semibold text-dark-brown">Ближайшее по расписанию</h2>
+          <p className="mt-2 text-dark-brown">{nextSession.title}</p>
+          <p className="mt-1 text-sm text-gray-brown">
+            {nextSession.dayLabel} · {nextSession.timeLabel} МСК · {nextSession.durationMin} мин ·{' '}
+            {nextSession.level}
           </p>
+        </section>
+      ) : null}
+
+      <section className="rounded-card border border-light-sandy bg-light-text p-6 shadow-soft">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <h2 className="font-display text-xl font-semibold text-dark-brown">Подписка</h2>
+          {statusView ? <StatusBadge label={statusView.label} tone={statusView.tone} /> : null}
+        </div>
+        {me?.subscription && statusView ? (
+          <div className="space-y-2 text-dark-brown">
+            <p>Тариф: {getPlanLabel(me.subscription.plan_code)}</p>
+            <p>Доступ до: {formatAccountDate(me.subscription.ends_at)}</p>
+            {me.subscription.status === 'grace' && statusView.description ? (
+              <p className="text-sm text-gray-brown">{statusView.description}</p>
+            ) : null}
+            {me.subscription.status === 'grace' ? (
+              <Link
+                to={FUNNEL_RATES_PATH}
+                className="inline-flex min-h-touch items-center font-medium text-terracotta hover:underline"
+                onClick={() => analyticsEvents.ctaClick('renew', 'account_dashboard')}
+              >
+                Продлить доступ
+              </Link>
+            ) : null}
+          </div>
+        ) : (
+          <p className="text-gray-brown">Активной подписки нет — Zoom и записи откроются после оплаты.</p>
         )}
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Link
           to="/account/videos"
-          className="bg-cream border border-light-sandy rounded-2xl p-5 hover:border-terracotta transition-colors"
+          className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft transition-colors hover:border-terracotta"
         >
-          <h3 className="font-semibold text-terracotta mb-1">Записи</h3>
-          <p className="text-sm text-gray-brown">Библиотека практик и семинаров Kinescope</p>
+          <h3 className="mb-1 font-semibold text-terracotta">Записи</h3>
+          <p className="text-sm text-gray-brown">Практики и семинары, если пропустили эфир</p>
         </Link>
         <Link
           to="/account/knowledge"
-          className="rounded-card border border-light-sandy bg-cream p-5 transition-colors hover:border-terracotta"
+          className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft transition-colors hover:border-terracotta"
         >
           <h3 className="mb-1 font-semibold text-terracotta">Знания</h3>
-          <p className="text-sm text-gray-brown">Клубные материалы TJ club</p>
+          <p className="text-sm text-gray-brown">Клубные материалы рядом с практикой</p>
         </Link>
       </section>
     </div>

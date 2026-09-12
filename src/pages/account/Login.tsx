@@ -2,7 +2,10 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PublicPageLayout from '../../components/PublicPageLayout';
 import { Button, FormCard, TextField } from '../../components/ui';
-import { apiClient, ApiClientError } from '../../lib/apiClient';
+import { CLUB_SUPPORT } from '../../config/clubContent';
+import { apiClient } from '../../lib/apiClient';
+import { friendlyAuthError } from '../../lib/authCopy';
+import { ACCOUNT_HOME_PATH, resolvePostAuthPath } from '../../lib/authRedirect';
 import { isRememberMeEnabled, saveAuthSession } from '../../lib/authStorage';
 import { analyticsEvents } from '../../utils/analytics';
 import { usePageMeta } from '../../utils/usePageMeta';
@@ -11,7 +14,8 @@ const Login: React.FC = () => {
   usePageMeta('accountLogin');
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: string } | null)?.from ?? '/account';
+  const nextPath = resolvePostAuthPath({ search: location.search, state: location.state });
+  const fromPayment = new URLSearchParams(location.search).get('from') === 'payment';
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -32,28 +36,49 @@ const Login: React.FC = () => {
         rememberMe ? 'login_success_remember' : 'login_success',
         'account_login',
       );
-      navigate(from, { replace: true });
+      navigate(nextPath, { replace: true });
     } catch (err) {
-      const message =
-        err instanceof ApiClientError ? err.message : 'Не удалось войти. Проверьте данные.';
-      setError(message);
+      setError(friendlyAuthError(err, 'login'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <PublicPageLayout title="Вход" subtitle="Быстрый доступ к кабинету, Zoom и клубным материалам.">
+    <PublicPageLayout
+      title="Вход"
+      subtitle={
+        fromPayment
+          ? 'Оплата принята. Войдите — и кабинет сразу откроет практику.'
+          : 'После входа откроется кабинет: Zoom, записи и статус подписки.'
+      }
+    >
       <FormCard
         title="С возвращением"
-        subtitle="Войдите по email и паролю. Можно сохранить сессию на этом устройстве."
+        subtitle="Войдите по email и паролю. Сессию можно сохранить на этом устройстве."
         footer={
-          <p className="text-center text-sm text-gray-brown">
-            Нет аккаунта?{' '}
-            <Link to="/account/register" className="font-medium text-terracotta hover:underline">
-              Зарегистрироваться
-            </Link>
-          </p>
+          <div className="space-y-2 text-center text-sm text-gray-brown">
+            <p>
+              Нет аккаунта?{' '}
+              <Link
+                to={`/account/register?next=${encodeURIComponent(nextPath)}`}
+                className="font-medium text-terracotta hover:underline"
+              >
+                Зарегистрироваться
+              </Link>
+            </p>
+            <p>
+              Не получается войти?{' '}
+              <a
+                href={CLUB_SUPPORT.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-olive-green hover:underline"
+              >
+                Напишите в Telegram
+              </a>
+            </p>
+          </div>
         }
       >
         <form onSubmit={onSubmit} className="space-y-4">
@@ -98,12 +123,18 @@ const Login: React.FC = () => {
             </p>
           ) : null}
           <Button type="submit" fullWidth loading={loading}>
-            Войти
+            Войти в кабинет
           </Button>
           <p className="text-center text-xs text-gray-brown">
             <Link to="/blog" className="text-olive-green hover:underline">
               Читать блог без входа
             </Link>
+            {nextPath !== ACCOUNT_HOME_PATH ? (
+              <>
+                {' · '}
+                после входа вернём на нужную страницу кабинета
+              </>
+            ) : null}
           </p>
         </form>
       </FormCard>

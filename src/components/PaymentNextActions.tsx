@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CLUB_SUPPORT } from '../config/clubContent';
 import { FUNNEL_RATES_PATH } from '../config/funnel';
+import { ACCOUNT_HOME_PATH, loginPathForAccount } from '../lib/authRedirect';
 import { loadAuthSession } from '../lib/authStorage';
 import { analyticsEvents } from '../utils/analytics';
 
@@ -40,15 +41,16 @@ const actionClass = (variant: ActionVariant): string => {
 
 const PaymentNextActions: React.FC<PaymentNextActionsProps> = ({ outcome, retryPath }) => {
   const hasSession = Boolean(loadAuthSession());
-  const cabinetTo = hasSession ? '/account' : '/account/login';
-  const cabinetLabel = hasSession ? 'Кабинет' : 'Войти в кабинет';
+  const cabinetTo = hasSession ? ACCOUNT_HOME_PATH : `${loginPathForAccount(ACCOUNT_HOME_PATH)}&from=payment`;
+  const cabinetLabel = hasSession ? 'Открыть практику' : 'Войти в кабинет';
+  const cabinetEvent = hasSession ? 'open_practice' : 'enter_cabinet';
   const analyticsLocation = outcome === 'success' ? 'payment_success' : 'payment_error';
 
   const cabinetLink = (
     <Link
       to={cabinetTo}
       className={actionClass(outcome === 'success' ? 'primary' : 'ghost')}
-      onClick={() => analyticsEvents.ctaClick(cabinetLabel, analyticsLocation)}
+      onClick={() => analyticsEvents.ctaClick(cabinetEvent, analyticsLocation)}
     >
       {cabinetLabel}
     </Link>

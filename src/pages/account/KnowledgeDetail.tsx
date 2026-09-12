@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { EmptyState, StatusBadge } from '../../components/ui';
+import { FUNNEL_RATES_PATH } from '../../config/funnel';
 import { apiClient, ApiClientError, type ArticleDetail } from '../../lib/apiClient';
 import { loadAuthSession } from '../../lib/authStorage';
+import { analyticsEvents } from '../../utils/analytics';
 
 const KnowledgeDetail: React.FC = () => {
   const { slug = '' } = useParams();
@@ -14,7 +16,7 @@ const KnowledgeDetail: React.FC = () => {
     const load = async () => {
       const session = loadAuthSession();
       if (!session) {
-        setError('Требуется вход');
+        setError('Чтобы читать статью, войдите в кабинет.');
         return;
       }
       try {
@@ -36,9 +38,10 @@ const KnowledgeDetail: React.FC = () => {
     return (
       <EmptyState
         title="Нужна активная подписка"
-        description="Эта статья из раздела Знания доступна участникам клуба."
+        description="Эта статья из раздела Знания доступна участникам клуба. Оформите тариф — и материал откроется."
         actionLabel="Выбрать тариф"
-        actionTo="/club/rates"
+        actionTo={FUNNEL_RATES_PATH}
+        onActionClick={() => analyticsEvents.ctaClick('renew', 'account_knowledge')}
       />
     );
   }
