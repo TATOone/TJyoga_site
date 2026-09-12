@@ -189,6 +189,14 @@ a:focus-visible {
   }
 }
 
+.sticky-funnel-cta {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  padding-top: 0.75rem;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .countdown-live__dot {
     animation: none;

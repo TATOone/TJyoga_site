@@ -12,6 +12,9 @@ const ClubRates: React.FC = () => {
   const accent = getActiveAccent();
   const monthly = PRODUCTS['club-monthly'];
   const yearly = PRODUCTS['club-yearly'];
+  const plans = [...CLUB_RATE_PRODUCT_IDS]
+    .map((id) => PRODUCTS[id])
+    .sort((left, right) => Number(Boolean(right.featured)) - Number(Boolean(left.featured)));
 
   return (
     <PublicPageLayout
@@ -20,29 +23,45 @@ const ClubRates: React.FC = () => {
       eyebrow={accent.label}
     >
       <div className="mx-auto max-w-5xl space-y-8">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {CLUB_RATE_PRODUCT_IDS.map((id) => {
-            const product = PRODUCTS[id];
+        <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2">
+          {plans.map((product) => {
+            const featured = Boolean(product.featured);
 
             return (
               <article
                 key={product.id}
-                className={`rounded-card border p-6 shadow-soft ${
-                  product.featured
-                    ? 'border-terracotta/40 bg-cream'
+                className={`flex min-w-0 flex-col rounded-card border p-6 shadow-soft md:p-8 ${
+                  featured
+                    ? 'border-terracotta bg-cream ring-2 ring-terracotta/35'
                     : 'border-light-sandy bg-light-text'
                 }`}
               >
-                {product.featured ? (
-                  <p className="mb-3 text-sm font-medium text-terracotta">На 12 000 ₽ меньше за год</p>
-                ) : null}
-                <h2 className="mb-2 font-display text-2xl font-semibold text-terracotta">
+                {featured ? (
+                  <p className="mb-3 inline-flex w-fit rounded-full bg-terracotta/10 px-3 py-1 text-sm font-semibold text-terracotta">
+                    На 12 000 ₽ меньше за год
+                  </p>
+                ) : (
+                  <p className="mb-3 text-sm font-medium text-transparent" aria-hidden="true">
+                    На 12 000 ₽ меньше за год
+                  </p>
+                )}
+                <h2
+                  className={`mb-2 font-display font-semibold text-terracotta ${
+                    featured ? 'text-3xl' : 'text-2xl'
+                  }`}
+                >
                   {product.shortTitle}
                 </h2>
                 <p className="mb-4 text-gray-brown">{product.description}</p>
-                <p className="mb-5 text-2xl font-bold text-olive-green">{product.priceLabel}</p>
+                <p
+                  className={`mb-5 font-bold text-olive-green ${
+                    featured ? 'text-3xl' : 'text-2xl'
+                  }`}
+                >
+                  {product.priceLabel}
+                </p>
 
-                <ul className="mb-6 space-y-2 text-dark-brown">
+                <ul className="mb-6 flex-1 space-y-2 text-dark-brown">
                   {product.includes.map((item) => (
                     <li key={item} className="relative pl-4">
                       <span className="absolute left-0 text-olive-green">•</span>
@@ -54,6 +73,8 @@ const ClubRates: React.FC = () => {
                 <Link to={product.checkoutPath} className="block">
                   <Button
                     fullWidth
+                    size="lg"
+                    className="min-h-12 text-base"
                     onClick={() =>
                       analyticsEvents.ctaClick(`Оформить ${product.shortTitle}`, 'club_rates')
                     }

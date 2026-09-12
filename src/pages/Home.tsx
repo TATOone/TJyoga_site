@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
+import StickyFunnelCta from '../components/StickyFunnelCta';
 import { getActiveAccent } from '../config/campaignAccent';
 import { PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
@@ -122,6 +123,7 @@ const Home: React.FC = () => {
           <Footer />
         </Suspense>
       </main>
+      <StickyFunnelCta />
     </div>
   );
 };
