@@ -31,7 +31,7 @@ const PaymentSuccess: React.FC = () => {
       const session = loadAuthSession();
       if (!session) {
         setMessage(
-          'Оплата принята провайдером. Войдите в аккаунт, чтобы увидеть актуальный статус подписки.',
+          'Оплата принята. Войдите в кабинет — там Zoom, записи и статус подписки.',
         );
         setTone('warning');
         return;
@@ -40,7 +40,7 @@ const PaymentSuccess: React.FC = () => {
       try {
         const order = await apiClient.getCheckoutOrder(orderId, session.accessToken);
         if (order.status === 'paid' || order.subscription_status === 'active') {
-          setMessage('Оплата подтверждена. Доступ к клубу активирован.');
+          setMessage('Оплата подтверждена. Дальше — кабинет: откройте практику или записи.');
           setTone('success');
           return;
         }
@@ -65,7 +65,10 @@ const PaymentSuccess: React.FC = () => {
   }, [orderIdFromQuery]);
 
   return (
-    <PublicPageLayout title="Оплата" subtitle="Статус вашего платежа">
+    <PublicPageLayout
+      title="Оплата"
+      subtitle="Дальше — кабинет: там Zoom, записи и статус подписки."
+    >
       <FormCard className="text-center">
         <div className="mb-3 flex justify-center">
           <StatusBadge

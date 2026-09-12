@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { EmptyState, SectionHeader, StatusBadge } from '../../components/ui';
+import { FUNNEL_RATES_PATH } from '../../config/funnel';
 import { apiClient, ApiClientError, type ArticleListItem, type MeResponse } from '../../lib/apiClient';
 import { loadAuthSession } from '../../lib/authStorage';
+import { hasPracticeAccess } from '../../lib/subscriptionDisplay';
 import { analyticsEvents } from '../../utils/analytics';
 
 const Knowledge: React.FC = () => {
@@ -15,7 +17,7 @@ const Knowledge: React.FC = () => {
     const load = async () => {
       const session = loadAuthSession();
       if (!session) {
-        setError('Требуется вход');
+        setError('Чтобы читать Знания, войдите в кабинет.');
         setLoading(false);
         return;
       }
@@ -26,8 +28,7 @@ const Knowledge: React.FC = () => {
           apiClient.listArticles(session.accessToken),
         ]);
         setMe(meData);
-        const hasSub =
-          meData.subscription?.status === 'active' || meData.subscription?.status === 'grace';
+        const hasSub = hasPracticeAccess(meData.subscription);
         if (!hasSub) {
           setArticles([]);
           analyticsEvents.ctaClick('knowledge_denied', 'account_knowledge');
@@ -36,7 +37,11 @@ const Knowledge: React.FC = () => {
           analyticsEvents.ctaClick('knowledge_open', 'account_knowledge');
         }
       } catch (err) {
-        setError(err instanceof ApiClientError ? err.message : 'Не удалось загрузить Знания');
+        setError(
+          err instanceof ApiClientError
+            ? err.message
+            : 'Не удалось загрузить Знания. Обновите страницу или напишите в поддержку.',
+        );
       } finally {
         setLoading(false);
       }
@@ -45,14 +50,21 @@ const Knowledge: React.FC = () => {
     void load();
   }, []);
 
-  const hasSub = me?.subscription?.status === 'active' || me?.subscription?.status === 'grace';
+  const hasSub = hasPracticeAccess(me?.subscription);
 
   if (loading) {
     return <p className="text-gray-brown">Загрузка Знаний...</p>;
   }
 
   if (error) {
-    return <p className="text-danger">{error}</p>;
+    return (
+      <EmptyState
+        title="Знания сейчас недоступны"
+        description={error}
+        actionLabel="В поддержку"
+        actionTo="/account/support"
+      />
+    );
   }
 
   if (!hasSub) {
@@ -61,16 +73,17 @@ const Knowledge: React.FC = () => {
         <SectionHeader
           eyebrow="Клуб"
           title="Знания"
-          subtitle="Углублённые материалы для участников TJ club."
+          subtitle="Углублённые материалы для участников клуба."
         />
         <EmptyState
-          title="Доступ только по подписке"
-          description="Знания — закрытый раздел клуба. Оформите тариф, чтобы читать материалы как в канале TJ club."
+          title="Раздел откроется после оплаты"
+          description="Знания доступны при активной подписке. Открытые заметки можно читать в блоге без входа."
           actionLabel="Выбрать тариф"
-          actionTo="/club/rates"
+          actionTo={FUNNEL_RATES_PATH}
+          onActionClick={() => analyticsEvents.ctaClick('renew', 'account_knowledge')}
         />
         <p className="text-sm text-gray-brown">
-          Открытые заметки доступны всем в{' '}
+          Открытые заметки — в{' '}
           <Link to="/blog" className="text-terracotta hover:underline">
             блоге
           </Link>
@@ -91,7 +104,9 @@ const Knowledge: React.FC = () => {
       {articles.length === 0 ? (
         <EmptyState
           title="Пока пусто"
-          description="Скоро здесь появятся клубные статьи."
+          description="Клубные статьи появятся здесь. Пока можно открыть ближайшую практику или записи."
+          actionLabel="К обзору"
+          actionTo="/account"
         />
       ) : (
         <ul className="space-y-4">

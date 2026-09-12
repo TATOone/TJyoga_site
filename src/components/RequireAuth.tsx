@@ -12,7 +12,13 @@ const RequireAuth: React.FC<RequireAuthProps> = ({ children, roles }) => {
   const session = loadAuthSession();
 
   if (!session?.accessToken) {
-    return <Navigate to="/account/login" replace state={{ from: location.pathname }} />;
+    return (
+      <Navigate
+        to="/account/login"
+        replace
+        state={{ from: `${location.pathname}${location.search}` }}
+      />
+    );
   }
 
   if (roles && !roles.includes(session.user.role)) {
