@@ -112,7 +112,7 @@ const Dashboard: React.FC = () => {
               <Link
                 to="/account/videos"
                 className="inline-flex min-h-touch items-center justify-center rounded-soft border border-terracotta px-5 font-medium text-terracotta transition-colors hover:bg-cream"
-                onClick={() => analyticsEvents.ctaClick('first_video', 'account_dashboard')}
+                onClick={() => analyticsEvents.ctaClick('open_videos', 'account_dashboard')}
               >
                 Смотреть записи
               </Link>
