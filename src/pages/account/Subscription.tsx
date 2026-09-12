@@ -64,7 +64,7 @@ const Subscription: React.FC = () => {
       <SectionHeader
         eyebrow="Кабинет"
         title="Подписка"
-        subtitle="Тариф, срок доступа и продление — без английских статусов."
+        subtitle="Тариф, срок доступа и как продлить вручную."
       />
 
       <section className="space-y-4 rounded-card border border-light-sandy bg-light-text p-6 shadow-soft">
