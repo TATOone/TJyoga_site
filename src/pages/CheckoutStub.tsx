@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldErrors } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
@@ -57,6 +57,7 @@ const CheckoutStub: React.FC = () => {
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: { errors, isSubmitting, submitCount },
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
@@ -111,11 +112,27 @@ const CheckoutStub: React.FC = () => {
     return () => observer.disconnect();
   }, [product, planCode]);
 
-  const scrollToFirstError = () => {
-    const firstInvalid = document.querySelector<HTMLElement>('[aria-invalid="true"], [data-consent-error="true"]');
-    firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    firstInvalid?.focus?.();
+  const scrollToFirstError = (formErrors: FieldErrors<CheckoutFormData>) => {
     analyticsEvents.ctaClick('checkout_validation_error', 'checkout_stub');
+    const fieldOrder = [
+      'fullName',
+      'email',
+      'telegram',
+      'password',
+      'offerAccept',
+      'privacyAccept',
+      'medicalDisclaimerAccept',
+    ] as const;
+    const firstInvalidField = fieldOrder.find((field) => formErrors[field]);
+    if (firstInvalidField) {
+      setFocus(firstInvalidField);
+    }
+    window.requestAnimationFrame(() => {
+      const firstInvalid = document.querySelector<HTMLElement>(
+        '[aria-invalid="true"], [data-consent-error="true"]',
+      );
+      firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   };
 
   const onSubmit = async (formData: CheckoutFormData) => {

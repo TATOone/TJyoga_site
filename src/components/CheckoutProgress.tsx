@@ -39,7 +39,7 @@ const CheckoutProgress: React.FC<CheckoutProgressProps> = ({ current }) => {
         const state = index < currentIndex ? 'done' : index === currentIndex ? 'current' : 'upcoming';
         const circleClass =
           state === 'upcoming'
-            ? 'bg-light-sandy text-gray-brown'
+            ? 'border border-gray-brown/50 bg-light-text text-gray-brown'
             : 'bg-terracotta text-light-text';
         const labelClass = state === 'upcoming' ? 'text-gray-brown' : 'text-dark-brown';
 

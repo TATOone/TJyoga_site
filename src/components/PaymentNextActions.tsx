@@ -4,14 +4,39 @@ import { CLUB_SUPPORT } from '../config/clubContent';
 import { FUNNEL_RATES_PATH } from '../config/funnel';
 import { loadAuthSession } from '../lib/authStorage';
 import { analyticsEvents } from '../utils/analytics';
-import { Button } from './ui';
 
 export type PaymentOutcome = 'success' | 'error';
+
+type ActionVariant = 'primary' | 'secondary' | 'ghost';
 
 interface PaymentNextActionsProps {
   outcome: PaymentOutcome;
   retryPath?: string | null;
 }
+
+const actionClass = (variant: ActionVariant): string => {
+  const variantClass = (() => {
+    switch (variant) {
+      case 'primary':
+        return 'bg-terracotta text-light-text hover:bg-golden-sandy shadow-soft';
+      case 'secondary':
+        return 'border border-terracotta text-terracotta bg-transparent hover:bg-cream';
+      case 'ghost':
+        return 'border border-light-sandy text-dark-brown bg-light-text hover:bg-cream';
+      default: {
+        const _exhaustive: never = variant;
+        return _exhaustive;
+      }
+    }
+  })();
+
+  return [
+    'inline-flex w-full min-h-touch items-center justify-center rounded-soft px-5 text-base font-medium',
+    'transition-colors duration-200 focus:outline-none',
+    'focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2',
+    variantClass,
+  ].join(' ');
+};
 
 const PaymentNextActions: React.FC<PaymentNextActionsProps> = ({ outcome, retryPath }) => {
   const hasSession = Boolean(loadAuthSession());
@@ -19,47 +44,41 @@ const PaymentNextActions: React.FC<PaymentNextActionsProps> = ({ outcome, retryP
   const cabinetLabel = hasSession ? 'Кабинет' : 'Войти в кабинет';
   const analyticsLocation = outcome === 'success' ? 'payment_success' : 'payment_error';
 
-  const cabinetButton = (
+  const cabinetLink = (
     <Link
       to={cabinetTo}
-      className="block"
+      className={actionClass(outcome === 'success' ? 'primary' : 'ghost')}
       onClick={() => analyticsEvents.ctaClick(cabinetLabel, analyticsLocation)}
     >
-      <Button fullWidth variant={outcome === 'success' ? 'primary' : 'ghost'}>
-        {cabinetLabel}
-      </Button>
+      {cabinetLabel}
     </Link>
   );
 
-  const telegramButton = (
+  const telegramLink = (
     <a
       href={CLUB_SUPPORT.telegram}
       target="_blank"
       rel="noopener noreferrer"
-      className="block"
+      className={actionClass('secondary')}
       onClick={() => {
         analyticsEvents.ctaClick('Telegram', analyticsLocation);
         analyticsEvents.telegramClick('starovoitovae', analyticsLocation);
       }}
     >
-      <Button fullWidth variant="secondary">
-        Telegram
-      </Button>
+      Telegram
     </a>
   );
 
   const ratesLabel = retryPath ? 'Повторить' : 'К тарифам';
   const ratesTo = retryPath ?? FUNNEL_RATES_PATH;
 
-  const ratesButton = (
+  const ratesLink = (
     <Link
       to={ratesTo}
-      className="block"
+      className={actionClass(outcome === 'error' ? 'primary' : 'ghost')}
       onClick={() => analyticsEvents.ctaClick(ratesLabel, analyticsLocation)}
     >
-      <Button fullWidth variant={outcome === 'error' ? 'primary' : 'ghost'}>
-        {ratesLabel}
-      </Button>
+      {ratesLabel}
     </Link>
   );
 
@@ -67,36 +86,32 @@ const PaymentNextActions: React.FC<PaymentNextActionsProps> = ({ outcome, retryP
     case 'success':
       return (
         <div className="flex flex-col gap-3">
-          {cabinetButton}
-          {telegramButton}
+          {cabinetLink}
+          {telegramLink}
           <Link
             to={FUNNEL_RATES_PATH}
-            className="block"
+            className={actionClass('ghost')}
             onClick={() => analyticsEvents.ctaClick('К тарифам', analyticsLocation)}
           >
-            <Button fullWidth variant="ghost">
-              К тарифам
-            </Button>
+            К тарифам
           </Link>
         </div>
       );
     case 'error':
       return (
         <div className="flex flex-col gap-3">
-          {ratesButton}
+          {ratesLink}
           {retryPath ? (
             <Link
               to={FUNNEL_RATES_PATH}
-              className="block"
+              className={actionClass('ghost')}
               onClick={() => analyticsEvents.ctaClick('К тарифам', analyticsLocation)}
             >
-              <Button fullWidth variant="ghost">
-                К тарифам
-              </Button>
+              К тарифам
             </Link>
           ) : null}
-          {telegramButton}
-          {cabinetButton}
+          {telegramLink}
+          {cabinetLink}
         </div>
       );
     default: {
