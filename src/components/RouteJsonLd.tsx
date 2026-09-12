@@ -2,7 +2,19 @@ import React, { useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getRouteJsonLdGraph, ROUTE_JSON_LD_SCRIPT_ID } from '../config/jsonLd';
 
+const HOME_SERVICE_SCRIPT_ID = 'jsonld-home-service';
+
+const syncHomeServiceJsonLd = (pathname: string): void => {
+  const homeService = document.getElementById(HOME_SERVICE_SCRIPT_ID);
+  if (!homeService) {
+    return;
+  }
+
+  homeService.setAttribute('type', pathname === '/' ? 'application/ld+json' : 'application/json');
+};
+
 const upsertRouteJsonLd = (pathname: string): void => {
+  syncHomeServiceJsonLd(pathname);
   const graph = getRouteJsonLdGraph(pathname);
   let element = document.getElementById(ROUTE_JSON_LD_SCRIPT_ID) as HTMLScriptElement | null;
 
