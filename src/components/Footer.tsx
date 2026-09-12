@@ -8,6 +8,7 @@ const Footer: React.FC = () => {
   const publicLinks = [
     { label: 'Главная', to: '/' },
     { label: 'Клуб', to: '/club' },
+    { label: 'О нас', to: '/about' },
     { label: FREE_CTA_LABEL, to: FREE_PAGE_PATH },
     { label: 'Блог', to: '/blog' },
     { label: 'Тарифы', to: '/club/rates' },

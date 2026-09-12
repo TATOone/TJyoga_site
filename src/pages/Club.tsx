@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PublicPageLayout from '../components/PublicPageLayout';
+import TeachersTeaser from '../components/TeachersTeaser';
+import Testimonials from '../components/Testimonials';
 import { getActiveAccent } from '../config/campaignAccent';
 import {
   CLUB_PROGRAM,
@@ -38,6 +40,8 @@ const Club: React.FC = () => {
             {FREE_CTA_LABEL}
           </Link>
         </div>
+
+        <TeachersTeaser analyticsLocation="club_teachers" />
 
         <ul className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {CLUB_SOCIAL_PROOF.map((item) => (
@@ -103,6 +107,8 @@ const Club: React.FC = () => {
             ))}
           </ul>
         </section>
+
+        <Testimonials variant="compact" />
 
         <section>
           <h2 className="text-2xl font-semibold text-dark-brown mb-2">Тарифы</h2>

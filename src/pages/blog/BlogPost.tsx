@@ -3,13 +3,27 @@ import { Link, useParams } from 'react-router-dom';
 import PublicPageLayout from '../../components/PublicPageLayout';
 import { StatusBadge } from '../../components/ui';
 import { apiClient, ApiClientError, type ArticleDetail } from '../../lib/apiClient';
-import { usePageMeta } from '../../utils/usePageMeta';
+import { useResolvedPageMeta } from '../../utils/usePageMeta';
 
 const BlogPost: React.FC = () => {
-  usePageMeta('blog');
   const { slug = '' } = useParams();
   const [article, setArticle] = React.useState<ArticleDetail | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+
+  const pageMetaOverrides = React.useMemo(() => {
+    if (!article) {
+      return undefined;
+    }
+
+    return {
+      title: `${article.title} — TJ Yoga`,
+      description: article.excerpt,
+      path: `/blog/${article.slug}`,
+      ogType: 'article' as const,
+    };
+  }, [article]);
+
+  useResolvedPageMeta(slug ? `/blog/${slug}` : '/blog', pageMetaOverrides);
 
   React.useEffect(() => {
     const load = async () => {
