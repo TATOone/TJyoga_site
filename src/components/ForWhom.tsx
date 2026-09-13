@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import {
   CAMPAIGN_ACCENT_IDS,
   CAMPAIGN_ACCENTS,
   getActiveAccent,
   type CampaignAccentId,
 } from '../config/campaignAccent';
+import { useSectionInView } from '../hooks/useSectionInView';
 
 const audienceLead = (id: CampaignAccentId): string => {
   switch (id) {
@@ -24,8 +24,7 @@ const audienceLead = (id: CampaignAccentId): string => {
 };
 
 const ForWhom: React.FC = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, isInView } = useSectionInView();
   const activeAccent = getActiveAccent();
 
   return (

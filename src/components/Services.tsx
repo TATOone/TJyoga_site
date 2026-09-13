@@ -1,6 +1,5 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { MessageCircle, Globe, Star } from 'lucide-react';
 import { analyticsEvents } from '../utils/analytics';
 import Countdown from './Countdown';
@@ -8,6 +7,7 @@ import { RETREAT_START } from '../config/retreat';
 import { Link } from 'react-router-dom';
 import { HOME_SERVICE_PRODUCT_IDS, PRODUCTS } from '../config/products';
 import type { ProductId } from '../config/products';
+import { useSectionInView } from '../hooks/useSectionInView';
 
 type Service = {
   id: ProductId;
@@ -23,8 +23,7 @@ type Service = {
 };
 
 const Services: React.FC = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, isInView } = useSectionInView();
 
   const iconByProduct: Record<ProductId, React.ReactElement> = {
     'club-monthly': <MessageCircle className="w-8 h-8 text-terracotta" />,

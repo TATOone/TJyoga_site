@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
+import SectionLoader from '../components/SectionLoader';
 import StickyFunnelCta from '../components/StickyFunnelCta';
 import { getActiveAccent } from '../config/campaignAccent';
 import { PRODUCTS } from '../config/products';
@@ -15,12 +16,6 @@ const Testimonials = lazy(() => import('../components/Testimonials'));
 const Blog = lazy(() => import('../components/Blog'));
 const CTA = lazy(() => import('../components/CTA'));
 const Footer = lazy(() => import('../components/Footer'));
-
-const SectionLoader: React.FC = () => (
-  <div className="py-16 flex items-center justify-center">
-    <div className="animate-pulse text-gray-brown">Загрузка...</div>
-  </div>
-);
 
 const Home: React.FC = () => {
   usePageMeta('home');
@@ -54,7 +49,7 @@ const Home: React.FC = () => {
       <Header />
       <main>
         <Hero />
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader variant="cards" />}>
           <Services />
         </Suspense>
         <section id="club-entry" className="py-16 bg-light-text">
@@ -104,13 +99,13 @@ const Home: React.FC = () => {
             </ol>
           </div>
         </section>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader variant="cards" />}>
           <ForWhom />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader variant="cards" />}>
           <Testimonials />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SectionLoader variant="cards" />}>
           <Blog />
         </Suspense>
         <Suspense fallback={<SectionLoader />}>
@@ -119,7 +114,7 @@ const Home: React.FC = () => {
         <Suspense fallback={<SectionLoader />}>
           <About />
         </Suspense>
-        <Suspense fallback={null}>
+        <Suspense fallback={<SectionLoader variant="footer" />}>
           <Footer />
         </Suspense>
       </main>

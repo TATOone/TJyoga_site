@@ -23,7 +23,9 @@ const PaymentSuccess: React.FC = () => {
       setResolvedOrderId(orderId);
 
       if (!orderId) {
-        setMessage('Не найден order_id. Если оплата прошла, доступ активируется после webhook.');
+        setMessage(
+          'Номер заказа не найден. Если оплата уже прошла, доступ может ещё обрабатываться — откройте кабинет или напишите в Telegram.',
+        );
         setTone('warning');
         return;
       }
@@ -50,7 +52,7 @@ const PaymentSuccess: React.FC = () => {
       } catch (error) {
         if (error instanceof ApiClientError && error.code === 'NOT_FOUND') {
           setMessage(
-            'Заказ пока не синхронизирован. Если оплата прошла, доступ появится после webhook.',
+            'Заказ ещё не появился в кабинете. Если оплата прошла, доступ обычно открывается в течение нескольких минут.',
           );
           setTone('warning');
           return;

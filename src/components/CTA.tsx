@@ -1,14 +1,13 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { getActiveAccent } from '../config/campaignAccent';
 import { PRODUCTS } from '../config/products';
+import { useSectionInView } from '../hooks/useSectionInView';
 import { analyticsEvents } from '../utils/analytics';
 
 const CTA: React.FC = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, isInView } = useSectionInView();
   const accent = getActiveAccent();
   const monthly = PRODUCTS['club-monthly'];
   const yearly = PRODUCTS['club-yearly'];

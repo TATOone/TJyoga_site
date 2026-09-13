@@ -23,11 +23,11 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-xl font-bold text-olive-green mb-2">{OPERATOR_INFO.brandName}</h3>
-            <p className="text-gray-brown mb-1">
+            <p className="text-footer-muted mb-1">
               Оператор: {OPERATOR_INFO.operatorName} ({OPERATOR_INFO.operatorStatus})
             </p>
-            <p className="text-gray-brown mb-1">{OPERATOR_INFO.taxInfo}</p>
-            <p className="text-gray-brown text-sm">© 2026 TJ Yoga. Все права защищены</p>
+            <p className="text-footer-muted mb-1">{OPERATOR_INFO.taxInfo}</p>
+            <p className="text-footer-muted text-sm">© 2026 TJ Yoga. Все права защищены</p>
           </div>
 
           <div>
@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
                 <li key={link.to}>
                   <Link
                     to={link.to}
-                    className="text-gray-brown hover:text-golden-sandy transition-colors"
+                    className="text-cream hover:text-golden-sandy transition-colors"
                     onClick={() => analyticsEvents.ctaClick(`footer_${link.label}`, 'footer_navigation')}
                   >
                     {link.label}
@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
                 <li key={doc.path}>
                   <Link
                     to={doc.path}
-                    className="text-gray-brown hover:text-golden-sandy transition-colors"
+                    className="text-cream hover:text-golden-sandy transition-colors"
                     onClick={() => analyticsEvents.ctaClick(`footer_${doc.type}`, 'footer_legal')}
                   >
                     {doc.title}
@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/how-to-buy"
-                  className="text-gray-brown hover:text-golden-sandy transition-colors"
+                  className="text-cream hover:text-golden-sandy transition-colors"
                   onClick={() => analyticsEvents.ctaClick('footer_how_to_buy', 'footer_legal')}
                 >
                   Как купить
@@ -72,15 +72,15 @@ const Footer: React.FC = () => {
               </li>
             </ul>
 
-            <p className="text-gray-brown">
+            <p className="text-footer-muted">
               Юридические обращения:{' '}
-              <a href={`mailto:${OPERATOR_INFO.legalEmail}`} className="text-golden-sandy hover:underline">
+              <a href={`mailto:${OPERATOR_INFO.legalEmail}`} className="text-golden-sandy hover:text-cream hover:underline">
                 {OPERATOR_INFO.legalEmail}
               </a>
             </p>
-            <p className="text-gray-brown">
+            <p className="text-footer-muted">
               Telegram:{' '}
-              <a href="https://t.me/starovoitovae" className="text-golden-sandy hover:underline">
+              <a href="https://t.me/starovoitovae" className="text-golden-sandy hover:text-cream hover:underline">
                 {OPERATOR_INFO.legalTelegram}
               </a>
             </p>

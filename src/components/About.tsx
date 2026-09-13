@@ -1,11 +1,10 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { IMAGES } from '../config/images';
+import { useSectionInView } from '../hooks/useSectionInView';
 
 const About: React.FC = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, isInView } = useSectionInView();
 
   return (
     <section id="about" className="py-16 bg-light-text">
