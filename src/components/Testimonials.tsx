@@ -1,7 +1,7 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { TESTIMONIALS, TESTIMONIALS_TITLE } from '../config/testimonials';
+import { useSectionInView } from '../hooks/useSectionInView';
 
 interface TestimonialsProps {
   variant?: 'full' | 'compact';
@@ -41,8 +41,7 @@ const TestimonialCard: React.FC<{
 };
 
 const Testimonials: React.FC<TestimonialsProps> = ({ variant = 'full' }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, isInView } = useSectionInView();
   const compact = variant === 'compact';
 
   if (compact) {
