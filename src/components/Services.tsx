@@ -16,6 +16,7 @@ type Service = {
   description: string;
   price: string;
   button: string;
+  checkoutLabel: string;
   link: string;
   checkoutPath: string;
   image: string;
@@ -38,10 +39,11 @@ const Services: React.FC = () => {
     return {
       id: product.id,
       icon: iconByProduct[id],
-      title: product.title,
-      description: product.details,
+      title: product.homeCard?.title ?? product.title,
+      description: product.homeCard?.description ?? product.details,
       price: product.priceLabel,
-      button: product.ctaLabel,
+      button: product.homeCard?.primaryCta ?? product.ctaLabel,
+      checkoutLabel: product.homeCard?.secondaryCta ?? 'Купить',
       link: product.primaryPath,
       checkoutPath: product.checkoutPath,
       image: product.image,
@@ -113,10 +115,10 @@ const Services: React.FC = () => {
                   <Link
                     to={service.checkoutPath}
                     className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
-                    aria-label={`Купить: ${service.title}`}
-                    onClick={() => analyticsEvents.ctaClick(`Купить ${service.title}`, 'services')}
+                    aria-label={`${service.checkoutLabel}: ${service.title}`}
+                    onClick={() => analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services')}
                   >
-                    Купить
+                    {service.checkoutLabel}
                   </Link>
                 </div>
               </div>

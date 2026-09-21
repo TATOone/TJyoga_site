@@ -11,12 +11,6 @@ export default {
         display: ['Fraunces', 'Georgia', 'Times New Roman', 'serif'],
         body: ['"Source Sans 3"', 'Segoe UI', 'system-ui', 'sans-serif'],
         inter: ['"Source Sans 3"', 'Segoe UI', 'system-ui', 'sans-serif'],
-        devanagari: [
-          '"Tiro Devanagari Sanskrit"',
-          '"Noto Serif Devanagari"',
-          'Georgia',
-          'serif',
-        ],
       },
       colors: {
         'terracotta': 'var(--color-terracotta)',

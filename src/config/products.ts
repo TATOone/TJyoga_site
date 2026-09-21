@@ -2,6 +2,13 @@ import { IMAGES } from './images';
 
 export type ProductId = 'club-monthly' | 'club-yearly' | 'retreat-pass' | 'personal-session';
 
+export interface HomeServiceCardCopy {
+  title: string;
+  description: string;
+  primaryCta: string;
+  secondaryCta: string;
+}
+
 export interface ProductConfig {
   id: ProductId;
   title: string;
@@ -19,6 +26,8 @@ export interface ProductConfig {
   includes: readonly string[];
   featured?: boolean;
   showCountdown?: boolean;
+  /** Копирайт карточки на главной. Не подменяет IA страницы продукта. */
+  homeCard?: HomeServiceCardCopy;
 }
 
 /**
@@ -53,6 +62,13 @@ export const PRODUCTS: Record<ProductId, ProductConfig> = {
     checkoutPath: '/checkout/club-monthly',
     image: IMAGES.services.onlineClub,
     includes: clubCoreIncludes,
+    homeCard: {
+      title: 'Йога онлайн',
+      description:
+        'Доступ в личный кабинет TJ club: онлайн занятия в Zoom, библиотека записей, материалы по практике, задания «Йога вне коврика», чат с преподавателем и пространство общения',
+      primaryCta: 'Подробнее',
+      secondaryCta: 'Оплатить',
+    },
   },
   'club-yearly': {
     id: 'club-yearly',
