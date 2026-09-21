@@ -6,6 +6,12 @@ import { FREE_CTA_LABEL, FREE_PAGE_PATH } from '../config/freePractices';
 import { IMAGES } from '../config/images';
 import { analyticsEvents } from '../utils/analytics';
 
+const HERO_CHIPS = [
+  'Йога из первоисточников',
+  'Структура практики',
+  'Поддержка от преподавателя',
+] as const;
+
 const Hero: React.FC = () => {
   const [imageError, setImageError] = React.useState(false);
   const accent = getActiveAccent();
@@ -63,9 +69,14 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
         >
-          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Живые практики + записи</li>
-          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Уровни на виду</li>
-          <li className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1">Преподаватель в чате</li>
+          {HERO_CHIPS.map((chip) => (
+            <li
+              key={chip}
+              className="bg-cream/90 border border-light-sandy rounded-full px-3 py-1"
+            >
+              {chip}
+            </li>
+          ))}
         </motion.ul>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"

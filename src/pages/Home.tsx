@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
+import SourceVerse from '../components/SourceVerse';
 import SectionLoader from '../components/SectionLoader';
 import StickyFunnelCta from '../components/StickyFunnelCta';
 import { getActiveAccent } from '../config/campaignAccent';
@@ -49,6 +50,7 @@ const Home: React.FC = () => {
       <Header />
       <main>
         <Hero />
+        <SourceVerse />
         <Suspense fallback={<SectionLoader variant="cards" />}>
           <Services />
         </Suspense>
