@@ -27,10 +27,9 @@ export const CAMPAIGN_ACCENTS: Record<CampaignAccentId, CampaignAccentDefinition
   beginners: {
     id: 'beginners',
     label: 'Спокойный старт',
-    heroEyebrow: 'Классическая хатха · можно с нуля',
+    heroEyebrow: 'Классическая хатха-йога',
     heroHeadline: 'Практика, в которой вас не оставляют наедине',
-    heroSubhead:
-      'Живые занятия в Zoom и записи. Понятные уровни асан, структура практики и помощь преподавателя',
+    heroSubhead: 'Онлайн занятия в Zoom и записи',
     homeEmphasis:
       'Если давно хотели начать и откладывали из страха сделать «не так» — в клубе вас проводят, а не оценивают. Можно приходить, не зная санскрита и не имея «базы».',
     clubEmphasis:
