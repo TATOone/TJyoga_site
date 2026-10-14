@@ -68,7 +68,7 @@ const Videos: React.FC = () => {
         />
         <EmptyState
           title="Записи пока закрыты"
-          description="Оформите или продлите тариф — и библиотека откроется. Пока подписка не активна, ссылки на видео не показываем."
+          description="Оформите или продлите тариф, и библиотека откроется. Пока подписка не активна, ссылки на видео не показываем."
           actionLabel="Выбрать тариф"
           actionTo={FUNNEL_RATES_PATH}
           onActionClick={() => analyticsEvents.ctaClick('renew', 'account_videos')}
@@ -93,7 +93,7 @@ const Videos: React.FC = () => {
       <SectionHeader
         eyebrow="Кабинет"
         title="Видеозаписи"
-        subtitle="Практики и семинары с проверкой доступа по подписке."
+        subtitle="Практики и семинары, если пропустили эфир."
       />
       <div className="flex flex-wrap gap-2">
         <button

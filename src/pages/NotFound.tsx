@@ -135,7 +135,7 @@ const NotFound: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          К сожалению, запрашиваемая страница не существует. Возможно, она была перемещена или удалена.
+          Похоже, этой страницы нет. Можно вернуться на главную или заглянуть в клуб.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -168,7 +168,7 @@ const NotFound: React.FC = () => {
             Бесплатные практики
           </Link>
           <Link to="/how-to-buy" className="text-olive-green hover:text-golden-sandy transition-colors">
-            Как купить
+            Как оформить
           </Link>
           <a
             href="https://t.me/TJyoga"

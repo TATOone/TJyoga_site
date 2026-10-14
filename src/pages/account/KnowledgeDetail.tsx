@@ -38,7 +38,7 @@ const KnowledgeDetail: React.FC = () => {
     return (
       <EmptyState
         title="Нужна активная подписка"
-        description="Эта статья из раздела Знания доступна участникам клуба. Оформите тариф — и материал откроется."
+        description="Эта статья из раздела Знания доступна участникам клуба. Оформите тариф, и материал откроется."
         actionLabel="Выбрать тариф"
         actionTo={FUNNEL_RATES_PATH}
         onActionClick={() => analyticsEvents.ctaClick('renew', 'account_knowledge')}

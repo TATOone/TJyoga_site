@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
         subtitle={
           me?.user?.email
             ? `Вы вошли как ${me.user.email}`
-            : 'Zoom, записи и статус подписки — в одном месте.'
+            : 'Zoom, записи и статус подписки - в одном месте.'
         }
       />
 
@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
               <h2 className="font-display text-xl font-semibold text-dark-brown">Открыть практику</h2>
               <p className="mt-1 text-sm text-gray-brown">
                 {nextSession
-                  ? `Ближайшее занятие: ${nextSession.dayLabel}, ${nextSession.timeLabel} МСК — ${nextSession.title}.`
+                  ? `Ближайшее занятие: ${nextSession.dayLabel}, ${nextSession.timeLabel} МСК - ${nextSession.title}.`
                   : 'Живое занятие открывается через защищённый переход.'}
               </p>
             </div>
@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
               </p>
             ) : (
               <p className="text-sm text-gray-brown">
-                Ссылка на комнату не показывается в кабинете — только безопасный переход.
+                Ссылка на комнату не показывается в кабинете - только безопасный переход.
               </p>
             )}
           </div>
@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
             <div>
               <h2 className="font-display text-xl font-semibold text-dark-brown">Сначала тариф</h2>
               <p className="mt-1 text-sm text-gray-brown">
-                Без активной подписки Zoom и записи закрыты. После оплаты кабинет откроет практику сразу.
+                Zoom и записи открываются после оплаты подписки. Когда доступ появится, кабинет сразу покажет практику.
               </p>
             </div>
             <Button
@@ -181,7 +181,7 @@ const Dashboard: React.FC = () => {
             ) : null}
           </div>
         ) : (
-          <p className="text-gray-brown">Активной подписки нет — Zoom и записи откроются после оплаты.</p>
+          <p className="text-gray-brown">Активной подписки нет. Zoom и записи откроются после оплаты.</p>
         )}
       </section>
 

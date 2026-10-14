@@ -9,7 +9,7 @@ const Support: React.FC = () => {
       <SectionHeader
         eyebrow="Кабинет"
         title="Поддержка"
-        subtitle="Короткий путь: Telegram в рабочие часы. Ответ — в тот же день."
+        subtitle="Короткий путь: Telegram в рабочие часы. Ответ в тот же день."
       />
 
       <section className="space-y-4 rounded-card border border-light-sandy bg-light-text p-6 shadow-soft">

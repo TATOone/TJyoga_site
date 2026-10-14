@@ -16,7 +16,7 @@ const BlogPost: React.FC = () => {
     }
 
     return {
-      title: `${article.title} — TJ Yoga`,
+      title: `${article.title} - TJ Yoga`,
       description: article.excerpt,
       path: `/blog/${article.slug}`,
       ogType: 'article' as const,

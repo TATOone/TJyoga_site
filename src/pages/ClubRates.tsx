@@ -23,7 +23,7 @@ const ClubRates: React.FC = () => {
   return (
     <PublicPageLayout
       title="Тарифы Йога-Клуба"
-      subtitle={`${accent.ctaHint}. Месяц — ${monthly.priceLabel}, год — ${yearly.priceLabel}. Наполнение одно, доплат нет.`}
+      subtitle={`${accent.ctaHint}. Месяц - ${monthly.priceLabel}, год - ${yearly.priceLabel}. Наполнение одно.`}
       eyebrow={accent.label}
     >
       <div className="mx-auto max-w-5xl space-y-8">
@@ -99,7 +99,7 @@ const ClubRates: React.FC = () => {
         <div className="rounded-card bg-light-olive p-6 text-dark-brown">
           <h3 className="mb-3 font-display text-xl font-semibold">После оплаты</h3>
           <p className="mb-3">
-            Кабинет открывается после подтверждения платежа — обычно за несколько минут. Если доступ
+            Кабинет открывается после подтверждения платежа - обычно за несколько минут. Если доступ
             не появился, мы включим его вручную в течение 2 часов (ежедневно 10:00–22:00 МСК).
           </p>
           <Link

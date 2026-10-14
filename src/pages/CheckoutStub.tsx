@@ -205,7 +205,7 @@ const CheckoutStub: React.FC = () => {
         return;
       }
 
-      toast.error('Не удалось создать платёжную сессию. Попробуйте ещё раз.');
+      toast.error('Не получилось открыть оплату. Попробуйте ещё раз.');
     }
   };
 
@@ -213,7 +213,7 @@ const CheckoutStub: React.FC = () => {
     return (
       <PublicPageLayout
         title="Товар не найден"
-        subtitle="Проверьте ссылку или выберите актуальный тариф на странице клуба."
+        subtitle="Проверьте ссылку или выберите тариф на странице клуба."
       >
         <div className="max-w-xl mx-auto text-center">
           <Link
@@ -231,7 +231,7 @@ const CheckoutStub: React.FC = () => {
     return (
       <PublicPageLayout
         title="Онлайн-оплата скоро"
-        subtitle="Для этого продукта пока доступна заявка через поддержку. Выберите тариф клуба для оплаты онлайн."
+        subtitle="Для этого продукта пока доступна заявка через поддержку. Выберите тариф клуба, чтобы оплатить онлайн."
       >
         <div className="max-w-xl mx-auto text-center">
           <Link
@@ -250,7 +250,7 @@ const CheckoutStub: React.FC = () => {
   return (
     <PublicPageLayout
       title="Оформление заказа"
-      subtitle="Подтверждение данных и согласий перед переходом к оплате Prodamus."
+      subtitle="Подтверждение данных и согласий перед переходом к оплате."
     >
       <div className="mx-auto max-w-3xl space-y-6 pb-[calc(7.5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
         <article className="rounded-card border border-light-sandy bg-cream p-6 shadow-soft">
@@ -276,7 +276,7 @@ const CheckoutStub: React.FC = () => {
               className="rounded-soft border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger"
               role="alert"
             >
-              Проверьте поля ниже — без этого оплата не начнётся.
+              Проверьте поля ниже. Без этого оплата не начнётся.
             </div>
           ) : null}
 
@@ -409,7 +409,7 @@ const CheckoutStub: React.FC = () => {
           <section id="checkout-pay" className="space-y-3 scroll-mt-28">
             <h3 className="font-display text-lg font-semibold text-dark-brown">3. Оплата</h3>
             <p className="rounded-soft bg-light-olive px-4 py-3 text-sm text-dark-brown">
-              Дальше откроется оплата Prodamus. Кабинет — после подтверждения платежа, обычно за
+              Дальше откроется оплата. Кабинет - после подтверждения платежа, обычно за
               несколько минут.
             </p>
             <button
@@ -431,7 +431,7 @@ const CheckoutStub: React.FC = () => {
         >
           <div className="sticky-funnel-cta mx-auto flex w-full min-w-0 max-w-lg flex-col gap-2 px-3">
             <p className="text-xs leading-tight text-gray-brown">
-              {product.priceLabel}. После оплаты — кабинет, обычно за несколько минут.
+              {product.priceLabel}. После оплаты - кабинет, обычно за несколько минут.
             </p>
             {hasErrors ? (
               <p className="text-xs text-danger" role="alert">

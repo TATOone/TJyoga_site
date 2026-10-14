@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
     { label: 'Тарифы', to: '/club/rates' },
     { label: 'Ретриты', to: '/retreats' },
     { label: 'Персонально', to: '/personal' },
-    { label: 'Как купить', to: '/how-to-buy' },
+    { label: 'Как оформить', to: '/how-to-buy' },
   ];
 
   return (
@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
                   className="text-cream hover:text-golden-sandy transition-colors"
                   onClick={() => analyticsEvents.ctaClick('footer_how_to_buy', 'footer_legal')}
                 >
-                  Как купить
+                  Как оформить
                 </Link>
               </li>
             </ul>

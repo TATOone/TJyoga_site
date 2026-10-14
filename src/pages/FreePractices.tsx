@@ -16,7 +16,7 @@ const FreePractices: React.FC = () => {
   return (
     <PublicPageLayout
       title="Бесплатные практики"
-      subtitle="Три занятия с YouTube-канала TJ Yoga. Можно смотреть здесь — кабинет не нужен."
+      subtitle="Три занятия с YouTube-канала TJ Yoga. Можно смотреть здесь, кабинет не нужен."
       eyebrow="YouTube"
     >
       <div className="mx-auto w-full min-w-0 max-w-3xl space-y-10">
@@ -47,7 +47,7 @@ const FreePractices: React.FC = () => {
         <section className="rounded-2xl bg-light-olive p-6 md:p-8">
           <h2 className="mb-2 text-2xl font-semibold text-dark-brown">В онлайн-клуб</h2>
           <p className="mb-5 text-gray-brown">
-            Живые эфиры, записи и чат — в клубе. Как устроен формат и тарифы, можно посмотреть
+            Живые эфиры, записи и чат - в клубе. Как устроен формат и тарифы, можно посмотреть
             отдельно.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">

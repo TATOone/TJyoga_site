@@ -16,16 +16,16 @@ const HowToBuy: React.FC = () => {
   const yearly = PRODUCTS['club-yearly'];
 
   const steps = [
-    'Выберите месяц или год на странице тарифов — наполнение клуба одно и то же.',
+    'Выберите месяц или год на странице тарифов. Наполнение клуба одно и то же.',
     'В форме заказа укажите имя, почту, Telegram и пароль для кабинета.',
-    'Подтвердите оферту, политику данных и медицинский отказ — без этого оплата не начнётся.',
-    'После оплаты кабинет открывается сам, обычно за несколько минут. Если нет — пишите в Telegram, в рабочие часы доступ включают вручную.',
+    'Подтвердите оферту, политику данных и медицинский отказ. Без этого оплата не начнётся.',
+    'После оплаты кабинет открывается сам, обычно за несколько минут. Если нет - пишите в Telegram, в рабочие часы доступ включают вручную.',
   ];
 
   return (
     <PublicPageLayout
       title="Как оформить подписку"
-      subtitle={`${accent.ctaHint}. Цена на экране — та же при оплате.`}
+      subtitle={`${accent.ctaHint}. Цена как на сайте.`}
       eyebrow={accent.label}
     >
       <div className="max-w-5xl mx-auto space-y-8">
@@ -69,8 +69,7 @@ const HowToBuy: React.FC = () => {
           <div>
             <h2 className="text-2xl font-semibold text-dark-brown mb-2">Месяц или год</h2>
             <p className="text-gray-brown">
-              {monthly.priceLabel}. {yearly.priceLabel}. Сравните на странице тарифов или сразу
-              оформите месяц.
+              {monthly.priceLabel}. {yearly.priceLabel}. Посмотреть оба тарифа или сразу оформить месяц.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">

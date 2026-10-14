@@ -61,7 +61,7 @@ const Services: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          Практикуйте в клубе. Ретриты и персональные — рядом.
+          Практикуйте в клубе. Ретриты и персональные - рядом.
         </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (

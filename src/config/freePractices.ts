@@ -4,7 +4,7 @@
  */
 
 export const FREE_PAGE_PATH = '/free';
-export const FREE_CTA_LABEL = 'Попробовать бесплатно';
+export const FREE_CTA_LABEL = 'Бесплатные практики';
 
 export const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@TJyoga_club';
 export const YOUTUBE_CHANNEL_HANDLE = '@TJyoga_club';

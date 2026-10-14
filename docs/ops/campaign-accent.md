@@ -14,28 +14,29 @@ export const ACTIVE_ACCENT_ID: CampaignAccentId = 'beginners';
 
 | id | Кому говорим |
 |---|---|
-| `beginners` | Тревожный новичок, страх «сделать не так» |
-| `depth` | Практикующий, которому нужна система и первоисточники, а не фитнес |
-| `office-restore` | Офис, спина, стресс, выгорание |
+| `beginners` | Человек, который начинает. Можно с нуля. |
+| `depth` | Тому, кто ищет систему, ритм недели и первоисточники |
+| `office-restore` | Тому, чей день за компьютером: спина, внимание, рабочая неделя |
 
-Дальше — обычный деплой фронтенда. Админки пока нет: это намеренно маленький конфиг.
+Дальше - обычный деплой фронтенда. Админки пока нет: это намеренно маленький конфиг.
 
 ## Что не трогать при смене акцента
 
 - Цены и `checkoutPath` в `src/config/products.ts`
 - Коды тарифов backend `PLAN_CATALOG` (`club-month` / `club-year`, алиасы `club-monthly` / `club-yearly`)
-- Расписание Zoom и SLA поддержки в `src/config/clubContent.ts` — если они не менялись по факту
+- Расписание Zoom и сроки поддержки в `src/config/clubContent.ts` - если они не менялись по факту
+- У акцента `beginners`: `heroEyebrow`, `heroHeadline`, `heroSubhead` (утверждено)
 
-Акцент меняет **формулировки** (eyebrow, заголовок, подзаголовок, акцент на Home/Club, подсказку CTA). Обещания клуба (эфиры + записи, уровни, чат, хатха ≠ фитнес, цена без мелкого шрифта) остаются в `products.ts` и на витрине клуба.
+Акцент меняет **формулировки** (eyebrow, заголовок, подзаголовок, акцент на Home/Club, подсказку CTA). Обещания клуба (эфиры + записи, уровни, чат, классическая хатха, цена как на сайте) остаются в `products.ts` и на витрине клуба.
 
 ## Поля акцента
 
 Каждая запись в `CAMPAIGN_ACCENTS`:
 
-- `id`, `label` — бейдж на Club / Rates / блок «для кого» на Home
-- `heroEyebrow` / `heroHeadline` / `heroSubhead` — главный экран Home
-- `homeEmphasis` — пояснение на Home (вход в клуб + карточка аудитории)
-- `clubEmphasis` — акцент на странице клуба
-- `ctaHint` — подсказка у финальных CTA и в герое тарифов
+- `id`, `label` - бейдж на Club / Rates / блок «для кого» на Home
+- `heroEyebrow` / `heroHeadline` / `heroSubhead` - главный экран Home
+- `homeEmphasis` - пояснение на Home (вход в клуб + карточка аудитории)
+- `clubEmphasis` - акцент на странице клуба
+- `ctaHint` - подсказка у финальных CTA и в герое тарифов
 
-Новый акцент добавляйте в union `CampaignAccentId`, в `CAMPAIGN_ACCENT_IDS`, в `CAMPAIGN_ACCENTS` и в `switch` внутри `getAccentById()` — иначе TypeScript не соберётся.
+Новый акцент добавляйте в union `CampaignAccentId`, в `CAMPAIGN_ACCENT_IDS`, в `CAMPAIGN_ACCENTS` и в `switch` внутри `getAccentById()` - иначе TypeScript не соберётся.

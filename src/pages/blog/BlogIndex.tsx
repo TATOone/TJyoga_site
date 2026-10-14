@@ -30,13 +30,13 @@ const BlogIndex: React.FC = () => {
   return (
     <PublicPageLayout
       title="Блог TJ Yoga"
-      subtitle="Открытые заметки о практике — как в канале yogaTJ. Для клубных материалов зайдите в Знания."
+      subtitle="Открытые заметки о практике, как в канале yogaTJ. Для клубных материалов зайдите в Знания."
     >
       <div className="mx-auto max-w-3xl">
         <SectionHeader
           eyebrow="Публично"
           title="Свежие записи"
-          subtitle="Читайте без регистрации. Углублённые материалы клуба — в кабинете."
+          subtitle="Читайте без регистрации. Углублённые материалы клуба - в кабинете."
         />
 
         {loading ? <p className="text-gray-brown">Загрузка...</p> : null}
@@ -75,7 +75,7 @@ const BlogIndex: React.FC = () => {
         </ul>
 
         <p className="mt-10 rounded-card border border-light-olive bg-light-olive/50 p-5 text-sm text-dark-brown">
-          Хотите материалы TJ club?{' '}
+          Хотите клубные материалы?{' '}
           <Link to="/account/knowledge" className="font-medium text-terracotta hover:underline">
             Открыть Знания
           </Link>{' '}

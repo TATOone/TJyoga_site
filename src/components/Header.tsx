@@ -23,7 +23,7 @@ const Header: React.FC = () => {
     { to: '/retreats', label: 'Ретриты' },
     { to: '/personal', label: 'Персонально' },
     { to: '/about', label: 'О нас' },
-    { to: '/how-to-buy', label: 'Как купить' },
+    { to: '/how-to-buy', label: 'Как оформить' },
     { to: '/account', label: 'Кабинет' },
   ];
 

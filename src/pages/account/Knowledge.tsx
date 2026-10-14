@@ -83,7 +83,7 @@ const Knowledge: React.FC = () => {
           onActionClick={() => analyticsEvents.ctaClick('renew', 'account_knowledge')}
         />
         <p className="text-sm text-gray-brown">
-          Открытые заметки — в{' '}
+          Открытые заметки - в{' '}
           <Link to="/blog" className="text-terracotta hover:underline">
             блоге
           </Link>
@@ -98,7 +98,7 @@ const Knowledge: React.FC = () => {
       <SectionHeader
         eyebrow="Клуб"
         title="Знания"
-        subtitle="Углублённые материалы о практике — только для участников клуба."
+        subtitle="Углублённые материалы о практике - только для участников клуба."
       />
 
       {articles.length === 0 ? (

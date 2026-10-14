@@ -23,7 +23,7 @@ export const organizationJsonLd = (): JsonLdNode => ({
   logo: `${SITE_URL}/images/logo/exports/tjyoga-logo-512.png`,
   image: OG_IMAGE_URL,
   description:
-    'Классическая хатха-йога из первоисточников. Онлайн-клуб, ретриты и персональные занятия.',
+    'Классическая хатха-йога из первоисточников. Онлайн-клуб, ретриты и персональные занятия с Тимом и Женей.',
   email: OPERATOR_INFO.supportEmail,
   sameAs: ['https://t.me/TJyoga', 'https://t.me/starovoitovae'],
   contactPoint: {
@@ -83,7 +83,7 @@ const clubOfferJsonLd = (): JsonLdNode => ({
   '@id': `${SITE_URL}/club#product`,
   name: 'Онлайн Йога-Клуб TJ Yoga',
   description:
-    'Подписка: живые практики хатха-йоги в Zoom, записи занятий, понятные уровни и чат с преподавателем.',
+    'Подписка на онлайн-клуб: живые практики хатха-йоги в Zoom, записи занятий, уровни и чат с преподавателем.',
   image: OG_IMAGE_URL,
   brand: { '@id': `${SITE_URL}/#organization` },
   url: pageUrl('/club'),

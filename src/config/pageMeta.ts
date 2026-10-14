@@ -39,15 +39,15 @@ export const OG_IMAGE_PATH = '/images/og-image.png';
 export const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 export const OG_IMAGE_WIDTH = '1200';
 export const OG_IMAGE_HEIGHT = '630';
-export const OG_IMAGE_ALT = 'TJ Yoga — Женя и Тим, классическая хатха-йога';
+export const OG_IMAGE_ALT = 'TJ Yoga - Женя и Тим, классическая хатха-йога';
 export const OG_IMAGE_TYPE = 'image/png';
 export const TWITTER_CARD = 'summary_large_image';
 
 export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   home: {
-    title: 'Онлайн Йога-Клуб TJ Yoga — классическая хатха в Zoom и в записях',
+    title: 'Онлайн Йога-Клуб TJ Yoga - классическая хатха в Zoom и в записях',
     description:
-      'Подписка на клуб: живые практики хатха-йоги из первоисточников, записи занятий, понятные уровни и чат с преподавателем. 6 000 ₽/месяц или 60 000 ₽/год.',
+      'Мы, Тим и Женя, ведём онлайн-клуб классической хатха-йоги: живые практики в Zoom, записи и чат с преподавателем. 6 000 ₽/месяц или 60 000 ₽/год.',
     path: '/',
     robots: 'index,follow',
     keywords:
@@ -56,23 +56,23 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   club: {
     title: 'Что внутри Йога-Клуба TJ Yoga: эфиры, записи, уровни, чат',
     description:
-      'Как устроен онлайн-клуб TJ Yoga: расписание Zoom, библиотека записей, уровни практики, поддержка преподавателя и кому подходит классическая хатха.',
+      'Как устроен наш онлайн-клуб: расписание Zoom, библиотека записей, уровни практики и чат с преподавателем. Классическая хатха из первоисточников.',
     path: '/club',
     robots: 'index,follow',
     keywords: 'йога клуб онлайн, расписание хатха йоги, подписка на йогу, йога с преподавателем',
   },
   clubRates: {
-    title: 'Тарифы Йога-Клуба: 6 000 ₽/месяц или 60 000 ₽/год — TJ Yoga',
+    title: 'Тарифы Йога-Клуба: 6 000 ₽/месяц или 60 000 ₽/год - TJ Yoga',
     description:
-      'Месячная подписка 6 000 ₽ и годовая 60 000 ₽. Одно наполнение: Zoom, записи, чат. Цена на экране — та же при оплате, без доплат.',
+      'Месячная подписка 6 000 ₽ и годовая 60 000 ₽. Одно наполнение: Zoom, записи, чат. Цена как на сайте.',
     path: '/club/rates',
     robots: 'index,follow',
     keywords: 'тарифы йога клуба, цена подписки на хатха йогу, годовая подписка йога',
   },
   free: {
-    title: 'Бесплатные практики хатха-йоги на YouTube — TJ Yoga',
+    title: 'Бесплатные практики хатха-йоги на YouTube - TJ Yoga',
     description:
-      'Три открытые практики TJ Yoga на YouTube: утро 60 минут, вечер 60 минут и короткая утренняя. Без кабинета и без оплаты.',
+      'Три открытые практики TJ Yoga на YouTube: утро 60 минут, вечер 60 минут и короткая утренняя. Кабинет не нужен.',
     path: '/free',
     robots: 'index,follow',
     keywords: 'бесплатная йога онлайн, хатха йога youtube, йога утро, йога вечер, TJ Yoga',
@@ -80,23 +80,23 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   retreats: {
     title: 'Йога-ретриты TJ Yoga',
     description:
-      'Ретриты TJ Yoga: погружение в практику, программа по телу и вниманию, сопровождение преподавателя.',
+      'Ретриты TJ Yoga: практика, красивое место и мы рядом. Отдельный выездной формат, клуб держит регулярность дома.',
     path: '/retreats',
     robots: 'index,follow',
     keywords: 'йога ретрит, ретрит по йоге',
   },
   personal: {
-    title: 'Персональные занятия йогой — TJ Yoga',
+    title: 'Персональные занятия йогой - TJ Yoga',
     description:
-      'Индивидуальные занятия с преподавателем TJ Yoga: персональный план, работа с техникой и поддержка практики.',
+      'Индивидуальные занятия с нами: смотрим ваше тело, дыхание и технику. Для регулярной практики есть клуб.',
     path: '/personal',
     robots: 'index,follow',
     keywords: 'персональные занятия йогой, индивидуальная йога',
   },
   about: {
-    title: 'Женя и Тим — TJ Yoga, классическая хатха из первоисточников',
+    title: 'Женя и Тим - TJ Yoga, классическая хатха из первоисточников',
     description:
-      'Семья йогов Женя Старовойтова и Тим передают хатха-йогу школы Патанджали: практика из Ришикеша, без фитнес-хайпа и без обещания идеального тела.',
+      'Мы, Женя Старовойтова и Тим, преподаём классическую хатха-йогу школы Патанджали. Эту линию мы получили в Ришикеше.',
     path: '/about',
     robots: 'index,follow',
     keywords: 'Женя Старовойтова йога, преподаватели хатха йоги, TJ Yoga о нас',
@@ -110,77 +110,77 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
     keywords: 'как купить подписку на йогу, оплата йога клуба, TJ Yoga доступ',
   },
   checkout: {
-    title: 'Оформление заказа — TJ Yoga',
-    description: 'Checkout TJ Yoga: подтверждение тарифа, согласий и переход к оплате Prodamus.',
+    title: 'Оформление заказа - TJ Yoga',
+    description: 'Подтверждение тарифа, согласий и переход к оплате.',
     path: '/checkout',
     robots: 'noindex,nofollow',
   },
   paymentSuccess: {
-    title: 'Оплата успешна — TJ Yoga',
+    title: 'Оплата успешна - TJ Yoga',
     description: 'Статус успешной оплаты подписки TJ Yoga.',
     path: '/payment/success',
     robots: 'noindex,nofollow',
   },
   paymentError: {
-    title: 'Оплата не завершена — TJ Yoga',
+    title: 'Оплата не завершена - TJ Yoga',
     description: 'Статус незавершённой оплаты подписки TJ Yoga.',
     path: '/payment/error',
     robots: 'noindex,nofollow',
   },
   offer: {
-    title: 'Публичная оферта — TJ Yoga',
+    title: 'Публичная оферта - TJ Yoga',
     description:
       'Публичная оферта TJ Yoga: условия оказания услуг, порядок оплаты, сроки доступа и ответственность сторон.',
     path: '/offer',
     robots: 'index,follow',
   },
   policy: {
-    title: 'Политика обработки персональных данных — TJ Yoga',
+    title: 'Политика обработки персональных данных - TJ Yoga',
     description:
       'Политика обработки персональных данных TJ Yoga: цели обработки, права субъекта данных и порядок хранения.',
     path: '/policy',
     robots: 'index,follow',
   },
   refund: {
-    title: 'Условия возврата — TJ Yoga',
+    title: 'Условия возврата - TJ Yoga',
     description:
       'Правила возврата в TJ Yoga: сроки обращения, порядок рассмотрения заявки и условия отмены доступа.',
     path: '/refund',
     robots: 'index,follow',
   },
   medicalDisclaimer: {
-    title: 'Медицинский отказ от ответственности — TJ Yoga',
+    title: 'Медицинский отказ от ответственности - TJ Yoga',
     description:
       'Медицинский отказ от ответственности TJ Yoga: ограничения практики и рекомендации по безопасности.',
     path: '/medical-disclaimer',
     robots: 'index,follow',
   },
   account: {
-    title: 'Личный кабинет — TJ Yoga',
+    title: 'Личный кабинет - TJ Yoga',
     description: 'Кабинет участника Йога-Клуба TJ Yoga.',
     path: '/account',
     robots: 'noindex,nofollow',
   },
   accountLogin: {
-    title: 'Вход в кабинет — TJ Yoga',
+    title: 'Вход в кабинет - TJ Yoga',
     description: 'Вход в личный кабинет Йога-Клуба TJ Yoga.',
     path: '/account/login',
     robots: 'noindex,nofollow',
   },
   accountRegister: {
-    title: 'Регистрация — TJ Yoga',
+    title: 'Регистрация - TJ Yoga',
     description: 'Регистрация в Йога-Клубе TJ Yoga.',
     path: '/account/register',
     robots: 'noindex,nofollow',
   },
   admin: {
-    title: 'Админка — TJ Yoga',
+    title: 'Админка - TJ Yoga',
     description: 'Внутренняя админка TJ Yoga.',
     path: '/admin',
     robots: 'noindex,nofollow',
   },
   blog: {
-    title: 'Блог TJ Yoga — открытые заметки о практике',
+    title: 'Блог TJ Yoga - открытые заметки о практике',
     description:
       'Публичный блог TJ Yoga: открытые материалы о хатха-йоге, практике и подходе школы.',
     path: '/blog',
@@ -189,7 +189,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
     ogType: 'website',
   },
   notFound: {
-    title: 'Страница не найдена — TJ Yoga',
+    title: 'Страница не найдена - TJ Yoga',
     description: 'Запрашиваемая страница не найдена. Вернитесь на главную TJ Yoga.',
     path: '/404',
     robots: 'noindex,nofollow',
@@ -269,7 +269,7 @@ export const resolvePageMeta = (
     const slug = normalized.slice('/blog/'.length);
     const article = SEED_ARTICLES.find((item) => item.slug === slug && item.access === 'public');
     if (article) {
-      title = `${article.title} — ${SITE_NAME}`;
+      title = `${article.title} - ${SITE_NAME}`;
       description = article.excerpt;
     }
   }

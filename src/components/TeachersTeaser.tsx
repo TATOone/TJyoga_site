@@ -39,7 +39,7 @@ const TeachersTeaser: React.FC<TeachersTeaserProps> = ({ analyticsLocation }) =>
           </h2>
           <p className="mt-1 text-sm leading-snug text-gray-brown">{TEACHERS_TEASER}</p>
           <p className="sr-only">
-            {TEACHERS.map((teacher) => `${teacher.displayName} — ${teacher.role}, ${teacher.facts}`).join(
+            {TEACHERS.map((teacher) => `${teacher.displayName} - ${teacher.role}, ${teacher.facts}`).join(
               '. ',
             )}
           </p>

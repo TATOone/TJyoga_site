@@ -30,7 +30,7 @@ const Blog: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Открытые заметки о практике — как в канале yogaTJ. Углублённые материалы клуба — в разделе
+          Открытые заметки о практике, как в канале yogaTJ. Углублённые материалы клуба - в разделе
           «Знания» внутри кабинета.
         </motion.p>
         <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2">

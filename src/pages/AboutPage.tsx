@@ -12,7 +12,7 @@ const AboutPage: React.FC = () => {
   return (
     <PublicPageLayout
       title="О нас"
-      subtitle="Женя и Тим передают классическую хатха-йогу из первоисточников — тепло, без фитнес-хайпа и без обещания идеального тела."
+      subtitle="Мы, Женя и Тим, преподаём классическую хатха-йогу из первоисточников. Тепло, живо, из традиции нашей школы."
     >
       <div className="max-w-6xl mx-auto space-y-8">
         <Suspense fallback={<SectionLoader variant="cards" />}>

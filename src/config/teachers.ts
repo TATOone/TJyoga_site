@@ -30,9 +30,9 @@ export const TEACHERS: readonly TeacherProfile[] = [
 
 export const TEACHERS_HEADLINE = 'Женя и Тим';
 
-/** Короткий факт с /about — без нового продающего текста. */
+/** Короткий факт с /about - без нового продающего текста. */
 export const TEACHERS_TEASER =
-  'Классическая хатха школы Патанджали. Женя — основной преподаватель, Тим — ассистент.';
+  'Мы, Женя и Тим, передаём классическую хатха-йогу школы Патанджали. Женя ведёт практику, Тим рядом.';
 
 export const TEACHERS_PHOTO = {
   src: IMAGES.about.teachers,

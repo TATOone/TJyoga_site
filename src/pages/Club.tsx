@@ -26,7 +26,7 @@ const Club: React.FC = () => {
   return (
     <PublicPageLayout
       title="Онлайн Йога-Клуб"
-      subtitle="Классическая хатха в живом эфире и в записях. Практика для любого уровня, прямая связь с преподавателем и поддержка сообщества учеников. Понятная цена без доплат."
+      subtitle="Классическая хатха в живом эфире и в записях. Практика для любого уровня, мы рядом в чате. Месяц или год - наполнение одно."
       eyebrow={accent.label}
     >
       <div className="max-w-5xl mx-auto space-y-10">
@@ -176,7 +176,7 @@ const Club: React.FC = () => {
           <div>
             <h2 className="text-2xl font-semibold text-dark-brown mb-2">{accent.ctaHint}</h2>
             <p className="text-gray-brown">
-              Сравните месяц и год или напишите в Telegram. {CLUB_SUPPORT.sla}
+              Можно взять месяц или год, или написать нам в Telegram. {CLUB_SUPPORT.sla}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
