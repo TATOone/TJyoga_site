@@ -7,7 +7,7 @@
 
 - Главный продукт: Йога-Клуб.
 - Юридический оператор: самозанятый, реквизиты готовы.
-- Production-инфраструктура: Yandex Cloud (персональные данные в РФ).
+- Production-инфраструктура: **VPS Jino, https://tjyoga.ru** (не Cloudflare / не Yandex Cloud).
 - Prodamus: есть тест/боевой доступ и webhook-секреты.
 - Модель подписки MVP: ручное продление.
 - Kinescope: доступ только через authorization backend (`200/403`).

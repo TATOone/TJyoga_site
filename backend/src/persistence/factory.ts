@@ -1,10 +1,17 @@
 import { env } from '../config/env.js';
+import { buildPostgresStore } from './postgres.js';
 import { buildInMemoryStore, type BackendStore } from './store.js';
 
 export const buildStore = async (): Promise<BackendStore> => {
   if (env.DATABASE_URL) {
-    console.warn(
-      '[store] DATABASE_URL задан. Примените migrations 001/002/003 и подключите PostgresBackendStore на deploy. Используется in-memory fallback.',
+    return buildPostgresStore(env.DATABASE_URL, {
+      seedDemo: env.NODE_ENV !== 'production',
+    });
+  }
+
+  if (env.NODE_ENV === 'production') {
+    throw new Error(
+      'DATABASE_URL обязателен в production. In-memory store остаётся только для local/dev/tests.',
     );
   }
 

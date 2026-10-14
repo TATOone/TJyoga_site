@@ -1,6 +1,5 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { MessageCircle, Globe, Star } from 'lucide-react';
 import { analyticsEvents } from '../utils/analytics';
 import Countdown from './Countdown';
@@ -8,6 +7,7 @@ import { RETREAT_START } from '../config/retreat';
 import { Link } from 'react-router-dom';
 import { HOME_SERVICE_PRODUCT_IDS, PRODUCTS } from '../config/products';
 import type { ProductId } from '../config/products';
+import { useSectionInView } from '../hooks/useSectionInView';
 
 type Service = {
   id: ProductId;
@@ -16,16 +16,16 @@ type Service = {
   description: string;
   price: string;
   button: string;
+  checkoutLabel: string;
   link: string;
   checkoutPath: string;
+  bookingHref?: string;
   image: string;
   showCountdown?: boolean;
-  featured?: boolean;
 };
 
 const Services: React.FC = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, isInView } = useSectionInView();
 
   const iconByProduct: Record<ProductId, React.ReactElement> = {
     'club-monthly': <MessageCircle className="w-8 h-8 text-terracotta" />,
@@ -40,20 +40,16 @@ const Services: React.FC = () => {
     return {
       id: product.id,
       icon: iconByProduct[id],
-      title: product.title,
-      description: product.details,
+      title: product.homeCard?.title ?? product.title,
+      description: product.homeCard?.description ?? product.details,
       price: product.priceLabel,
-      button:
-        id === 'club-monthly'
-          ? 'Вступить в клуб'
-          : id === 'retreat-pass'
-            ? 'Смотреть ретриты'
-            : 'Смотреть персональный формат',
+      button: product.homeCard?.primaryCta ?? product.ctaLabel,
+      checkoutLabel: product.homeCard?.secondaryCta ?? 'Купить',
       link: product.primaryPath,
       checkoutPath: product.checkoutPath,
+      bookingHref: product.bookingHref,
       image: product.image,
       showCountdown: product.showCountdown,
-      featured: product.featured,
     };
   });
 
@@ -67,14 +63,14 @@ const Services: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          Практикуй с нами
+          Практикуйте в клубе. Ретриты и персональные - рядом.
         </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <motion.div
               key={service.id}
               className={`service-card bg-light-text rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border ${
-                service.featured
+                service.id === 'club-monthly'
                   ? 'border-terracotta/30 ring-1 ring-terracotta/10 md:-translate-y-1'
                   : 'border-light-sandy'
               }`}
@@ -94,7 +90,12 @@ const Services: React.FC = () => {
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center mb-4">
                   {service.icon}
-                  <h3 className="text-xl font-semibold text-terracotta ml-2">{service.title}</h3>
+                  <div className="ml-2">
+                    {service.id === 'club-monthly' ? (
+                      <p className="text-xs font-medium text-terracotta mb-0.5">Основной формат</p>
+                    ) : null}
+                    <h3 className="text-xl font-semibold text-terracotta">{service.title}</h3>
+                  </div>
                 </div>
                 <p className="text-dark-brown mb-2 flex-grow whitespace-pre-line">{service.description}</p>
                 {service.showCountdown && (
@@ -113,14 +114,30 @@ const Services: React.FC = () => {
                   >
                     {service.button}
                   </Link>
-                  <Link
-                    to={service.checkoutPath}
-                    className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
-                    aria-label={`Купить: ${service.title}`}
-                    onClick={() => analyticsEvents.ctaClick(`Купить ${service.title}`, 'services')}
-                  >
-                    Купить
-                  </Link>
+                  {service.bookingHref ? (
+                    <a
+                      href={service.bookingHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                      aria-label={`${service.checkoutLabel}: ${service.title}`}
+                      onClick={() => {
+                        analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services');
+                        analyticsEvents.telegramClick('starovoitovae', 'services');
+                      }}
+                    >
+                      {service.checkoutLabel}
+                    </a>
+                  ) : (
+                    <Link
+                      to={service.checkoutPath}
+                      className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                      aria-label={`${service.checkoutLabel}: ${service.title}`}
+                      onClick={() => analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services')}
+                    >
+                      {service.checkoutLabel}
+                    </Link>
+                  )}
                 </div>
               </div>
             </motion.div>

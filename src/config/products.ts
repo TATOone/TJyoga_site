@@ -2,6 +2,13 @@ import { IMAGES } from './images';
 
 export type ProductId = 'club-monthly' | 'club-yearly' | 'retreat-pass' | 'personal-session';
 
+export interface HomeServiceCardCopy {
+  title: string;
+  description: string;
+  primaryCta: string;
+  secondaryCta: string;
+}
+
 export interface ProductConfig {
   id: ProductId;
   title: string;
@@ -9,6 +16,9 @@ export interface ProductConfig {
   description: string;
   details: string;
   priceLabel: string;
+  /** Числовая цена в рублях для JSON-LD Offer. Только фиксированные тарифы. */
+  priceAmount?: number;
+  priceCurrency?: 'RUB';
   ctaLabel: string;
   primaryPath: string;
   checkoutPath: string;
@@ -16,14 +26,25 @@ export interface ProductConfig {
   includes: readonly string[];
   featured?: boolean;
   showCountdown?: boolean;
+  /** Копирайт карточки на главной. Не подменяет IA страницы продукта. */
+  homeCard?: HomeServiceCardCopy;
+  /** Внешняя запись (Telegram). Если задана, вторичная кнопка ведёт сюда, а не в checkout. */
+  bookingHref?: string;
 }
 
+/**
+ * Наполнение клуба. Цены ниже должны совпадать с backend PLAN_CATALOG:
+ * club-month = 600_000 копеек (6 000 ₽ / 30 дней),
+ * club-year  = 6_000_000 копеек (60 000 ₽ / 365 дней).
+ * Коды checkout: /checkout/club-monthly и /checkout/club-yearly
+ * (на backend алиасы club-monthly → club-month, club-yearly → club-year).
+ */
 const clubCoreIncludes = [
-  'Онлайн-занятия в прямом эфире',
-  'Библиотека записанных уроков',
-  'Практика «Йога вне коврика»',
-  'Разбор первоисточников и философии',
-  'Поддержка сообщества практикующих',
+  'Живые практики в Zoom: воскресенье, зарядка во вторник, среда и пятница',
+  'Записи всех занятий - если пропустили эфир',
+  'Уровни на виду: все уровни, начинающие, продолжающие',
+  'Чат с преподавателем, ответ ежедневно 10:00–22:00 МСК',
+  'Классическая хатха-йога из первоисточников',
 ] as const;
 
 export const PRODUCTS: Record<ProductId, ProductConfig> = {
@@ -31,68 +52,93 @@ export const PRODUCTS: Record<ProductId, ProductConfig> = {
     id: 'club-monthly',
     title: 'Онлайн Йога-Клуб',
     shortTitle: 'Месячная подписка',
-    description: 'Идеальный вход в клубный формат: доступ на 1 месяц с полным наполнением.',
+    description:
+      '30 дней клуба: живые практики, записи и чат с преподавателем. 6 000 ₽ в месяц.',
     details:
-      'Закрытый Telegram-канал с занятиями, записями, методическими материалами и живой поддержкой преподавателя.',
+      'Клуб в кабинете: занятия в Zoom, библиотека записей, материалы по практике и первоисточникам, чат с преподавателем. Ссылка на занятие открывается из кабинета.',
     priceLabel: '6 000 ₽/месяц',
-    ctaLabel: 'Вступить в клуб',
+    priceAmount: 6000,
+    priceCurrency: 'RUB',
+    ctaLabel: 'Оформить месяц',
     primaryPath: '/club',
     checkoutPath: '/checkout/club-monthly',
     image: IMAGES.services.onlineClub,
     includes: clubCoreIncludes,
+    homeCard: {
+      title: 'Йога онлайн',
+      description:
+        'Доступ в личный кабинет TJ club: онлайн занятия в Zoom, библиотека записей, материалы по практике, задания «Йога вне коврика», чат с преподавателем и пространство общения',
+      primaryCta: 'Подробнее',
+      secondaryCta: 'Оплатить',
+    },
   },
   'club-yearly': {
     id: 'club-yearly',
     title: 'Онлайн Йога-Клуб',
     shortTitle: 'Годовая подписка',
     description:
-      '12 месяцев стабильной практики и заметная экономия: годовой формат для устойчивого результата.',
+      '12 месяцев того же доступа за 60 000 ₽. Если платить помесячно, выйдет 72 000 ₽.',
     details:
-      'Подходит тем, кто готов встроить йогу в повседневную жизнь и пройти полный цикл практики с поддержкой.',
+      'Тот же клуб: эфиры, записи, уровни, чат. Год удобен, если хотите держать ритм без ежемесячного решения «оплатить ещё раз».',
     priceLabel: '60 000 ₽/год (5 000 ₽/мес)',
-    ctaLabel: 'Выбрать годовой тариф',
+    priceAmount: 60000,
+    priceCurrency: 'RUB',
+    ctaLabel: 'Оформить год',
     primaryPath: '/club/rates',
     checkoutPath: '/checkout/club-yearly',
     image: IMAGES.services.onlineClub,
-    includes: [...clubCoreIncludes, '2 месяца практики в подарок'],
+    includes: [...clubCoreIncludes, 'На 12 000 ₽ меньше, чем 12 месяцев по 6 000 ₽'],
     featured: true,
   },
   'retreat-pass': {
     id: 'retreat-pass',
-    title: 'Йога-Ретриты',
+    title: 'Йогические выходные с Тимом и Женей',
     shortTitle: 'Ретриты',
     description:
-      'Погружение в практику в природных локациях с ежедневными занятиями, режимом и сопровождением.',
-    details: 'Формат для глубокой перезагрузки, укрепления дисциплины и восстановления ресурса.',
-    priceLabel: 'от 35 000 ₽',
-    ctaLabel: 'Узнать подробности',
+      'С 3 по 6 января в эко-отеле в Налибокской пуще, Беларусь. Практика два раза в день, лекции, чай, онсен и сауна. Трансфер из Минска.',
+    details:
+      'С 3 по 6 января едем в эко-отель в Налибокской пуще, Беларусь. Трансфер из Минска. Практика два раза в день, лекции, чайные церемонии, онсен (горячий источник), сауна и киновечера. Вегетарианское питание от шеф-повара - три раза в день.',
+    priceLabel: 'двухместное 45 000 ₽',
+    ctaLabel: 'Смотреть ретрит',
     primaryPath: '/retreats',
     checkoutPath: '/checkout/retreat-pass',
+    bookingHref: 'https://t.me/starovoitovae',
     image: IMAGES.services.retreat,
     includes: [
-      'Ежедневная групповая практика',
-      'Программа по работе с телом и вниманием',
-      'Сопровождение преподавателя',
+      'Практика два раза в день, лекции и чайные церемонии',
+      'Онсен (горячий источник), сауна и киновечера',
+      'Вегетарианское питание от шеф-повара три раза в день',
+      'Трансфер из Минска',
+      'Двухместное проживание 45 000 ₽, одноместное 57 000 ₽',
+      'Предоплата 20 500 ₽. Не возвращается, если отменить меньше чем за 30 дней',
+      '20 мест',
     ],
     showCountdown: true,
-    featured: true,
+    homeCard: {
+      title: 'Йогические выходные',
+      description:
+        'С 3 по 6 января в Налибокской пуще. Практика два раза в день, лекции, чай, онсен и сауна. Трансфер из Минска.',
+      primaryCta: 'Подробнее',
+      secondaryCta: 'Записаться',
+    },
   },
   'personal-session': {
     id: 'personal-session',
     title: 'Персональные занятия',
     shortTitle: 'Индивидуальная практика',
     description:
-      'Один-на-один с преподавателем: точечная работа под ваши цели, состояние и физические особенности.',
-    details: 'Подходит для старта после травм, коррекции техники и ускорения личного прогресса.',
+      'Один-на-один: смотрим ваше тело, дыхание и то, что сейчас мешает практиковать спокойно.',
+    details:
+      'Подходит после травмы, если спина беспокоит, или если хотите точечно поправить технику. Для регулярной практики есть клуб.',
     priceLabel: '8 000 ₽/занятие',
     ctaLabel: 'Записаться персонально',
     primaryPath: '/personal',
     checkoutPath: '/checkout/personal-session',
     image: IMAGES.services.personal,
     includes: [
-      'Персональный план занятия',
-      'Обратная связь по технике',
-      'Рекомендации для самостоятельной практики',
+      'План встречи под ваше состояние',
+      'Разбор техники под ваше состояние',
+      'Что делать дома до следующей практики',
     ],
   },
 };

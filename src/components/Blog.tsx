@@ -1,14 +1,13 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { IMAGES } from '../config/images';
 import { SEED_ARTICLES } from '../config/seedContent';
+import { useSectionInView } from '../hooks/useSectionInView';
 import { analyticsEvents } from '../utils/analytics';
 
 const Blog: React.FC = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, isInView } = useSectionInView();
 
   const publicPosts = SEED_ARTICLES.filter((article) => article.access === 'public').slice(0, 2);
   const images = [IMAGES.blog.preview1, IMAGES.blog.preview2];
@@ -31,7 +30,7 @@ const Blog: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Открытые заметки о практике — как в канале yogaTJ. Углублённые материалы клуба — в разделе
+          Открытые заметки о практике, как в канале yogaTJ. Углублённые материалы клуба - в разделе
           «Знания» внутри кабинета.
         </motion.p>
         <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2">

@@ -14,6 +14,7 @@
   --color-dark-brown: #3d3229;
   --color-light-text: #ffffff;
   --color-gray-brown: #736b5e;
+  --color-footer-muted: #d8cbb8;
   --color-danger: #b42318;
   --color-success: #3f6212;
 
@@ -187,6 +188,14 @@ a:focus-visible {
     opacity: 0.6;
     transform: scale(0.85);
   }
+}
+
+.sticky-funnel-cta {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  padding-top: 0.75rem;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
 }
 
 @media (prefers-reduced-motion: reduce) {

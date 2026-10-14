@@ -8,6 +8,7 @@ interface EmptyStateProps {
   actionLabel?: string;
   actionTo?: string;
   onAction?: () => void;
+  onActionClick?: () => void;
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -16,6 +17,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   actionLabel,
   actionTo,
   onAction,
+  onActionClick,
 }) => {
   return (
     <div className="rounded-card border border-dashed border-light-sandy bg-cream/60 px-6 py-10 text-center">
@@ -23,7 +25,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <p className="mx-auto mt-2 max-w-md text-sm text-gray-brown">{description}</p>
       {actionLabel && actionTo ? (
         <div className="mt-5">
-          <Link to={actionTo}>
+          <Link to={actionTo} onClick={onActionClick}>
             <Button>{actionLabel}</Button>
           </Link>
         </div>

@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { success } from '../../lib/http.js';
-import { requireRoles } from '../../security/rbac.js';
+import { requireAdminAccess, requireRoles } from '../../security/rbac.js';
 import {
   loginRequestSchema,
   logoutRequestSchema,
@@ -53,7 +53,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
 
   app.post('/auth/logout', async (request, reply) => {
     const payload = logoutRequestSchema.parse(request.body);
-    logoutUser(app.store, payload.refresh_token);
+    await logoutUser(app.store, payload.refresh_token);
     return reply.status(204).send();
   });
 
@@ -64,8 +64,8 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     },
     async (request) => {
       const auth = request.auth;
-      const user = auth ? app.store.getUserById(auth.userId) : null;
-      const subscription = auth ? app.store.getSubscriptionByUserId(auth.userId) : null;
+      const user = auth ? await app.store.getUserById(auth.userId) : null;
+      const subscription = auth ? await app.store.getSubscriptionByUserId(auth.userId) : null;
 
       return success(request, {
         auth_source: auth?.source ?? null,
@@ -85,7 +85,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
               grace_ends_at: subscription.graceEndsAt,
             }
           : null,
-        consents: auth ? app.store.getConsentByUserId(auth.userId) : [],
+        consents: auth ? await app.store.getConsentByUserId(auth.userId) : [],
       });
     },
   );
@@ -93,7 +93,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   app.get(
     '/admin/foundation/ping',
     {
-      preHandler: [app.authenticate, requireRoles(['admin'])],
+      preHandler: [app.authenticate, requireAdminAccess],
     },
     async (request) =>
       success(request, {

@@ -1,8 +1,11 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PublicPageLayout from '../../components/PublicPageLayout';
 import { Button, FormCard, TextField } from '../../components/ui';
-import { apiClient, ApiClientError } from '../../lib/apiClient';
+import { CLUB_SUPPORT } from '../../config/clubContent';
+import { apiClient } from '../../lib/apiClient';
+import { friendlyAuthError } from '../../lib/authCopy';
+import { resolvePostAuthPath } from '../../lib/authRedirect';
 import { saveAuthSession } from '../../lib/authStorage';
 import { analyticsEvents } from '../../utils/analytics';
 import { usePageMeta } from '../../utils/usePageMeta';
@@ -10,6 +13,8 @@ import { usePageMeta } from '../../utils/usePageMeta';
 const Register: React.FC = () => {
   usePageMeta('accountRegister');
   const navigate = useNavigate();
+  const location = useLocation();
+  const nextPath = resolvePostAuthPath({ search: location.search, state: location.state });
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -33,11 +38,9 @@ const Register: React.FC = () => {
       const session = await apiClient.login({ email, password });
       saveAuthSession(session, rememberMe);
       analyticsEvents.ctaClick('register_success', 'account_register');
-      navigate('/account', { replace: true });
+      navigate(nextPath, { replace: true });
     } catch (err) {
-      const message =
-        err instanceof ApiClientError ? err.message : 'Не удалось зарегистрироваться.';
-      setError(message);
+      setError(friendlyAuthError(err, 'register'));
     } finally {
       setLoading(false);
     }
@@ -46,18 +49,34 @@ const Register: React.FC = () => {
   return (
     <PublicPageLayout
       title="Регистрация"
-      subtitle="Создайте аккаунт, чтобы оформить подписку и открыть кабинет клуба."
+      subtitle="После регистрации вы сразу попадёте в кабинет."
     >
       <FormCard
         title="Создать аккаунт"
-        subtitle="После регистрации можно сразу выбрать тариф и оплатить доступ."
+        subtitle="Дальше можно выбрать тариф или, если оплата уже прошла, открыть практику."
         footer={
-          <p className="text-center text-sm text-gray-brown">
-            Уже есть аккаунт?{' '}
-            <Link to="/account/login" className="font-medium text-terracotta hover:underline">
-              Войти
-            </Link>
-          </p>
+          <div className="space-y-2 text-center text-sm text-gray-brown">
+            <p>
+              Уже есть аккаунт?{' '}
+              <Link
+                to={`/account/login?next=${encodeURIComponent(nextPath)}`}
+                className="font-medium text-terracotta hover:underline"
+              >
+                Войти
+              </Link>
+            </p>
+            <p>
+              Нужна помощь?{' '}
+              <a
+                href={CLUB_SUPPORT.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-olive-green hover:underline"
+              >
+                Telegram поддержки
+              </a>
+            </p>
+          </div>
         }
       >
         <form onSubmit={onSubmit} className="space-y-4">

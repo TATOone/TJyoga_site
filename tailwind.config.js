@@ -22,6 +22,7 @@ export default {
         'dark-brown': 'var(--color-dark-brown)',
         'light-text': 'var(--color-light-text)',
         'gray-brown': 'var(--color-gray-brown)',
+        'footer-muted': 'var(--color-footer-muted)',
         danger: 'var(--color-danger)',
         success: 'var(--color-success)',
       },

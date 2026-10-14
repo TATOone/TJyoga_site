@@ -28,6 +28,7 @@ const issueLocalTokens = async (user: UserRecord): Promise<{
   const now = Math.floor(Date.now() / 1000);
   const accessToken = await new SignJWT({
     role: user.role,
+    email: user.email,
     app_metadata: {
       role: user.role,
     },
@@ -62,6 +63,7 @@ export interface AuthTokens {
   expiresInSec: number;
   user: {
     id: string;
+    email: string;
     role: UserRecord['role'];
   };
 }
@@ -72,7 +74,7 @@ export const registerUser = async (store: BackendStore, input: RegisterInput): P
   status: UserRecord['status'];
 }> => {
   const normalizedEmail = input.email.trim().toLowerCase();
-  const existingUser = store.getUserByEmail(normalizedEmail);
+  const existingUser = await store.getUserByEmail(normalizedEmail);
   if (existingUser) {
     throw new ApiError('CONFLICT', 'Пользователь с таким email уже существует');
   }
@@ -103,7 +105,7 @@ export const registerUser = async (store: BackendStore, input: RegisterInput): P
       throw new ApiError('INTERNAL_ERROR', 'Supabase не вернул user_id');
     }
 
-    store.createUser({
+    await store.createUser({
       id: userId,
       email: normalizedEmail,
       role: 'student',
@@ -117,7 +119,7 @@ export const registerUser = async (store: BackendStore, input: RegisterInput): P
     };
   }
 
-  const user = store.createUser({
+  const user = await store.createUser({
     email: normalizedEmail,
     role: 'student',
     status: 'active',
@@ -159,14 +161,15 @@ export const loginUser = async (store: BackendStore, input: { email: string; pas
       user: { id: string };
     };
 
-    const user = store.getUserById(payload.user.id) ?? store.createUser({
+    const existing = await store.getUserById(payload.user.id);
+    const user = existing ?? await store.createUser({
       id: payload.user.id,
       email: normalizedEmail,
       role: 'student',
       status: 'active',
     });
 
-    store.saveRefreshToken({
+    await store.saveRefreshToken({
       token: payload.refresh_token,
       userId: user.id,
       expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS).toISOString(),
@@ -178,12 +181,13 @@ export const loginUser = async (store: BackendStore, input: { email: string; pas
       expiresInSec: payload.expires_in,
       user: {
         id: user.id,
+        email: user.email,
         role: user.role,
       },
     };
   }
 
-  const user = store.getUserByEmail(normalizedEmail);
+  const user = await store.getUserByEmail(normalizedEmail);
   if (!user) {
     throw new ApiError('UNAUTHORIZED', 'Неверный email или пароль');
   }
@@ -198,7 +202,7 @@ export const loginUser = async (store: BackendStore, input: { email: string; pas
   }
 
   const tokens = await issueLocalTokens(user);
-  store.saveRefreshToken({
+  await store.saveRefreshToken({
     token: tokens.refreshToken,
     userId: user.id,
     expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS).toISOString(),
@@ -208,6 +212,7 @@ export const loginUser = async (store: BackendStore, input: { email: string; pas
     ...tokens,
     user: {
       id: user.id,
+      email: user.email,
       role: user.role,
     },
   };
@@ -217,12 +222,12 @@ export const refreshUserSession = async (
   store: BackendStore,
   refreshToken: string,
 ): Promise<AuthTokens> => {
-  const storedToken = store.getRefreshToken(refreshToken);
+  const storedToken = await store.getRefreshToken(refreshToken);
   if (!storedToken || storedToken.revokedAt || Date.parse(storedToken.expiresAt) <= Date.now()) {
     throw new ApiError('UNAUTHORIZED', 'Refresh token невалиден или отозван');
   }
 
-  const user = store.getUserById(storedToken.userId);
+  const user = await store.getUserById(storedToken.userId);
   if (!user) {
     throw new ApiError('UNAUTHORIZED', 'Пользователь не найден');
   }
@@ -250,8 +255,8 @@ export const refreshUserSession = async (
       user: { id: string };
     };
 
-    store.revokeRefreshToken(refreshToken);
-    store.saveRefreshToken({
+    await store.revokeRefreshToken(refreshToken);
+    await store.saveRefreshToken({
       token: payload.refresh_token,
       userId: payload.user.id,
       expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS).toISOString(),
@@ -263,14 +268,15 @@ export const refreshUserSession = async (
       expiresInSec: payload.expires_in,
       user: {
         id: user.id,
+        email: user.email,
         role: user.role,
       },
     };
   }
 
-  store.revokeRefreshToken(refreshToken);
+  await store.revokeRefreshToken(refreshToken);
   const tokens = await issueLocalTokens(user);
-  store.saveRefreshToken({
+  await store.saveRefreshToken({
     token: tokens.refreshToken,
     userId: user.id,
     expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS).toISOString(),
@@ -280,16 +286,17 @@ export const refreshUserSession = async (
     ...tokens,
     user: {
       id: user.id,
+      email: user.email,
       role: user.role,
     },
   };
 };
 
-export const logoutUser = (store: BackendStore, refreshToken: string): void => {
-  const storedToken = store.getRefreshToken(refreshToken);
+export const logoutUser = async (store: BackendStore, refreshToken: string): Promise<void> => {
+  const storedToken = await store.getRefreshToken(refreshToken);
   if (!storedToken) {
     return;
   }
 
-  store.revokeRefreshToken(refreshToken);
+  await store.revokeRefreshToken(refreshToken);
 };

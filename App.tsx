@@ -9,11 +9,14 @@ import { motion } from 'framer-motion';
 import Home from './src/pages/Home.tsx';
 import SkipLinks from './src/components/SkipLinks';
 import Analytics from './src/components/Analytics';
+import RoutePageMeta from './src/components/RoutePageMeta';
+import RouteJsonLd from './src/components/RouteJsonLd';
 import { MobileMenuContext } from './src/context/mobileMenuContext';
 import RequireAuth from './src/components/RequireAuth';
 const NotFound = lazy(() => import('./src/pages/NotFound.tsx'));
 const Club = lazy(() => import('./src/pages/Club'));
 const ClubRates = lazy(() => import('./src/pages/ClubRates'));
+const FreePractices = lazy(() => import('./src/pages/FreePractices'));
 const Retreats = lazy(() => import('./src/pages/Retreats'));
 const Personal = lazy(() => import('./src/pages/Personal'));
 const AboutPage = lazy(() => import('./src/pages/AboutPage'));
@@ -50,6 +53,8 @@ const App: React.FC = () => {
       <Analytics />
       <SkipLinks />
       <Router>
+        <RoutePageMeta />
+        <RouteJsonLd />
         <motion.main 
           id="main-content" 
           className="min-h-screen font-body overflow-x-hidden" 
@@ -74,6 +79,14 @@ const App: React.FC = () => {
               element={
                 <Suspense fallback={suspenseFallback}>
                   <ClubRates />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/free"
+              element={
+                <Suspense fallback={suspenseFallback}>
+                  <FreePractices />
                 </Suspense>
               }
             />
@@ -266,7 +279,7 @@ const App: React.FC = () => {
               path="/admin"
               element={
                 <Suspense fallback={suspenseFallback}>
-                  <RequireAuth roles={['admin', 'editor', 'support']}>
+                  <RequireAuth roles={['admin']} requireAdminEmail>
                     <AdminDashboard />
                   </RequireAuth>
                 </Suspense>

@@ -46,7 +46,7 @@ export const prodamusRoutes: FastifyPluginAsync = async (app) => {
       });
 
       if (!signatureValid) {
-        app.store.recordPaymentEvent({
+        await app.store.recordPaymentEvent({
           dedupKey: `prodamus:invalid:${Date.now()}`,
           providerPaymentId: 'unknown',
           providerOrderId: null,
@@ -61,7 +61,7 @@ export const prodamusRoutes: FastifyPluginAsync = async (app) => {
       }
 
       const payload = prodamusWebhookPayloadSchema.parse(request.body);
-      const result = processProdamusWebhook({
+      const result = await processProdamusWebhook({
         request,
         payload,
         store: app.store,

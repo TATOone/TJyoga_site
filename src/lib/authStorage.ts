@@ -8,6 +8,7 @@ export interface StoredAuthSession {
   user: {
     id: string;
     role: string;
+    email?: string;
   };
 }
 

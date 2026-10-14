@@ -43,6 +43,7 @@ export interface AuthSession {
   user: {
     id: string;
     role: string;
+    email?: string;
   };
 }
 

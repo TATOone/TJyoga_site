@@ -1,11 +1,10 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { IMAGES } from '../config/images';
+import { useSectionInView } from '../hooks/useSectionInView';
 
 const About: React.FC = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, isInView } = useSectionInView();
 
   return (
     <section id="about" className="py-16 bg-light-text">
@@ -50,14 +49,14 @@ const About: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <p className="text-dark-brown mb-4">
-              Мы — Женя и Тим, семья йогов, которая передаёт классические знания Хатха Йоги школы Патанджали. Наша практика началась в священном Ришикеше, где мы получили международные сертификаты преподавателей.
+              Мы - Женя и Тим. Практикуем и преподаём классическую хатха-йогу школы Патанджали. Эту линию мы получили в Ришикеше: из текстов и живой практики.
             </p>
             <p className="text-dark-brown mb-4">
-              Мы верим, что йога — это не про идеальность, а про честность с собой. Жизнь бывает непредсказуемой, и именно такая она — самая настоящая. Мы делимся не только асанами, но и философией, которая помогает находить баланс в современном мире.
+              Мы активные и энергичные, во многом благодаря йоге. Усталость бывает, и о ней можно сказать прямо. Практика держит тело и ум в обычном дне: после стула, после спешки, когда хочется жить красиво.
             </p>
             <div className="space-y-2">
-              <p className="font-semibold text-olive-green">Женя Старовойтова — основной преподаватель, 10+ лет личной практики, 5+ лет преподавания</p>
-              <p className="font-semibold text-olive-green">Тим — ассистент преподавателя, 5+ лет практики, вдохновитель и поддержка</p>
+              <p className="font-semibold text-olive-green">Женя Старовойтова - основной преподаватель, 10+ лет личной практики, 5+ лет преподавания</p>
+              <p className="font-semibold text-olive-green">Тим - ассистент преподавателя, 5+ лет практики, вдохновитель и поддержка</p>
             </div>
           </motion.div>
         </div>

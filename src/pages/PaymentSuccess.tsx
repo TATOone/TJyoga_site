@@ -1,9 +1,11 @@
 import React from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import PaymentNextActions from '../components/PaymentNextActions';
 import PublicPageLayout from '../components/PublicPageLayout';
-import { Button, FormCard, StatusBadge } from '../components/ui';
+import { FormCard, StatusBadge } from '../components/ui';
 import { apiClient, ApiClientError } from '../lib/apiClient';
 import { loadAuthSession } from '../lib/authStorage';
+import { readLastOrderId } from '../lib/checkoutStorage';
 import { usePageMeta } from '../utils/usePageMeta';
 
 const PaymentSuccess: React.FC = () => {
@@ -17,11 +19,13 @@ const PaymentSuccess: React.FC = () => {
 
   React.useEffect(() => {
     const loadStatus = async () => {
-      const orderId = orderIdFromQuery ?? sessionStorage.getItem('tj_yoga_last_order_id');
+      const orderId = orderIdFromQuery ?? readLastOrderId();
       setResolvedOrderId(orderId);
 
       if (!orderId) {
-        setMessage('Не найден order_id. Если оплата прошла, доступ активируется после webhook.');
+        setMessage(
+          'Номер заказа не найден. Если оплата уже прошла, доступ может ещё обрабатываться. Откройте кабинет или напишите в Telegram.',
+        );
         setTone('warning');
         return;
       }
@@ -29,7 +33,7 @@ const PaymentSuccess: React.FC = () => {
       const session = loadAuthSession();
       if (!session) {
         setMessage(
-          'Оплата принята провайдером. Войдите в аккаунт, чтобы увидеть актуальный статус подписки.',
+          'Оплата принята. Войдите в кабинет: там Zoom, записи и статус подписки.',
         );
         setTone('warning');
         return;
@@ -38,7 +42,7 @@ const PaymentSuccess: React.FC = () => {
       try {
         const order = await apiClient.getCheckoutOrder(orderId, session.accessToken);
         if (order.status === 'paid' || order.subscription_status === 'active') {
-          setMessage('Оплата подтверждена. Доступ к клубу активирован.');
+          setMessage('Оплата подтверждена. Дальше - кабинет: откройте практику или записи.');
           setTone('success');
           return;
         }
@@ -48,7 +52,7 @@ const PaymentSuccess: React.FC = () => {
       } catch (error) {
         if (error instanceof ApiClientError && error.code === 'NOT_FOUND') {
           setMessage(
-            'Заказ пока не синхронизирован. Если оплата прошла, доступ появится после webhook.',
+            'Заказ ещё не появился в кабинете. Если оплата прошла, доступ обычно открывается в течение нескольких минут.',
           );
           setTone('warning');
           return;
@@ -63,7 +67,10 @@ const PaymentSuccess: React.FC = () => {
   }, [orderIdFromQuery]);
 
   return (
-    <PublicPageLayout title="Оплата" subtitle="Статус вашего платежа">
+    <PublicPageLayout
+      title="Оплата"
+      subtitle="Дальше - кабинет: там Zoom, записи и статус подписки."
+    >
       <FormCard className="text-center">
         <div className="mb-3 flex justify-center">
           <StatusBadge
@@ -73,13 +80,8 @@ const PaymentSuccess: React.FC = () => {
         </div>
         <p className="text-dark-brown">{message}</p>
         {resolvedOrderId ? <p className="mt-2 text-sm text-gray-brown">Заказ: {resolvedOrderId}</p> : null}
-        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-          <Link to="/account">
-            <Button>Перейти в кабинет</Button>
-          </Link>
-          <Link to="/club">
-            <Button variant="secondary">Страница клуба</Button>
-          </Link>
+        <div className="mt-6">
+          <PaymentNextActions outcome="success" />
         </div>
       </FormCard>
     </PublicPageLayout>

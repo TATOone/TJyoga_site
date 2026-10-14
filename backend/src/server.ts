@@ -3,9 +3,8 @@ import { env } from './config/env.js';
 import { buildApp } from './app.js';
 
 const start = async (): Promise<void> => {
-  const app = await buildApp();
-
   try {
+    const app = await buildApp();
     await app.listen({
       host: env.HOST,
       port: env.PORT,
@@ -16,11 +15,12 @@ const start = async (): Promise<void> => {
         host: env.HOST,
         port: env.PORT,
         api_prefix: env.API_PREFIX,
+        store: app.store.kind,
       },
       'Backend foundation started',
     );
   } catch (error) {
-    app.log.error({ error }, 'Backend foundation failed to start');
+    console.error('Backend foundation failed to start', error);
     process.exit(1);
   }
 };

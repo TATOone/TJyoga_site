@@ -1,9 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown';
 import PublicPageLayout from '../components/PublicPageLayout';
 import { PRODUCTS } from '../config/products';
-import { RETREAT_START } from '../config/retreat';
+import {
+  RETREAT_BOOKING_HANDLE,
+  RETREAT_BOOKING_URL,
+  RETREAT_DATES_LABEL,
+  RETREAT_NAME,
+  RETREAT_START,
+} from '../config/retreat';
 import { analyticsEvents } from '../utils/analytics';
 import { usePageMeta } from '../utils/usePageMeta';
 
@@ -14,19 +19,19 @@ const Retreats: React.FC = () => {
 
   return (
     <PublicPageLayout
-      title="Йога-Ретриты TJ Yoga"
-      subtitle="Путешествия с фокусом на практику, восстановление и перезагрузку."
+      title={RETREAT_NAME}
+      subtitle={`${RETREAT_DATES_LABEL} 2027, эко-отель в Налибокской пуще. Трансфер из Минска.`}
     >
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <img
             src={retreat.image}
-            alt="Йога-ретрит TJ Yoga"
+            alt={RETREAT_NAME}
             className="w-full h-full max-h-[420px] object-cover rounded-2xl shadow-sm"
             loading="lazy"
           />
           <div className="bg-cream border border-light-sandy rounded-2xl p-6">
-            <h2 className="text-2xl font-semibold text-dark-brown mb-3">Что вас ждет</h2>
+            <h2 className="text-2xl font-semibold text-dark-brown mb-3">Что вас ждёт</h2>
             <p className="text-gray-brown mb-4">{retreat.details}</p>
             <Countdown targetDate={RETREAT_START} />
             <ul className="space-y-2 text-dark-brown mt-4 mb-6">
@@ -37,28 +42,23 @@ const Retreats: React.FC = () => {
                 </li>
               ))}
             </ul>
-            <p className="text-2xl font-bold text-olive-green mb-5">{retreat.priceLabel}</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                to={retreat.checkoutPath}
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
-                onClick={() => analyticsEvents.ctaClick('Забронировать ретрит', 'retreats_page')}
-              >
-                Забронировать место
-              </Link>
+            <p className="text-2xl font-bold text-olive-green mb-3">{retreat.priceLabel}</p>
+            <p className="text-dark-brown mb-5">
+              Одноместное проживание 57 000 ₽. Чтобы записаться, напишите Жене в Telegram:{' '}
               <a
-                href="https://t.me/TJyogatrip/133"
+                href={RETREAT_BOOKING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg border border-terracotta text-terracotta hover:bg-cream transition-colors"
+                className="text-terracotta underline underline-offset-2 hover:text-golden-sandy"
                 onClick={() => {
-                  analyticsEvents.ctaClick('Новости ретритов Telegram', 'retreats_page');
-                  analyticsEvents.telegramClick('TJyogatrip', 'retreats_page');
+                  analyticsEvents.ctaClick('Запись на ретрит', 'retreats_page');
+                  analyticsEvents.telegramClick('starovoitovae', 'retreats_page');
                 }}
               >
-                Новости ретритов
+                {RETREAT_BOOKING_HANDLE}
               </a>
-            </div>
+              .
+            </p>
           </div>
         </div>
       </div>

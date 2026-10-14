@@ -1,9 +1,9 @@
 User-agent: *
 Allow: /
-Disallow: /account/
-Disallow: /admin/
-Disallow: /checkout/
-Disallow: /payment/
+Disallow: /account
+Disallow: /admin
+Disallow: /checkout
+Disallow: /payment
 Disallow: /api/
 
 # Sitemap
