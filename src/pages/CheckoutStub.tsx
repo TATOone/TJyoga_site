@@ -12,6 +12,7 @@ import TrustStrip from '../components/TrustStrip';
 import { TextField } from '../components/ui';
 import { CONSENT_BASELINE, LEGAL_DOCUMENTS } from '../config/legalDocuments';
 import { getProductById, type ProductId } from '../config/products';
+import { RETREAT_BOOKING_HANDLE, RETREAT_BOOKING_URL } from '../config/retreat';
 import { apiClient, ApiClientError, type AuthSession } from '../lib/apiClient';
 import { saveAuthSession } from '../lib/authStorage';
 import { saveLastCheckoutRefs } from '../lib/checkoutStorage';
@@ -228,6 +229,37 @@ const CheckoutStub: React.FC = () => {
   }
 
   if (!planCode) {
+    if (product.id === 'retreat-pass') {
+      return (
+        <PublicPageLayout
+          title="Запись на ретрит в Telegram"
+          subtitle="Онлайн-оплаты ретрита на сайте нет. Напишите Жене, чтобы занять место."
+        >
+          <div className="max-w-xl mx-auto text-center space-y-3">
+            <p className="text-gray-brown">
+              Чтобы записаться, напишите Жене в Telegram:{' '}
+              <a
+                href={RETREAT_BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-terracotta underline underline-offset-2 hover:text-golden-sandy"
+                onClick={() => analyticsEvents.telegramClick('starovoitovae', 'checkout_retreat')}
+              >
+                {RETREAT_BOOKING_HANDLE}
+              </a>
+              .
+            </p>
+            <Link
+              to="/retreats"
+              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+            >
+              К ретриту
+            </Link>
+          </div>
+        </PublicPageLayout>
+      );
+    }
+
     return (
       <PublicPageLayout
         title="Онлайн-оплата скоро"

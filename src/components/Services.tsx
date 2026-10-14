@@ -19,6 +19,7 @@ type Service = {
   checkoutLabel: string;
   link: string;
   checkoutPath: string;
+  bookingHref?: string;
   image: string;
   showCountdown?: boolean;
 };
@@ -46,6 +47,7 @@ const Services: React.FC = () => {
       checkoutLabel: product.homeCard?.secondaryCta ?? 'Купить',
       link: product.primaryPath,
       checkoutPath: product.checkoutPath,
+      bookingHref: product.bookingHref,
       image: product.image,
       showCountdown: product.showCountdown,
     };
@@ -112,14 +114,30 @@ const Services: React.FC = () => {
                   >
                     {service.button}
                   </Link>
-                  <Link
-                    to={service.checkoutPath}
-                    className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
-                    aria-label={`${service.checkoutLabel}: ${service.title}`}
-                    onClick={() => analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services')}
-                  >
-                    {service.checkoutLabel}
-                  </Link>
+                  {service.bookingHref ? (
+                    <a
+                      href={service.bookingHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                      aria-label={`${service.checkoutLabel}: ${service.title}`}
+                      onClick={() => {
+                        analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services');
+                        analyticsEvents.telegramClick('starovoitovae', 'services');
+                      }}
+                    >
+                      {service.checkoutLabel}
+                    </a>
+                  ) : (
+                    <Link
+                      to={service.checkoutPath}
+                      className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                      aria-label={`${service.checkoutLabel}: ${service.title}`}
+                      onClick={() => analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services')}
+                    >
+                      {service.checkoutLabel}
+                    </Link>
+                  )}
                 </div>
               </div>
             </motion.div>

@@ -8,6 +8,13 @@ import {
   resolvePageMeta,
 } from './pageMeta';
 import { CLUB_RATE_PRODUCT_IDS, PRODUCTS } from './products';
+import {
+  RETREAT_BOOKING_URL,
+  RETREAT_END_ISO,
+  RETREAT_NAME,
+  RETREAT_PLACE_NAME,
+  RETREAT_START_ISO,
+} from './retreat';
 import { SEED_ARTICLES } from './seedContent';
 import { TEACHERS } from './teachers';
 
@@ -106,6 +113,52 @@ const clubOfferJsonLd = (): JsonLdNode => ({
   }),
 });
 
+const retreatEventJsonLd = (): JsonLdNode => {
+  const product = PRODUCTS['retreat-pass'];
+
+  return {
+    '@type': 'Event',
+    '@id': `${SITE_URL}/retreats#event`,
+    name: RETREAT_NAME,
+    description: product.details,
+    startDate: RETREAT_START_ISO,
+    endDate: RETREAT_END_ISO,
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    image: `${SITE_URL}${product.image}`,
+    url: pageUrl('/retreats'),
+    location: {
+      '@type': 'Place',
+      name: RETREAT_PLACE_NAME,
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'BY',
+        addressLocality: 'Налибокская пуща',
+      },
+    },
+    organizer: { '@id': `${SITE_URL}/#organization` },
+    maximumAttendeeCapacity: 20,
+    offers: [
+      {
+        '@type': 'Offer',
+        name: 'Двухместное проживание',
+        price: '45000',
+        priceCurrency: 'RUB',
+        url: RETREAT_BOOKING_URL,
+        availability: 'https://schema.org/InStock',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Одноместное проживание',
+        price: '57000',
+        priceCurrency: 'RUB',
+        url: RETREAT_BOOKING_URL,
+        availability: 'https://schema.org/InStock',
+      },
+    ],
+  };
+};
+
 const clubFaqJsonLd = (): JsonLdNode => ({
   '@type': 'FAQPage',
   mainEntity: CLUB_SUPPORT.faq.map((item) => ({
@@ -176,7 +229,10 @@ export const getRouteJsonLdGraph = (pathname: string): JsonLdNode[] => {
       break;
     }
     case 'free':
+      break;
     case 'retreats':
+      graph.push(retreatEventJsonLd());
+      break;
     case 'personal':
     case 'about':
     case 'howToBuy':
