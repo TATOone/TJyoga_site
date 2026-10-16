@@ -5,7 +5,7 @@ import StickyFunnelCta from './StickyFunnelCta';
 
 interface PublicPageLayoutProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   eyebrow?: string;
   children: React.ReactNode;
 }
@@ -29,8 +29,14 @@ const PublicPageLayout: React.FC<PublicPageLayoutProps> = ({
                 </span>
               </p>
             ) : null}
-            <h1 className="text-3xl md:text-5xl font-bold text-dark-brown mb-4">{title}</h1>
-            <p className="text-lg text-gray-brown">{subtitle}</p>
+            <h1
+              className={`text-3xl md:text-5xl font-bold text-dark-brown ${
+                subtitle ? 'mb-4' : ''
+              }`}
+            >
+              {title}
+            </h1>
+            {subtitle ? <p className="text-lg text-gray-brown">{subtitle}</p> : null}
           </div>
         </section>
         <section className="container mx-auto px-4">{children}</section>

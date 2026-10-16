@@ -6,16 +6,9 @@ import { analyticsEvents } from '../../utils/analytics';
 const Support: React.FC = () => {
   return (
     <div className="space-y-6">
-      <SectionHeader
-        eyebrow="Кабинет"
-        title="Поддержка"
-        subtitle="Короткий путь: Telegram в рабочие часы. Ответ в тот же день."
-      />
+      <SectionHeader title="Поддержка" subtitle="Telegram, ежедневно 10:00–22:00 МСК" />
 
       <section className="space-y-4 rounded-card border border-light-sandy bg-light-text p-6 shadow-soft">
-        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-terracotta">
-          Когда отвечаем
-        </p>
         <p className="font-display text-2xl font-semibold text-dark-brown">10:00–22:00 МСК</p>
         <p className="text-gray-brown">{CLUB_SUPPORT.sla}</p>
         <div className="flex flex-col gap-3 sm:flex-row">

@@ -8,7 +8,7 @@ const MedicalDisclaimer: React.FC = () => {
   return (
     <LegalPageLayout
       title="Медицинский отказ от ответственности"
-      subtitle="Пожалуйста, внимательно ознакомьтесь с условиями безопасной практики."
+      subtitle="Условия безопасной практики."
     >
       <section>
         <h2 className="text-xl font-semibold mb-2">1. Общие положения</h2>

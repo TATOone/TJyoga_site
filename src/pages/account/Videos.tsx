@@ -61,14 +61,10 @@ const Videos: React.FC = () => {
   if (errorCode === 'SUBSCRIPTION_REQUIRED') {
     return (
       <div className="space-y-6">
-        <SectionHeader
-          eyebrow="Кабинет"
-          title="Видеозаписи"
-          subtitle="Практики и семинары откроются, когда подписка будет активна."
-        />
+        <SectionHeader title="Записи" />
         <EmptyState
           title="Записи пока закрыты"
-          description="Оформите или продлите тариф, и библиотека откроется. Пока подписка не активна, ссылки на видео не показываем."
+          description="Оформите или продлите тариф - и библиотека откроется."
           actionLabel="Выбрать тариф"
           actionTo={FUNNEL_RATES_PATH}
           onActionClick={() => analyticsEvents.ctaClick('renew', 'account_videos')}
@@ -90,11 +86,7 @@ const Videos: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <SectionHeader
-        eyebrow="Кабинет"
-        title="Видеозаписи"
-        subtitle="Практики и семинары, если пропустили эфир."
-      />
+      <SectionHeader title="Записи" subtitle="Если пропустили эфир." />
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
@@ -145,7 +137,7 @@ const Videos: React.FC = () => {
       {videos.length === 0 ? (
         <EmptyState
           title="Записей пока нет"
-          description="Как только эфир закончится, запись появится здесь. Ближайшую практику можно открыть из обзора."
+          description="Как только эфир закончится, запись появится здесь."
           actionLabel="К обзору"
           actionTo="/account"
         />

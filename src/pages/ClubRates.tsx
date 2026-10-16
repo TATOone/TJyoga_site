@@ -6,14 +6,12 @@ import TeachersTeaser from '../components/TeachersTeaser';
 import Testimonials from '../components/Testimonials';
 import TrustStrip from '../components/TrustStrip';
 import { Button } from '../components/ui';
-import { getActiveAccent } from '../config/campaignAccent';
 import { CLUB_RATE_PRODUCT_IDS, PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
 import { usePageMeta } from '../utils/usePageMeta';
 
 const ClubRates: React.FC = () => {
   usePageMeta('clubRates');
-  const accent = getActiveAccent();
   const monthly = PRODUCTS['club-monthly'];
   const yearly = PRODUCTS['club-yearly'];
   const plans = [...CLUB_RATE_PRODUCT_IDS]
@@ -22,9 +20,8 @@ const ClubRates: React.FC = () => {
 
   return (
     <PublicPageLayout
-      title="Тарифы Йога-Клуба"
-      subtitle={`${accent.ctaHint}. Месяц - ${monthly.priceLabel}, год - ${yearly.priceLabel}. Наполнение одно.`}
-      eyebrow={accent.label}
+      title="Тарифы"
+      subtitle={`${monthly.priceLabel} или ${yearly.priceLabel}. Наполнение одно.`}
     >
       <div className="mx-auto max-w-5xl space-y-8">
         <TrustStrip />
@@ -99,15 +96,15 @@ const ClubRates: React.FC = () => {
         <div className="rounded-card bg-light-olive p-6 text-dark-brown">
           <h3 className="mb-3 font-display text-xl font-semibold">После оплаты</h3>
           <p className="mb-3">
-            Кабинет открывается после подтверждения платежа - обычно за несколько минут. Если доступ
-            не появился, мы включим его вручную в течение 2 часов (ежедневно 10:00–22:00 МСК).
+            Кабинет обычно за несколько минут. Если доступа нет, включим вручную в течение 2 часов
+            (ежедневно 10:00–22:00 МСК).
           </p>
           <Link
             to="/how-to-buy"
             className="inline-flex min-h-touch items-center font-medium text-terracotta transition-colors hover:text-golden-sandy"
             onClick={() => analyticsEvents.ctaClick('Перейти в как купить', 'club_rates')}
           >
-            Как проходит оформление
+            Как оформить
           </Link>
           <div className="mt-5 border-t border-olive-green/20 pt-4">
             <PurchaseLegalLinks analyticsLocation="club_rates_legal" />
