@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PublicPageLayout from '../../components/PublicPageLayout';
-import { EmptyState, SectionHeader, StatusBadge } from '../../components/ui';
+import { EmptyState, StatusBadge } from '../../components/ui';
 import { apiClient, ApiClientError, type ArticleListItem } from '../../lib/apiClient';
 import { analyticsEvents } from '../../utils/analytics';
 import { usePageMeta } from '../../utils/usePageMeta';
@@ -28,17 +28,8 @@ const BlogIndex: React.FC = () => {
   }, []);
 
   return (
-    <PublicPageLayout
-      title="Блог TJ Yoga"
-      subtitle="Открытые заметки о практике, как в канале yogaTJ. Для клубных материалов зайдите в Знания."
-    >
+    <PublicPageLayout title="Блог" subtitle="Открытые заметки о практике, как в канале yogaTJ.">
       <div className="mx-auto max-w-3xl">
-        <SectionHeader
-          eyebrow="Публично"
-          title="Свежие записи"
-          subtitle="Читайте без регистрации. Углублённые материалы клуба - в кабинете."
-        />
-
         {loading ? <p className="text-gray-brown">Загрузка...</p> : null}
         {error ? <p className="text-danger">{error}</p> : null}
 
@@ -75,11 +66,11 @@ const BlogIndex: React.FC = () => {
         </ul>
 
         <p className="mt-10 rounded-card border border-light-olive bg-light-olive/50 p-5 text-sm text-dark-brown">
-          Хотите клубные материалы?{' '}
+          Клубные материалы - в{' '}
           <Link to="/account/knowledge" className="font-medium text-terracotta hover:underline">
-            Открыть Знания
+            Знаниях
           </Link>{' '}
-          в кабинете (нужна подписка).
+          (нужна подписка).
         </p>
       </div>
     </PublicPageLayout>

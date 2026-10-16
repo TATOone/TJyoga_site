@@ -70,14 +70,10 @@ const Knowledge: React.FC = () => {
   if (!hasSub) {
     return (
       <div className="space-y-6">
-        <SectionHeader
-          eyebrow="Клуб"
-          title="Знания"
-          subtitle="Углублённые материалы для участников клуба."
-        />
+        <SectionHeader title="Знания" />
         <EmptyState
           title="Раздел откроется после оплаты"
-          description="Знания доступны при активной подписке. Открытые заметки можно читать в блоге без входа."
+          description="Знания - при активной подписке. Открытые заметки можно читать в блоге."
           actionLabel="Выбрать тариф"
           actionTo={FUNNEL_RATES_PATH}
           onActionClick={() => analyticsEvents.ctaClick('renew', 'account_knowledge')}
@@ -95,16 +91,12 @@ const Knowledge: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <SectionHeader
-        eyebrow="Клуб"
-        title="Знания"
-        subtitle="Углублённые материалы о практике - только для участников клуба."
-      />
+      <SectionHeader title="Знания" />
 
       {articles.length === 0 ? (
         <EmptyState
           title="Пока пусто"
-          description="Клубные статьи появятся здесь. Пока можно открыть ближайшую практику или записи."
+          description="Клубные статьи появятся здесь."
           actionLabel="К обзору"
           actionTo="/account"
         />

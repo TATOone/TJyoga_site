@@ -135,7 +135,7 @@ const NotFound: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          Похоже, этой страницы нет. Можно вернуться на главную или заглянуть в клуб.
+          Этой страницы нет. Можно вернуться на главную или заглянуть в клуб.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

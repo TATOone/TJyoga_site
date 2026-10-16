@@ -87,13 +87,8 @@ const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       <SectionHeader
-        eyebrow="Кабинет"
-        title="Что делать сейчас"
-        subtitle={
-          me?.user?.email
-            ? `Вы вошли как ${me.user.email}`
-            : 'Zoom, записи и статус подписки - в одном месте.'
-        }
+        title="Практика"
+        subtitle={me?.user?.email ? `Вы вошли как ${me.user.email}` : undefined}
       />
 
       <section className="rounded-card border border-light-sandy bg-light-text p-6 shadow-soft">
@@ -123,7 +118,7 @@ const Dashboard: React.FC = () => {
               </p>
             ) : (
               <p className="text-sm text-gray-brown">
-                Ссылка на комнату не показывается в кабинете - только безопасный переход.
+                Ссылка на комнату не показывается здесь - только безопасный переход.
               </p>
             )}
           </div>
@@ -132,7 +127,7 @@ const Dashboard: React.FC = () => {
             <div>
               <h2 className="font-display text-xl font-semibold text-dark-brown">Сначала тариф</h2>
               <p className="mt-1 text-sm text-gray-brown">
-                Zoom и записи открываются после оплаты подписки. Когда доступ появится, кабинет сразу покажет практику.
+                Zoom и записи откроются после оплаты. Когда доступ появится, кабинет сразу покажет практику.
               </p>
             </div>
             <Button
@@ -191,14 +186,14 @@ const Dashboard: React.FC = () => {
           className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft transition-colors hover:border-terracotta"
         >
           <h3 className="mb-1 font-semibold text-terracotta">Записи</h3>
-          <p className="text-sm text-gray-brown">Практики и семинары, если пропустили эфир</p>
+          <p className="text-sm text-gray-brown">Если пропустили эфир</p>
         </Link>
         <Link
           to="/account/knowledge"
           className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft transition-colors hover:border-terracotta"
         >
           <h3 className="mb-1 font-semibold text-terracotta">Знания</h3>
-          <p className="text-sm text-gray-brown">Клубные материалы рядом с практикой</p>
+          <p className="text-sm text-gray-brown">Клубные материалы</p>
         </Link>
       </section>
     </div>

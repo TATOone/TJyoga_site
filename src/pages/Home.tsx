@@ -26,20 +26,20 @@ const Home: React.FC = () => {
 
   const quickLinks = [
     {
-      title: 'Йога-Клуб',
-      description: 'Эфиры, записи, уровни и чат с преподавателем. Как устроена неделя.',
+      title: 'Клуб',
+      description: 'Четыре практики в неделю, записи и чат.',
       to: '/club',
       cta: 'Как устроен клуб',
     },
     {
       title: 'Тарифы',
-      description: `${monthly.priceLabel} или ${yearly.priceLabel}. Одно наполнение.`,
+      description: `${monthly.priceLabel} или ${yearly.priceLabel}.`,
       to: '/club/rates',
       cta: 'Выбрать тариф',
     },
     {
       title: 'Как оформить',
-      description: 'Оплата, когда откроется кабинет и куда писать, если доступ не пришёл.',
+      description: 'Картой. Кабинет обычно за несколько минут.',
       to: '/how-to-buy',
       cta: 'Как проходит оплата',
     },
@@ -57,7 +57,7 @@ const Home: React.FC = () => {
         <section id="club-entry" className="py-16 bg-light-text">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-dark-brown mb-4">
-              Клуб - основной формат
+              Клуб
             </h2>
             <p className="text-center text-gray-brown max-w-3xl mx-auto mb-10">{accent.homeEmphasis}</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -80,14 +80,14 @@ const Home: React.FC = () => {
         <section id="how-it-works" className="py-16 bg-cream">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-dark-brown mb-10">
-              Как присоединиться
+              Как попасть в клуб
             </h2>
             <ol className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
               {[
-                { step: '1', title: 'Тариф', text: 'Месяц или год - одно и то же наполнение клуба.' },
-                { step: '2', title: 'Оплата', text: 'Картой через защищённую форму. Цена как на сайте.' },
-                { step: '3', title: 'Кабинет', text: 'Доступ открывается сам, обычно за несколько минут.' },
-                { step: '4', title: 'Практика', text: 'Zoom, записи и чат - всё в одном месте.' },
+                { step: '1', title: 'Тариф', text: 'Месяц или год. Наполнение одно.' },
+                { step: '2', title: 'Оплата', text: 'Картой. Цена как на сайте.' },
+                { step: '3', title: 'Кабинет', text: 'Обычно за несколько минут.' },
+                { step: '4', title: 'Практика', text: 'Zoom, записи и чат.' },
               ].map((item) => (
                 <li
                   key={item.step}

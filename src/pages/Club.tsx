@@ -24,13 +24,8 @@ const Club: React.FC = () => {
   const yearly = PRODUCTS['club-yearly'];
 
   return (
-    <PublicPageLayout
-      title="Онлайн Йога-Клуб"
-      subtitle="Классическая хатха в живом эфире и в записях. Практика для любого уровня, мы рядом в чате. Месяц или год - наполнение одно."
-      eyebrow={accent.label}
-    >
+    <PublicPageLayout title="Онлайн Йога-Клуб" subtitle={accent.clubEmphasis}>
       <div className="max-w-5xl mx-auto space-y-10">
-        <p className="max-w-3xl mx-auto text-center text-dark-brown">{accent.clubEmphasis}</p>
         <div className="flex justify-center">
           <Link
             to={FREE_PAGE_PATH}
@@ -89,7 +84,7 @@ const Club: React.FC = () => {
         <section className="bg-light-text border border-light-sandy rounded-2xl p-6 md:p-8">
           <h2 className="text-2xl font-semibold text-dark-brown mb-2">Расписание Zoom</h2>
           <p className="text-gray-brown mb-4 text-sm">
-            Время по Москве. Ссылка на комнату открывается только из личного кабинета.
+            Время по Москве. Ссылка открывается из кабинета.
           </p>
           <ul className="space-y-3">
             {ZOOM_SCHEDULE.map((item) => (
@@ -113,7 +108,7 @@ const Club: React.FC = () => {
         <section>
           <h2 className="text-2xl font-semibold text-dark-brown mb-2">Тарифы</h2>
           <p className="text-gray-brown mb-4 text-sm md:text-base">
-            {monthly.priceLabel} или {yearly.priceLabel}. Наполнение одно. Скрытых доплат нет.
+            {monthly.priceLabel} или {yearly.priceLabel}. Наполнение одно.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <article className="bg-light-text border border-light-sandy rounded-2xl p-6 shadow-sm">
@@ -176,7 +171,7 @@ const Club: React.FC = () => {
           <div>
             <h2 className="text-2xl font-semibold text-dark-brown mb-2">{accent.ctaHint}</h2>
             <p className="text-gray-brown">
-              Можно взять месяц или год, или написать нам в Telegram. {CLUB_SUPPORT.sla}
+              Месяц или год, или напишите нам в Telegram. {CLUB_SUPPORT.sla}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">

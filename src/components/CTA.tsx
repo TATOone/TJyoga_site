@@ -30,8 +30,7 @@ const CTA: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          {monthly.priceLabel} или {yearly.priceLabel}. Если остался вопрос про тело или формат -
-          напишите нам.
+          {monthly.priceLabel} или {yearly.priceLabel}. Вопрос про тело или формат - напишите нам.
         </motion.p>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"

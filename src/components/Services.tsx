@@ -25,7 +25,7 @@ type Service = {
 };
 
 const Services: React.FC = () => {
-  const { ref, isInView } = useSectionInView();
+  const { ref, isInView } = useSectionInView<HTMLElement>();
 
   const iconByProduct: Record<ProductId, React.ReactElement> = {
     'club-monthly': <MessageCircle className="w-8 h-8 text-terracotta" />,
@@ -54,17 +54,16 @@ const Services: React.FC = () => {
   });
 
   return (
-    <section id="services" className="py-16 bg-light-sandy">
+    <section
+      id="services"
+      ref={ref}
+      className="py-16 bg-light-sandy"
+      aria-labelledby="services-heading"
+    >
       <div className="container mx-auto px-4">
-        <motion.h2
-          className="text-3xl md:text-4xl font-bold text-center text-dark-brown mb-12"
-          ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          Практикуйте в клубе. Ретриты и персональные - рядом.
-        </motion.h2>
+        <h2 id="services-heading" className="sr-only">
+          Клуб, ретриты и персональные занятия
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <motion.div
@@ -90,12 +89,7 @@ const Services: React.FC = () => {
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center mb-4">
                   {service.icon}
-                  <div className="ml-2">
-                    {service.id === 'club-monthly' ? (
-                      <p className="text-xs font-medium text-terracotta mb-0.5">Основной формат</p>
-                    ) : null}
-                    <h3 className="text-xl font-semibold text-terracotta">{service.title}</h3>
-                  </div>
+                  <h3 className="ml-2 text-xl font-semibold text-terracotta">{service.title}</h3>
                 </div>
                 <p className="text-dark-brown mb-2 flex-grow whitespace-pre-line">{service.description}</p>
                 {service.showCountdown && (

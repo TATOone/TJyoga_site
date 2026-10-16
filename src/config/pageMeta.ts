@@ -47,16 +47,16 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   home: {
     title: 'Онлайн Йога-Клуб TJ Yoga - классическая хатха в Zoom и в записях',
     description:
-      'Мы, Тим и Женя, ведём онлайн-клуб классической хатха-йоги: живые практики в Zoom, записи и чат с преподавателем. 6 000 ₽/месяц или 60 000 ₽/год.',
+      'Мы, Тим и Женя. Классическая хатха-йога: живые практики в Zoom, записи и чат. 6 000 ₽/месяц или 60 000 ₽/год.',
     path: '/',
     robots: 'index,follow',
     keywords:
       'йога клуб онлайн, хатха йога из первоисточников, занятия йогой в zoom, йога для начинающих, TJ Yoga',
   },
   club: {
-    title: 'Что внутри Йога-Клуба TJ Yoga: эфиры, записи, уровни, чат',
+    title: 'Онлайн Йога-Клуб TJ Yoga: эфиры, записи, уровни, чат',
     description:
-      'Как устроен наш онлайн-клуб: расписание Zoom, библиотека записей, уровни практики и чат с преподавателем. Классическая хатха из первоисточников.',
+      'Четыре практики в неделю в Zoom, записи, уровни и чат с преподавателем. Классическая хатха из первоисточников.',
     path: '/club',
     robots: 'index,follow',
     keywords: 'йога клуб онлайн, расписание хатха йоги, подписка на йогу, йога с преподавателем',
@@ -64,7 +64,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   clubRates: {
     title: 'Тарифы Йога-Клуба: 6 000 ₽/месяц или 60 000 ₽/год - TJ Yoga',
     description:
-      'Месячная подписка 6 000 ₽ и годовая 60 000 ₽. Одно наполнение: Zoom, записи, чат. Цена как на сайте.',
+      'Месяц 6 000 ₽ или год 60 000 ₽. Наполнение одно: Zoom, записи, чат.',
     path: '/club/rates',
     robots: 'index,follow',
     keywords: 'тарифы йога клуба, цена подписки на хатха йогу, годовая подписка йога',
@@ -72,7 +72,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   free: {
     title: 'Бесплатные практики хатха-йоги на YouTube - TJ Yoga',
     description:
-      'Три открытые практики TJ Yoga на YouTube: утро 60 минут, вечер 60 минут и короткая утренняя. Кабинет не нужен.',
+      'Три открытые практики: утро 60 минут, вечер 60 минут и короткая утренняя. Кабинет не нужен.',
     path: '/free',
     robots: 'index,follow',
     keywords: 'бесплатная йога онлайн, хатха йога youtube, йога утро, йога вечер, TJ Yoga',
@@ -80,7 +80,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   retreats: {
     title: 'Йогические выходные с Тимом и Женей - с 3 по 6 января - TJ Yoga',
     description:
-      'Ретрит с 3 по 6 января в эко-отеле в Налибокской пуще, Беларусь. Практика два раза в день, лекции, чай, онсен, сауна. Трансфер из Минска.',
+      'С 3 по 6 января в эко-отеле в Налибокской пуще. Практика, лес и хорошие люди рядом. Трансфер из Минска.',
     path: '/retreats',
     robots: 'index,follow',
     keywords: 'йога ретрит, ретрит январь, Налибокская пуща, TJ Yoga',
@@ -88,7 +88,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   personal: {
     title: 'Персональные занятия йогой - TJ Yoga',
     description:
-      'Индивидуальные занятия с нами: смотрим ваше тело, дыхание и технику. Для регулярной практики есть клуб.',
+      'Один-на-один: смотрим ваше тело, дыхание и технику. Для регулярной практики есть клуб.',
     path: '/personal',
     robots: 'index,follow',
     keywords: 'персональные занятия йогой, индивидуальная йога',
@@ -96,7 +96,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   about: {
     title: 'Женя и Тим - TJ Yoga, классическая хатха из первоисточников',
     description:
-      'Мы, Женя Старовойтова и Тим, преподаём классическую хатха-йогу школы Патанджали. Эту линию мы получили в Ришикеше.',
+      'Мы, Женя и Тим. Классическая хатха-йога школы Патанджали. Эту линию мы получили в Ришикеше.',
     path: '/about',
     robots: 'index,follow',
     keywords: 'Женя Старовойтова йога, преподаватели хатха йоги, TJ Yoga о нас',
@@ -104,26 +104,26 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   howToBuy: {
     title: 'Как оформить подписку на Йога-Клуб TJ Yoga',
     description:
-      'Как оплатить месяц или год клуба: тариф, кабинет, оплата, когда открывается доступ и куда писать, если что-то не пришло.',
+      'Как оплатить месяц или год клуба: тариф, оплата, кабинет. Цена как на сайте.',
     path: '/how-to-buy',
     robots: 'index,follow',
     keywords: 'как купить подписку на йогу, оплата йога клуба, TJ Yoga доступ',
   },
   checkout: {
-    title: 'Оформление заказа - TJ Yoga',
-    description: 'Подтверждение тарифа, согласий и переход к оплате.',
+    title: 'Оплата - TJ Yoga',
+    description: 'Тариф, согласия и переход к оплате.',
     path: '/checkout',
     robots: 'noindex,nofollow',
   },
   paymentSuccess: {
     title: 'Оплата успешна - TJ Yoga',
-    description: 'Статус успешной оплаты подписки TJ Yoga.',
+    description: 'Оплата прошла. Дальше - кабинет.',
     path: '/payment/success',
     robots: 'noindex,nofollow',
   },
   paymentError: {
     title: 'Оплата не завершена - TJ Yoga',
-    description: 'Статус незавершённой оплаты подписки TJ Yoga.',
+    description: 'Платёж не завершён. Можно оплатить ещё раз.',
     path: '/payment/error',
     robots: 'noindex,nofollow',
   },
@@ -156,14 +156,14 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
     robots: 'index,follow',
   },
   account: {
-    title: 'Личный кабинет - TJ Yoga',
-    description: 'Кабинет участника Йога-Клуба TJ Yoga.',
+    title: 'Кабинет - TJ Yoga',
+    description: 'Кабинет Йога-Клуба: Zoom, записи и подписка.',
     path: '/account',
     robots: 'noindex,nofollow',
   },
   accountLogin: {
     title: 'Вход в кабинет - TJ Yoga',
-    description: 'Вход в личный кабинет Йога-Клуба TJ Yoga.',
+    description: 'Вход в кабинет Йога-Клуба TJ Yoga.',
     path: '/account/login',
     robots: 'noindex,nofollow',
   },
@@ -181,8 +181,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   },
   blog: {
     title: 'Блог TJ Yoga - открытые заметки о практике',
-    description:
-      'Публичный блог TJ Yoga: открытые материалы о хатха-йоге, практике и подходе школы.',
+    description: 'Открытые заметки о хатха-йоге и практике, как в канале yogaTJ.',
     path: '/blog',
     robots: 'index,follow',
     keywords: 'блог о йоге, статьи о йоге, хатха йога блог',
@@ -190,7 +189,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   },
   notFound: {
     title: 'Страница не найдена - TJ Yoga',
-    description: 'Запрашиваемая страница не найдена. Вернитесь на главную TJ Yoga.',
+    description: 'Этой страницы нет. Можно вернуться на главную TJ Yoga.',
     path: '/404',
     robots: 'noindex,nofollow',
   },
