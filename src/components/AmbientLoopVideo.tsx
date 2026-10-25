@@ -11,6 +11,8 @@ type AmbientLoopVideoProps = {
 type NavigatorWithConnection = Navigator & {
   connection?: {
     saveData?: boolean;
+    addEventListener?: (type: 'change', listener: () => void) => void;
+    removeEventListener?: (type: 'change', listener: () => void) => void;
   };
 };
 
@@ -41,13 +43,18 @@ const AmbientLoopVideo: React.FC<AmbientLoopVideoProps> = ({
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const connection = (navigator as NavigatorWithConnection).connection;
     const sync = () => {
       setStaticOnly(prefersStaticAmbient());
     };
 
     sync();
     media.addEventListener('change', sync);
-    return () => media.removeEventListener('change', sync);
+    connection?.addEventListener?.('change', sync);
+    return () => {
+      media.removeEventListener('change', sync);
+      connection?.removeEventListener?.('change', sync);
+    };
   }, []);
 
   useEffect(() => {
@@ -85,6 +92,7 @@ const AmbientLoopVideo: React.FC<AmbientLoopVideoProps> = ({
 
     video.muted = true;
     video.defaultMuted = true;
+    video.playsInline = true;
     video.load();
   }, [mp4Src, sourcesArmed, staticOnly, webmSrc]);
 
@@ -94,12 +102,23 @@ const AmbientLoopVideo: React.FC<AmbientLoopVideoProps> = ({
       return;
     }
 
-    if (inView) {
-      void video.play().catch(() => undefined);
+    if (!inView) {
+      video.pause();
       return;
     }
 
-    video.pause();
+    const tryPlay = () => {
+      void video.play().catch(() => undefined);
+    };
+
+    video.addEventListener('canplay', tryPlay);
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      tryPlay();
+    }
+
+    return () => {
+      video.removeEventListener('canplay', tryPlay);
+    };
   }, [inView, sourcesArmed, staticOnly]);
 
   const frameClass = [
@@ -118,12 +137,15 @@ const AmbientLoopVideo: React.FC<AmbientLoopVideoProps> = ({
           alt=""
           width={960}
           height={540}
+          loading="lazy"
           decoding="async"
           draggable={false}
         />
       ) : (
         <video
           ref={videoRef}
+          width={960}
+          height={540}
           autoPlay
           muted
           loop
