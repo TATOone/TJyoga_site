@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 type AmbientLoopVideoProps = {
   webmSrc: string;
@@ -16,17 +16,41 @@ type NavigatorWithConnection = Navigator & {
   };
 };
 
+type PlayPhase = 'idle' | 'playing' | 'ended' | 'blocked';
+
 function prefersSaveData(): boolean {
   return Boolean((navigator as NavigatorWithConnection).connection?.saveData);
 }
 
-function prefersStaticAmbient(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches || prefersSaveData();
+function prepareInlineMuted(video: HTMLVideoElement): void {
+  // React's `muted` attribute does not always set the DOM property on iOS.
+  video.muted = true;
+  video.defaultMuted = true;
+  video.volume = 0;
+  video.playsInline = true;
+  video.setAttribute('playsinline', '');
+  video.setAttribute('webkit-playsinline', 'true');
+}
+
+function tapClassForPhase(phase: PlayPhase): string {
+  switch (phase) {
+    case 'blocked':
+      return 'ambient-loop-video--tap';
+    case 'idle':
+    case 'playing':
+    case 'ended':
+      return '';
+    default: {
+      const _exhaustive: never = phase;
+      return _exhaustive;
+    }
+  }
 }
 
 /**
- * Decorative looping video: poster first, sources only in view,
- * pause off-screen, static poster for reduced motion and Save-Data.
+ * Decorative play-once video: starts the first time the block is ≥50% visible,
+ * then rests on the last frame. Save-Data keeps the poster. Reduced motion
+ * still plays once (owner request; no loop).
  */
 const AmbientLoopVideo: React.FC<AmbientLoopVideoProps> = ({
   webmSrc,
@@ -37,30 +61,52 @@ const AmbientLoopVideo: React.FC<AmbientLoopVideoProps> = ({
 }) => {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [staticOnly, setStaticOnly] = useState(true);
-  const [sourcesArmed, setSourcesArmed] = useState(false);
-  const [inView, setInView] = useState(false);
+  const startedRef = useRef(false);
+  const playLockRef = useRef(false);
+  const [posterOnly, setPosterOnly] = useState(false);
+  const [phase, setPhase] = useState<PlayPhase>('idle');
+
+  const bindVideo = useCallback((node: HTMLVideoElement | null) => {
+    videoRef.current = node;
+    if (node) {
+      prepareInlineMuted(node);
+    }
+  }, []);
+
+  const attemptPlay = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video || startedRef.current || playLockRef.current) {
+      return;
+    }
+
+    playLockRef.current = true;
+    prepareInlineMuted(video);
+
+    try {
+      await video.play();
+      startedRef.current = true;
+      setPhase('playing');
+    } catch {
+      playLockRef.current = false;
+      setPhase('blocked');
+    }
+  }, []);
 
   useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const connection = (navigator as NavigatorWithConnection).connection;
     const sync = () => {
-      setStaticOnly(prefersStaticAmbient());
+      setPosterOnly(prefersSaveData());
     };
 
     sync();
-    media.addEventListener('change', sync);
     connection?.addEventListener?.('change', sync);
     return () => {
-      media.removeEventListener('change', sync);
       connection?.removeEventListener?.('change', sync);
     };
   }, []);
 
   useEffect(() => {
-    if (staticOnly) {
-      setSourcesArmed(false);
-      setInView(false);
+    if (posterOnly) {
       return;
     }
 
@@ -71,67 +117,56 @@ const AmbientLoopVideo: React.FC<AmbientLoopVideoProps> = ({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const visible = entry.isIntersecting;
-        setInView(visible);
-        if (visible) {
-          setSourcesArmed(true);
+        if (!entry || entry.intersectionRatio < 0.5) {
+          return;
         }
+        void attemptPlay();
+        observer.disconnect();
       },
-      { root: null, rootMargin: '120px 0px', threshold: 0.15 },
+      { root: null, threshold: [0, 0.5, 1] },
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [staticOnly]);
+  }, [attemptPlay, posterOnly]);
 
-  useEffect(() => {
+  const handleEnded = () => {
+    startedRef.current = true;
+    setPhase('ended');
     const video = videoRef.current;
-    if (!video || !sourcesArmed || staticOnly) {
+    if (!video || !Number.isFinite(video.duration) || video.duration <= 0) {
       return;
     }
+    const last = Math.max(0, video.duration - 0.05);
+    if (video.currentTime < last) {
+      video.currentTime = last;
+    }
+  };
 
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
-    video.load();
-  }, [mp4Src, sourcesArmed, staticOnly, webmSrc]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !sourcesArmed || staticOnly) {
+  const handleUserStart = () => {
+    if (startedRef.current || posterOnly) {
       return;
     }
-
-    if (!inView) {
-      video.pause();
-      return;
-    }
-
-    const tryPlay = () => {
-      void video.play().catch(() => undefined);
-    };
-
-    video.addEventListener('canplay', tryPlay);
-    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      tryPlay();
-    }
-
-    return () => {
-      video.removeEventListener('canplay', tryPlay);
-    };
-  }, [inView, sourcesArmed, staticOnly]);
+    void attemptPlay();
+  };
 
   const frameClass = [
     'ambient-loop-video',
     fadeEdges ? 'ambient-loop-video--fade' : '',
+    tapClassForPhase(phase),
     className,
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <div ref={rootRef} className={frameClass} aria-hidden="true">
-      {staticOnly ? (
+    <div
+      ref={rootRef}
+      className={frameClass}
+      aria-hidden="true"
+      onClick={handleUserStart}
+    >
+      {posterOnly ? (
         <img
           src={posterSrc}
           alt=""
@@ -143,26 +178,21 @@ const AmbientLoopVideo: React.FC<AmbientLoopVideoProps> = ({
         />
       ) : (
         <video
-          ref={videoRef}
+          ref={bindVideo}
           width={960}
           height={540}
-          autoPlay
           muted
-          loop
           playsInline
-          preload="none"
+          preload="auto"
           poster={posterSrc}
           controls={false}
           disablePictureInPicture
           disableRemotePlayback
           tabIndex={-1}
+          onEnded={handleEnded}
         >
-          {sourcesArmed ? (
-            <>
-              <source src={webmSrc} type="video/webm" />
-              <source src={mp4Src} type="video/mp4" />
-            </>
-          ) : null}
+          <source src={mp4Src} type={'video/mp4; codecs="avc1.4D401F"'} />
+          <source src={webmSrc} type={'video/webm; codecs="vp9"'} />
         </video>
       )}
     </div>
