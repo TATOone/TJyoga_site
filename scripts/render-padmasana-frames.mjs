@@ -13,15 +13,17 @@ const OUT_DIR = process.argv[2] || join(ROOT, 'artifacts/padmasana-frames');
 const WIDTH = 960;
 const HEIGHT = 540;
 const CREAM = { r: 245, g: 239, b: 231 };
-const GOLD = { r: 196, g: 154, b: 108 };
+const WAVE_ACCENT = { r: 200, g: 92, b: 60 };
 const MOTION = {
   breathPeriod: 7,
-  breathAmp: 0.08,
+  breathAmp: 0.14,
   wavePeriod: 9,
-  waveAmp: 0.16,
-  waveBright: 0.55,
-  waveSigma: 0.055,
+  waveAmp: 0.23,
+  waveBright: 0.9,
+  waveSigma: 0.084,
   shimmerAmp: 0.016,
+  figureOpacityAmp: 0.09,
+  fieldBreathShare: 0.22,
 };
 
 const source = readFileSync(join(ROOT, 'src/data/quotePadmasanaDots.ts'), 'utf8');
@@ -68,6 +70,7 @@ for (let i = 0; i < pack.count; i += 1) {
     g: bytes[offset + 5],
     b: bytes[offset + 6],
     phase: ((col * 12.9898 + row * 78.233) % 1) * Math.PI * 2,
+    isFigure: radius >= 4 / pack.srcW,
   });
 }
 
@@ -77,12 +80,11 @@ const spineX = pack.spineX;
 
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
-const breathScale = (timeSec) => {
+const breathAmount = (timeSec) => {
   const cycle = ((timeSec / MOTION.breathPeriod) % 1 + 1) % 1;
   const inhale = cycle < 0.52;
   const local = inhale ? cycle / 0.52 : (1 - cycle) / 0.48;
-  const eased = 0.5 - 0.5 * Math.cos(Math.PI * clamp01(local));
-  return 1 + MOTION.breathAmp * (eased * 2 - 1);
+  return 0.5 - 0.5 * Math.cos(Math.PI * clamp01(local));
 };
 
 class SoftwareCanvas {
@@ -104,7 +106,7 @@ class SoftwareCanvas {
     }
   }
 
-  dot(cx, cy, radius, r, g, b) {
+  dot(cx, cy, radius, r, g, b, a = 1) {
     const x0 = Math.max(0, Math.floor(cx - radius - 1));
     const x1 = Math.min(this.width - 1, Math.ceil(cx + radius + 1));
     const y0 = Math.max(0, Math.floor(cy - radius - 1));
@@ -115,7 +117,7 @@ class SoftwareCanvas {
         const dx = x + 0.5 - cx;
         const dy = y + 0.5 - cy;
         const dist = Math.hypot(dx, dy);
-        const coverage = Math.max(0, Math.min(1, radius + 0.5 - dist));
+        const coverage = Math.max(0, Math.min(1, radius + 0.5 - dist)) * a;
         if (coverage <= 0) {
           continue;
         }
@@ -155,54 +157,63 @@ class SoftwareCanvas {
   }
 }
 
-const paint = (target, timeSec) => {
-  const breath = breathScale(timeSec);
+const paint = (target, timeSec, opts = {}) => {
+  const amount = breathAmount(timeSec);
+  const figureBreath = 1 + MOTION.breathAmp * (amount * 2 - 1);
+  const fieldBreath =
+    1 + MOTION.breathAmp * MOTION.fieldBreathShare * (amount * 2 - 1);
   const cycle = ((timeSec / MOTION.wavePeriod) % 1 + 1) % 1;
   const travel = cycle * cycle * (3 - 2 * cycle);
   const waveY = bottom + (top - bottom) * travel;
   const invSigma = 1 / (2 * MOTION.waveSigma * MOTION.waveSigma);
   const minSide = Math.min(WIDTH, HEIGHT);
+  const waveAmp = opts.rest ? 0 : MOTION.waveAmp;
+  const waveBright = opts.rest ? 0 : MOTION.waveBright;
 
   target.clear();
   for (const dot of dots) {
     const dy = dot.y - waveY;
-    const dx = (dot.x - spineX) * 1.15;
-    const wave = Math.exp(-(dy * dy + dx * dx * 0.35) * invSigma);
-    const shimmer =
-      MOTION.shimmerAmp * Math.sin(timeSec * 1.35 + dot.phase + dot.y * 6);
+    const dx = (dot.x - spineX) * 0.85;
+    const wave = dot.isFigure
+      ? Math.exp(-(dy * dy + dx * dx * 0.18) * invSigma)
+      : 0;
+    const shimmer = dot.isFigure
+      ? MOTION.shimmerAmp * Math.sin(timeSec * 1.35 + dot.phase + dot.y * 6)
+      : 0;
+    const scale = dot.isFigure ? figureBreath : fieldBreath;
     const radius =
-      dot.radius *
-      WIDTH *
-      breath *
-      (1 + wave * MOTION.waveAmp) *
-      (1 + shimmer);
+      dot.radius * WIDTH * scale * (1 + wave * waveAmp) * (1 + shimmer);
     if (radius < 0.2) {
       continue;
     }
-    const warm = clamp01(wave * MOTION.waveBright);
-    const mix = warm * 0.38;
+    const warm = dot.isFigure ? clamp01(wave * waveBright) : 0;
+    const mix = warm * 0.82;
+    const alpha = dot.isFigure
+      ? clamp01(0.92 + amount * MOTION.figureOpacityAmp + warm * 0.1)
+      : 1;
     target.dot(
       dot.x * WIDTH,
       dot.y * HEIGHT,
-      Math.min(radius, minSide * 0.03),
-      Math.round(dot.r + (GOLD.r - dot.r) * mix),
-      Math.round(dot.g + (GOLD.g - dot.g) * mix),
-      Math.round(dot.b + (GOLD.b - dot.b) * mix),
+      Math.min(radius, minSide * 0.034),
+      Math.round(dot.r + (WAVE_ACCENT.r - dot.r) * mix),
+      Math.round(dot.g + (WAVE_ACCENT.g - dot.g) * mix),
+      Math.round(dot.b + (WAVE_ACCENT.b - dot.b) * mix),
+      alpha,
     );
   }
 };
 
 const frames = [
-  { name: 'padmasana_frame_rest.png', time: 0 },
-  { name: 'padmasana_frame_wave_base.png', time: 1.8 },
-  { name: 'padmasana_frame_wave_crown.png', time: 7.6 },
+  { name: 'padmasana_contrast_rest.png', time: 3.5, rest: true },
+  { name: 'padmasana_contrast_wave_base.png', time: 1.8 },
+  { name: 'padmasana_contrast_wave_crown.png', time: 7.6 },
 ];
 
 mkdirSync(OUT_DIR, { recursive: true });
 
 for (const frame of frames) {
   const surface = new SoftwareCanvas(WIDTH, HEIGHT);
-  paint(surface, frame.time);
+  paint(surface, frame.time, { rest: Boolean(frame.rest) });
   surface.applyEdgeFade();
   const file = join(OUT_DIR, frame.name);
   await sharp(Buffer.from(surface.data), {

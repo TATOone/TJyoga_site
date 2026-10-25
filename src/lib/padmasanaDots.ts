@@ -9,6 +9,7 @@ export type PadmasanaDot = {
   g: number;
   b: number;
   phase: number;
+  isFigure: boolean;
 };
 
 export type PadmasanaMotion = {
@@ -19,6 +20,8 @@ export type PadmasanaMotion = {
   waveBright: number;
   waveSigma: number;
   shimmerAmp: number;
+  figureOpacityAmp: number;
+  fieldBreathShare: number;
 };
 
 export type PadmasanaBounds = {
@@ -34,28 +37,32 @@ export type PadmasanaScene = {
 
 export const PADMASANA_MOTION: PadmasanaMotion = {
   breathPeriod: 7,
-  breathAmp: 0.08,
+  breathAmp: 0.14,
   wavePeriod: 9,
-  waveAmp: 0.16,
-  waveBright: 0.55,
-  waveSigma: 0.055,
+  waveAmp: 0.23,
+  waveBright: 0.9,
+  waveSigma: 0.084,
   shimmerAmp: 0.016,
+  figureOpacityAmp: 0.09,
+  fieldBreathShare: 0.22,
 };
 
 export const PADMASANA_REDUCED_MOTION: PadmasanaMotion = {
   breathPeriod: 14,
-  breathAmp: 0.035,
+  breathAmp: 0.07,
   wavePeriod: 18,
-  waveAmp: 0.07,
-  waveBright: 0.22,
-  waveSigma: 0.07,
-  shimmerAmp: 0.008,
+  waveAmp: 0.12,
+  waveBright: 0.55,
+  waveSigma: 0.095,
+  shimmerAmp: 0.01,
+  figureOpacityAmp: 0.055,
+  fieldBreathShare: 0.18,
 };
 
 export const PADMASANA_FRAME_MS = 1000 / 30;
 export const PADMASANA_MAX_DPR = 2;
 
-const GOLD = { r: 196, g: 154, b: 108 };
+const WAVE_ACCENT = { r: 200, g: 92, b: 60 };
 
 let cachedScene: PadmasanaScene | null = null;
 
@@ -99,6 +106,7 @@ export function unpackPadmasanaDots(
       g: bytes[offset + 5],
       b: bytes[offset + 6],
       phase: shimmerPhase(col, row),
+      isFigure: radius >= 4 / pack.srcW,
     });
   }
 
@@ -131,12 +139,15 @@ function mixChannel(from: number, to: number, amount: number): number {
   return from + (to - from) * amount;
 }
 
-export function breathScale(timeSec: number, motion: PadmasanaMotion): number {
+export function breathAmount(timeSec: number, motion: PadmasanaMotion): number {
   const cycle = ((timeSec / motion.breathPeriod) % 1 + 1) % 1;
   const inhale = cycle < 0.52;
   const local = inhale ? cycle / 0.52 : (1 - cycle) / 0.48;
-  const eased = 0.5 - 0.5 * Math.cos(Math.PI * clamp01(local));
-  return 1 + motion.breathAmp * (eased * 2 - 1);
+  return 0.5 - 0.5 * Math.cos(Math.PI * clamp01(local));
+}
+
+export function breathScale(timeSec: number, motion: PadmasanaMotion): number {
+  return 1 + motion.breathAmp * (breathAmount(timeSec, motion) * 2 - 1);
 }
 
 export function waveFields(
@@ -161,6 +172,7 @@ export type PadmasanaDrawTarget = {
     r: number,
     g: number,
     b: number,
+    a: number,
   ) => void;
 };
 
@@ -172,7 +184,10 @@ export function paintPadmasanaFrame(
   timeSec: number,
   motion: PadmasanaMotion,
 ): void {
-  const breath = breathScale(timeSec, motion);
+  const amount = breathAmount(timeSec, motion);
+  const figureBreath = 1 + motion.breathAmp * (amount * 2 - 1);
+  const fieldBreath =
+    1 + motion.breathAmp * motion.fieldBreathShare * (amount * 2 - 1);
   const { waveY, sigma } = waveFields(timeSec, scene.bounds, motion);
   const invSigma = 1 / (2 * sigma * sigma);
   const minSide = Math.min(width, height);
@@ -181,33 +196,36 @@ export function paintPadmasanaFrame(
 
   for (const dot of scene.dots) {
     const dy = dot.y - waveY;
-    const dx = (dot.x - scene.bounds.spineX) * 1.15;
-    const wave = Math.exp(-(dy * dy + dx * dx * 0.35) * invSigma);
-    const shimmer =
-      motion.shimmerAmp *
-      Math.sin(timeSec * 1.35 + dot.phase + dot.y * 6);
+    const dx = (dot.x - scene.bounds.spineX) * 0.85;
+    const wave = dot.isFigure
+      ? Math.exp(-(dy * dy + dx * dx * 0.18) * invSigma)
+      : 0;
+    const shimmer = dot.isFigure
+      ? motion.shimmerAmp * Math.sin(timeSec * 1.35 + dot.phase + dot.y * 6)
+      : 0;
+    const scale = dot.isFigure ? figureBreath : fieldBreath;
     const radius =
-      dot.radius *
-      width *
-      breath *
-      (1 + wave * motion.waveAmp) *
-      (1 + shimmer);
+      dot.radius * width * scale * (1 + wave * motion.waveAmp) * (1 + shimmer);
     if (radius < 0.2) {
       continue;
     }
 
-    const warm = clamp01(wave * motion.waveBright);
-    const r = Math.round(mixChannel(dot.r, GOLD.r, warm * 0.38));
-    const g = Math.round(mixChannel(dot.g, GOLD.g, warm * 0.38));
-    const b = Math.round(mixChannel(dot.b, GOLD.b, warm * 0.38));
+    const warm = dot.isFigure ? clamp01(wave * motion.waveBright) : 0;
+    const r = Math.round(mixChannel(dot.r, WAVE_ACCENT.r, warm * 0.82));
+    const g = Math.round(mixChannel(dot.g, WAVE_ACCENT.g, warm * 0.82));
+    const b = Math.round(mixChannel(dot.b, WAVE_ACCENT.b, warm * 0.82));
+    const alpha = dot.isFigure
+      ? clamp01(0.92 + amount * motion.figureOpacityAmp + warm * 0.1)
+      : 1;
 
     target.dot(
       dot.x * width,
       dot.y * height,
-      Math.min(radius, minSide * 0.03),
+      Math.min(radius, minSide * 0.034),
       Math.min(255, r),
       Math.min(255, g),
       Math.min(255, b),
+      alpha,
     );
   }
 }
@@ -222,8 +240,8 @@ export function createCanvasTarget(
     clear: () => {
       ctx.clearRect(0, 0, width, height);
     },
-    dot: (x, y, radius, r, g, b) => {
-      const fill = `rgb(${r},${g},${b})`;
+    dot: (x, y, radius, r, g, b, a) => {
+      const fill = `rgba(${r},${g},${b},${a.toFixed(3)})`;
       if (fill !== lastFill) {
         ctx.fillStyle = fill;
         lastFill = fill;
