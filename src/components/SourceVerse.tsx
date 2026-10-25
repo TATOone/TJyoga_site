@@ -1,7 +1,26 @@
-import React from 'react';
-import { QUOTE_PADMASANA_LOOP } from '../config/media';
+import React, { Suspense, lazy } from 'react';
+import { QUOTE_PADMASANA_POSTER } from '../config/media';
 import { HOME_SOURCE_VERSE } from '../config/sourceVerse';
-import AmbientLoopVideo from './AmbientLoopVideo';
+
+const QuotePadmasana = lazy(() => import('./QuotePadmasana'));
+
+const FIGURE_CLASS = 'mb-6 w-full max-w-[520px] sm:mb-8 md:mb-10';
+
+const QuotePadmasanaFallback: React.FC = () => (
+  <div
+    className={`quote-padmasana quote-padmasana--fade ${FIGURE_CLASS}`}
+    aria-hidden="true"
+  >
+    <img
+      src={QUOTE_PADMASANA_POSTER}
+      alt=""
+      width={960}
+      height={540}
+      decoding="async"
+      draggable={false}
+    />
+  </div>
+);
 
 const SourceVerse: React.FC = () => {
   const verse = HOME_SOURCE_VERSE;
@@ -15,12 +34,9 @@ const SourceVerse: React.FC = () => {
     >
       <div className="container mx-auto px-4">
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <AmbientLoopVideo
-            webmSrc={QUOTE_PADMASANA_LOOP.webm}
-            mp4Src={QUOTE_PADMASANA_LOOP.mp4}
-            posterSrc={QUOTE_PADMASANA_LOOP.poster}
-            className="mb-6 w-full max-w-[520px] sm:mb-8 md:mb-10"
-          />
+          <Suspense fallback={<QuotePadmasanaFallback />}>
+            <QuotePadmasana className={FIGURE_CLASS} />
+          </Suspense>
           <blockquote className="w-full">
             <p
               id={quoteId}
