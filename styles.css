@@ -203,9 +203,12 @@ a:focus-visible {
   aspect-ratio: 16 / 9;
   width: 100%;
   overflow: hidden;
-  pointer-events: none;
   user-select: none;
   background-color: transparent;
+}
+
+.ambient-loop-video--tap {
+  cursor: pointer;
 }
 
 .ambient-loop-video img,
@@ -216,17 +219,29 @@ a:focus-visible {
   object-fit: cover;
 }
 
-.ambient-loop-video--fade {
-  -webkit-mask-image: radial-gradient(
+/* Fade via overlay, not mask-image: iOS Safari can fail to paint <video> under a CSS mask. */
+.ambient-loop-video--fade::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
     ellipse 72% 78% at 50% 46%,
-    #000 36%,
-    transparent 78%
+    transparent 36%,
+    var(--color-cream) 78%
   );
-  mask-image: radial-gradient(ellipse 72% 78% at 50% 46%, #000 36%, transparent 78%);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
+}
+
+.ambient-loop-video video::-webkit-media-controls,
+.ambient-loop-video video::-webkit-media-controls-overlay-play-button,
+.ambient-loop-video video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
 }
 
 .source-verse {
