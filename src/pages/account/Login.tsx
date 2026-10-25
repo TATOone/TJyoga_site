@@ -47,15 +47,9 @@ const Login: React.FC = () => {
   return (
     <PublicPageLayout
       title="Вход"
-      subtitle={
-        fromPayment
-          ? 'Оплата принята. Войдите, и кабинет сразу откроет практику.'
-          : 'После входа откроется кабинет: Zoom, записи и статус подписки.'
-      }
+      subtitle={fromPayment ? 'Оплата принята. Войдите, чтобы открыть практику.' : undefined}
     >
       <FormCard
-        title="С возвращением"
-        subtitle="Войдите по email и паролю. Сессию можно сохранить на этом устройстве."
         footer={
           <div className="space-y-2 text-center text-sm text-gray-brown">
             <p>
@@ -132,7 +126,7 @@ const Login: React.FC = () => {
             {nextPath !== ACCOUNT_HOME_PATH ? (
               <>
                 {' · '}
-                после входа вернём на нужную страницу кабинета
+                после входа вернём на нужную страницу
               </>
             ) : null}
           </p>

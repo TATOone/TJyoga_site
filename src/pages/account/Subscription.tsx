@@ -61,11 +61,7 @@ const Subscription: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <SectionHeader
-        eyebrow="Кабинет"
-        title="Подписка"
-        subtitle="Тариф, срок доступа и как продлить."
-      />
+      <SectionHeader title="Подписка" />
 
       <section className="space-y-4 rounded-card border border-light-sandy bg-light-text p-6 shadow-soft">
         <div className="flex flex-wrap items-center gap-2">
@@ -106,8 +102,7 @@ const Subscription: React.FC = () => {
           {needsRenew ? 'Продлить доступ' : 'Продление'}
         </h2>
         <p className="text-sm text-gray-brown">
-          Продление ручное: выберите тариф и оплатите снова. После подтверждения оплаты доступ
-          обновится сам, без письма в поддержку.
+          Выберите тариф и оплатите снова. После подтверждения доступ обновится сам.
         </p>
         <Button
           onClick={() => {

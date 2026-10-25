@@ -16,8 +16,7 @@ const FreePractices: React.FC = () => {
   return (
     <PublicPageLayout
       title="Бесплатные практики"
-      subtitle="Три занятия с YouTube-канала TJ Yoga. Можно смотреть здесь, кабинет не нужен."
-      eyebrow="YouTube"
+      subtitle="Три занятия с нашего YouTube. Кабинет не нужен."
     >
       <div className="mx-auto w-full min-w-0 max-w-3xl space-y-10">
         <ol className="space-y-8">
@@ -45,11 +44,8 @@ const FreePractices: React.FC = () => {
         </p>
 
         <section className="rounded-2xl bg-light-olive p-6 md:p-8">
-          <h2 className="mb-2 text-2xl font-semibold text-dark-brown">В онлайн-клуб</h2>
-          <p className="mb-5 text-gray-brown">
-            Живые эфиры, записи и чат - в клубе. Как устроен формат и тарифы, можно посмотреть
-            отдельно.
-          </p>
+          <h2 className="mb-2 text-2xl font-semibold text-dark-brown">В клуб</h2>
+          <p className="mb-5 text-gray-brown">Живые эфиры, записи и чат.</p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               to="/club"

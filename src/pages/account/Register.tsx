@@ -47,13 +47,8 @@ const Register: React.FC = () => {
   };
 
   return (
-    <PublicPageLayout
-      title="Регистрация"
-      subtitle="После регистрации вы сразу попадёте в кабинет."
-    >
+    <PublicPageLayout title="Регистрация">
       <FormCard
-        title="Создать аккаунт"
-        subtitle="Дальше можно выбрать тариф или, если оплата уже прошла, открыть практику."
         footer={
           <div className="space-y-2 text-center text-sm text-gray-brown">
             <p>
@@ -73,7 +68,7 @@ const Register: React.FC = () => {
                 rel="noopener noreferrer"
                 className="text-olive-green hover:underline"
               >
-                Telegram поддержки
+                Напишите в Telegram
               </a>
             </p>
           </div>

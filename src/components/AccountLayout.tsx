@@ -10,7 +10,7 @@ import { Button } from './ui';
 
 const navItems = [
   { to: '/account', label: 'Обзор', icon: Home, end: true },
-  { to: '/account/videos', label: 'Видео', icon: PlayCircle },
+  { to: '/account/videos', label: 'Записи', icon: PlayCircle },
   { to: '/account/knowledge', label: 'Знания', icon: BookOpen },
   { to: '/account/subscription', label: 'Подписка', icon: CreditCard },
   { to: '/account/support', label: 'Поддержка', icon: LifeBuoy },

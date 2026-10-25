@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PublicPageLayout from '../components/PublicPageLayout';
 import PurchaseLegalLinks from '../components/PurchaseLegalLinks';
-import { getActiveAccent } from '../config/campaignAccent';
 import { CONSENT_BASELINE } from '../config/legalDocuments';
 import { PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
@@ -11,26 +10,20 @@ import { usePageMeta } from '../utils/usePageMeta';
 const HowToBuy: React.FC = () => {
   usePageMeta('howToBuy');
 
-  const accent = getActiveAccent();
   const monthly = PRODUCTS['club-monthly'];
   const yearly = PRODUCTS['club-yearly'];
 
   const steps = [
-    'Выберите месяц или год на странице тарифов. Наполнение клуба одно и то же.',
-    'В форме заказа укажите имя, почту, Telegram и пароль для кабинета.',
-    'Подтвердите оферту, политику данных и медицинский отказ. Без этого оплата не начнётся.',
-    'После оплаты кабинет открывается сам, обычно за несколько минут. Если нет - пишите в Telegram, в рабочие часы доступ включают вручную.',
+    'Выберите месяц или год. Наполнение одно.',
+    'Имя, почта, Telegram и пароль для кабинета.',
+    'Оферта, политика данных и медицинский отказ - без этого оплата не начнётся.',
+    'Кабинет открывается сам, обычно за несколько минут. Если нет - напишите в Telegram.',
   ];
 
   return (
-    <PublicPageLayout
-      title="Как оформить подписку"
-      subtitle={`${accent.ctaHint}. Цена как на сайте.`}
-      eyebrow={accent.label}
-    >
+    <PublicPageLayout title="Как оформить" subtitle="Картой. Цена как на сайте.">
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="bg-cream border border-light-sandy rounded-2xl p-6 md:p-8">
-          <h2 className="text-2xl font-semibold text-dark-brown mb-4">По шагам</h2>
           <ol className="space-y-3">
             {steps.map((step, index) => (
               <li key={step} className="flex gap-3 text-dark-brown">
@@ -47,7 +40,7 @@ const HowToBuy: React.FC = () => {
           <article className="bg-light-text border border-light-sandy rounded-2xl p-6">
             <h3 className="text-xl font-semibold text-dark-brown mb-3">Если доступ не пришёл</h3>
             <p className="text-gray-brown mb-3">
-              Напишите в Telegram. В рабочие часы доступ обновляют вручную в течение{' '}
+              Напишите в Telegram. В рабочие часы включим вручную в течение{' '}
               {CONSENT_BASELINE.renewalSla}.
             </p>
             <p className="text-gray-brown">
@@ -57,10 +50,7 @@ const HowToBuy: React.FC = () => {
           </article>
           <article className="bg-light-text border border-light-sandy rounded-2xl p-6">
             <h3 className="text-xl font-semibold text-dark-brown mb-3">Документы перед оплатой</h3>
-            <p className="text-gray-brown mb-3">
-              Короткие тексты, которые нужно принять в форме заказа. Версия документов:{' '}
-              {CONSENT_BASELINE.version}.
-            </p>
+            <p className="text-gray-brown mb-3">Версия документов: {CONSENT_BASELINE.version}.</p>
             <PurchaseLegalLinks analyticsLocation="how_to_buy_legal" />
           </article>
         </div>
@@ -69,7 +59,7 @@ const HowToBuy: React.FC = () => {
           <div>
             <h2 className="text-2xl font-semibold text-dark-brown mb-2">Месяц или год</h2>
             <p className="text-gray-brown">
-              {monthly.priceLabel}. {yearly.priceLabel}. Посмотреть оба тарифа или сразу оформить месяц.
+              {monthly.priceLabel}. {yearly.priceLabel}.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
@@ -78,7 +68,7 @@ const HowToBuy: React.FC = () => {
               className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg border border-terracotta text-terracotta hover:bg-cream transition-colors"
               onClick={() => analyticsEvents.ctaClick('Сравнить тарифы', 'how_to_buy')}
             >
-              Сравнить тарифы
+              Тарифы
             </Link>
             <Link
               to={monthly.checkoutPath}

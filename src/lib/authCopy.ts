@@ -5,8 +5,8 @@ type AuthCopyKind = 'login' | 'register';
 export const friendlyAuthError = (err: unknown, kind: AuthCopyKind): string => {
   if (!(err instanceof ApiClientError)) {
     return kind === 'login'
-      ? 'Не удалось войти. Проверьте email и пароль или напишите в поддержку.'
-      : 'Не удалось создать аккаунт. Попробуйте ещё раз или напишите в поддержку.';
+      ? 'Не удалось войти. Проверьте email и пароль или напишите нам.'
+      : 'Не удалось создать аккаунт. Попробуйте ещё раз или напишите нам.';
   }
 
   switch (err.code) {

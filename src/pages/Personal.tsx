@@ -23,7 +23,6 @@ const Personal: React.FC = () => {
           loading="lazy"
         />
         <div className="bg-cream border border-light-sandy rounded-2xl p-6">
-          <h2 className="text-2xl font-semibold text-dark-brown mb-3">{personal.shortTitle}</h2>
           <p className="text-gray-brown mb-4">{personal.details}</p>
           <ul className="space-y-2 text-dark-brown mb-6">
             {personal.includes.map((item) => (

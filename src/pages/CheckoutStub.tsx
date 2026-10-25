@@ -214,7 +214,7 @@ const CheckoutStub: React.FC = () => {
     return (
       <PublicPageLayout
         title="Товар не найден"
-        subtitle="Проверьте ссылку или выберите тариф на странице клуба."
+        subtitle="Проверьте ссылку или выберите тариф."
       >
         <div className="max-w-xl mx-auto text-center">
           <Link
@@ -233,7 +233,7 @@ const CheckoutStub: React.FC = () => {
       return (
         <PublicPageLayout
           title="Запись на ретрит в Telegram"
-          subtitle="Онлайн-оплаты ретрита на сайте нет. Напишите Жене, чтобы занять место."
+          subtitle="Оплаты ретрита на сайте нет. Напишите Жене, чтобы занять место."
         >
           <div className="max-w-xl mx-auto text-center space-y-3">
             <p className="text-gray-brown">
@@ -263,7 +263,7 @@ const CheckoutStub: React.FC = () => {
     return (
       <PublicPageLayout
         title="Онлайн-оплата скоро"
-        subtitle="Для этого продукта пока доступна заявка через поддержку. Выберите тариф клуба, чтобы оплатить онлайн."
+        subtitle="Для этого продукта пока заявка через поддержку. Тариф клуба можно оплатить онлайн."
       >
         <div className="max-w-xl mx-auto text-center">
           <Link
@@ -281,8 +281,7 @@ const CheckoutStub: React.FC = () => {
 
   return (
     <PublicPageLayout
-      title="Оформление заказа"
-      subtitle="Подтверждение данных и согласий перед переходом к оплате."
+      title="Оплата"
     >
       <div className="mx-auto max-w-3xl space-y-6 pb-[calc(7.5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
         <article className="rounded-card border border-light-sandy bg-cream p-6 shadow-soft">
@@ -308,7 +307,7 @@ const CheckoutStub: React.FC = () => {
               className="rounded-soft border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger"
               role="alert"
             >
-              Проверьте поля ниже. Без этого оплата не начнётся.
+              Проверьте поля ниже.
             </div>
           ) : null}
 
@@ -340,7 +339,7 @@ const CheckoutStub: React.FC = () => {
             </div>
 
             <TextField
-              label="Пароль для личного кабинета"
+              label="Пароль для кабинета"
               type="password"
               autoComplete="new-password"
               hint="Минимум 8 символов"
@@ -441,8 +440,7 @@ const CheckoutStub: React.FC = () => {
           <section id="checkout-pay" className="space-y-3 scroll-mt-28">
             <h3 className="font-display text-lg font-semibold text-dark-brown">3. Оплата</h3>
             <p className="rounded-soft bg-light-olive px-4 py-3 text-sm text-dark-brown">
-              Дальше откроется оплата. Кабинет - после подтверждения платежа, обычно за
-              несколько минут.
+              Дальше откроется оплата. Кабинет - обычно за несколько минут.
             </p>
             <button
               type="submit"
@@ -463,7 +461,7 @@ const CheckoutStub: React.FC = () => {
         >
           <div className="sticky-funnel-cta mx-auto flex w-full min-w-0 max-w-lg flex-col gap-2 px-3">
             <p className="text-xs leading-tight text-gray-brown">
-              {product.priceLabel}. После оплаты - кабинет, обычно за несколько минут.
+              {product.priceLabel}. После оплаты кабинет обычно за несколько минут.
             </p>
             {hasErrors ? (
               <p className="text-xs text-danger" role="alert">
