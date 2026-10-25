@@ -20,3 +20,15 @@
 /*.css
   Content-Type: text/css; charset=utf-8
 
+/media/*.webm
+  Content-Type: video/webm
+  Cache-Control: public, max-age=2592000
+
+/media/*.mp4
+  Content-Type: video/mp4
+  Cache-Control: public, max-age=2592000
+
+/media/*.webp
+  Content-Type: image/webp
+  Cache-Control: public, max-age=2592000
+
