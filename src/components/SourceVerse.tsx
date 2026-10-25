@@ -4,7 +4,7 @@ import { HOME_SOURCE_VERSE } from '../config/sourceVerse';
 
 const QuotePadmasana = lazy(() => import('./QuotePadmasana'));
 
-const FIGURE_CLASS = 'mb-6 w-full max-w-[520px] sm:mb-8 md:mb-10';
+const FIGURE_CLASS = 'mb-4 w-[75%] max-w-[390px] sm:mb-5 md:mb-6';
 
 const QuotePadmasanaFallback: React.FC = () => (
   <div
