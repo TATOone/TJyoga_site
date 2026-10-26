@@ -53,6 +53,7 @@ const QuotePadmasana: React.FC<QuotePadmasanaProps> = ({
 
     const scene = unpackPadmasanaDots();
     const reduceQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const clockOffsetSec = Math.random() * 512;
 
     let visible = true;
     let pageHidden = document.hidden;
@@ -88,7 +89,7 @@ const QuotePadmasana: React.FC<QuotePadmasanaProps> = ({
         width,
         height,
         scene,
-        now / 1000,
+        now / 1000 + clockOffsetSec,
         motionForPreference(reduced),
       );
       lastDraw = now;

@@ -16,15 +16,17 @@ const CREAM = { r: 245, g: 239, b: 231 };
 const WAVE_ACCENT = { r: 200, g: 92, b: 60 };
 const MOTION = {
   breathPeriod: 7,
-  breathAmp: 0.14,
-  wavePeriod: 9,
-  waveAmp: 0.23,
-  waveBright: 0.9,
-  waveSigma: 0.084,
+  breathAmp: 0.11,
+  wavePeriod: 9.4,
+  waveAmp: 0.16,
+  waveBright: 0.72,
+  waveSigma: 0.22,
   shimmerAmp: 0.016,
-  figureOpacityAmp: 0.09,
+  figureOpacityAmp: 0.06,
   fieldBreathShare: 0.22,
 };
+const WAVE_COLOR_MIX = 0.49;
+const LATERAL_INV_SIGMA = 1 / (2 * 0.084 * 0.084);
 
 const source = readFileSync(join(ROOT, 'src/data/quotePadmasanaDots.ts'), 'utf8');
 const num = (name) => {
@@ -79,12 +81,33 @@ const bottom = pack.figureBottom;
 const spineX = pack.spineX;
 
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
+const fract = (value) => value - Math.floor(value);
 
-const breathAmount = (timeSec) => {
-  const cycle = ((timeSec / MOTION.breathPeriod) % 1 + 1) % 1;
-  const inhale = cycle < 0.52;
-  const local = inhale ? cycle / 0.52 : (1 - cycle) / 0.48;
-  return 0.5 - 0.5 * Math.cos(Math.PI * clamp01(local));
+const breathAmount = (timeSec) =>
+  0.5 + 0.5 * Math.sin((Math.PI * 2 * timeSec) / MOTION.breathPeriod);
+
+const cosineBump = (distance, halfWidth) => {
+  const width = halfWidth <= 0 ? 1 : halfWidth;
+  const t = Math.abs(distance) / width;
+  if (t >= 1) {
+    return 0;
+  }
+  return 0.5 + 0.5 * Math.cos(Math.PI * t);
+};
+
+const wrappedCosinePulse = (u, center, halfWidth) =>
+  cosineBump(u - center, halfWidth) +
+  cosineBump(u - (center - 1), halfWidth) +
+  cosineBump(u - (center + 1), halfWidth);
+
+const waveAmount = (u, timeSec) => {
+  const center = fract(timeSec / MOTION.wavePeriod);
+  const twin = center < 0.5 ? center + 0.5 : center - 0.5;
+  return Math.min(
+    1,
+    wrappedCosinePulse(u, center, MOTION.waveSigma) +
+      wrappedCosinePulse(u, twin, MOTION.waveSigma),
+  );
 };
 
 class SoftwareCanvas {
@@ -157,37 +180,32 @@ class SoftwareCanvas {
   }
 }
 
-const paint = (target, timeSec, opts = {}) => {
+const paint = (target, timeSec) => {
   const amount = breathAmount(timeSec);
-  const figureBreath = 1 + MOTION.breathAmp * (amount * 2 - 1);
+  const breathSine = Math.sin((Math.PI * 2 * timeSec) / MOTION.breathPeriod);
+  const figureBreath = 1 + MOTION.breathAmp * breathSine;
   const fieldBreath =
-    1 + MOTION.breathAmp * MOTION.fieldBreathShare * (amount * 2 - 1);
-  const cycle = ((timeSec / MOTION.wavePeriod) % 1 + 1) % 1;
-  const travel = cycle * cycle * (3 - 2 * cycle);
-  const waveY = bottom + (top - bottom) * travel;
-  const invSigma = 1 / (2 * MOTION.waveSigma * MOTION.waveSigma);
+    1 + MOTION.breathAmp * MOTION.fieldBreathShare * breathSine;
   const minSide = Math.min(WIDTH, HEIGHT);
-  const waveAmp = opts.rest ? 0 : MOTION.waveAmp;
-  const waveBright = opts.rest ? 0 : MOTION.waveBright;
+  const span = bottom - top;
 
   target.clear();
   for (const dot of dots) {
-    const dy = dot.y - waveY;
+    const u = span <= 0 ? 0 : (bottom - dot.y) / span;
     const dx = (dot.x - spineX) * 0.85;
-    const wave = dot.isFigure
-      ? Math.exp(-(dy * dy + dx * dx * 0.18) * invSigma)
-      : 0;
+    const lateral = Math.exp(-(dx * dx * 0.18) * LATERAL_INV_SIGMA);
+    const wave = dot.isFigure ? waveAmount(u, timeSec) * lateral : 0;
     const shimmer = dot.isFigure
       ? MOTION.shimmerAmp * Math.sin(timeSec * 1.35 + dot.phase + dot.y * 6)
       : 0;
     const scale = dot.isFigure ? figureBreath : fieldBreath;
     const radius =
-      dot.radius * WIDTH * scale * (1 + wave * waveAmp) * (1 + shimmer);
+      dot.radius * WIDTH * scale * (1 + wave * MOTION.waveAmp) * (1 + shimmer);
     if (radius < 0.2) {
       continue;
     }
-    const warm = dot.isFigure ? clamp01(wave * waveBright) : 0;
-    const mix = warm * 0.82;
+    const warm = dot.isFigure ? clamp01(wave * MOTION.waveBright) : 0;
+    const mix = warm * WAVE_COLOR_MIX;
     const alpha = dot.isFigure
       ? clamp01(0.92 + amount * MOTION.figureOpacityAmp + warm * 0.1)
       : 1;
@@ -204,16 +222,16 @@ const paint = (target, timeSec, opts = {}) => {
 };
 
 const frames = [
-  { name: 'padmasana_contrast_rest.png', time: 3.5, rest: true },
-  { name: 'padmasana_contrast_wave_base.png', time: 1.8 },
-  { name: 'padmasana_contrast_wave_crown.png', time: 7.6 },
+  { name: 'padmasana_seamless_t1.png', time: 1.15 },
+  { name: 'padmasana_seamless_t2.png', time: 3.9 },
+  { name: 'padmasana_seamless_t3.png', time: 7.4 },
 ];
 
 mkdirSync(OUT_DIR, { recursive: true });
 
 for (const frame of frames) {
   const surface = new SoftwareCanvas(WIDTH, HEIGHT);
-  paint(surface, frame.time, { rest: Boolean(frame.rest) });
+  paint(surface, frame.time);
   surface.applyEdgeFade();
   const file = join(OUT_DIR, frame.name);
   await sharp(Buffer.from(surface.data), {

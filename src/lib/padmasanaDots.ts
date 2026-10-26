@@ -37,25 +37,25 @@ export type PadmasanaScene = {
 
 export const PADMASANA_MOTION: PadmasanaMotion = {
   breathPeriod: 7,
-  breathAmp: 0.14,
-  wavePeriod: 9,
-  waveAmp: 0.23,
-  waveBright: 0.9,
-  waveSigma: 0.084,
+  breathAmp: 0.11,
+  wavePeriod: 9.4,
+  waveAmp: 0.16,
+  waveBright: 0.72,
+  waveSigma: 0.22,
   shimmerAmp: 0.016,
-  figureOpacityAmp: 0.09,
+  figureOpacityAmp: 0.06,
   fieldBreathShare: 0.22,
 };
 
 export const PADMASANA_REDUCED_MOTION: PadmasanaMotion = {
   breathPeriod: 14,
-  breathAmp: 0.07,
-  wavePeriod: 18,
-  waveAmp: 0.12,
-  waveBright: 0.55,
-  waveSigma: 0.095,
+  breathAmp: 0.055,
+  wavePeriod: 18.8,
+  waveAmp: 0.08,
+  waveBright: 0.44,
+  waveSigma: 0.24,
   shimmerAmp: 0.01,
-  figureOpacityAmp: 0.055,
+  figureOpacityAmp: 0.035,
   fieldBreathShare: 0.18,
 };
 
@@ -63,6 +63,8 @@ export const PADMASANA_FRAME_MS = 1000 / 30;
 export const PADMASANA_MAX_DPR = 2;
 
 const WAVE_ACCENT = { r: 200, g: 92, b: 60 };
+const WAVE_COLOR_MIX = 0.49;
+const LATERAL_INV_SIGMA = 1 / (2 * 0.084 * 0.084);
 
 let cachedScene: PadmasanaScene | null = null;
 
@@ -140,27 +142,60 @@ function mixChannel(from: number, to: number, amount: number): number {
 }
 
 export function breathAmount(timeSec: number, motion: PadmasanaMotion): number {
-  const cycle = ((timeSec / motion.breathPeriod) % 1 + 1) % 1;
-  const inhale = cycle < 0.52;
-  const local = inhale ? cycle / 0.52 : (1 - cycle) / 0.48;
-  return 0.5 - 0.5 * Math.cos(Math.PI * clamp01(local));
+  return 0.5 + 0.5 * Math.sin((Math.PI * 2 * timeSec) / motion.breathPeriod);
 }
 
 export function breathScale(timeSec: number, motion: PadmasanaMotion): number {
-  return 1 + motion.breathAmp * (breathAmount(timeSec, motion) * 2 - 1);
+  return (
+    1 + motion.breathAmp * Math.sin((Math.PI * 2 * timeSec) / motion.breathPeriod)
+  );
 }
 
-export function waveFields(
+function fract(value: number): number {
+  return value - Math.floor(value);
+}
+
+function cosineBump(distance: number, halfWidth: number): number {
+  const width = halfWidth <= 0 ? 1 : halfWidth;
+  const t = Math.abs(distance) / width;
+  if (t >= 1) {
+    return 0;
+  }
+  return 0.5 + 0.5 * Math.cos(Math.PI * t);
+}
+
+function wrappedCosinePulse(
+  u: number,
+  center: number,
+  halfWidth: number,
+): number {
+  return (
+    cosineBump(u - center, halfWidth) +
+    cosineBump(u - (center - 1), halfWidth) +
+    cosineBump(u - (center + 1), halfWidth)
+  );
+}
+
+export function spineCoordinate(y: number, bounds: PadmasanaBounds): number {
+  const span = bounds.bottom - bounds.top;
+  if (span <= 0) {
+    return 0;
+  }
+  return (bounds.bottom - y) / span;
+}
+
+export function waveAmount(
+  u: number,
   timeSec: number,
-  bounds: PadmasanaBounds,
   motion: PadmasanaMotion,
-): { waveY: number; sigma: number } {
-  const cycle = ((timeSec / motion.wavePeriod) % 1 + 1) % 1;
-  const travel = cycle * cycle * (3 - 2 * cycle);
-  return {
-    waveY: bounds.bottom + (bounds.top - bounds.bottom) * travel,
-    sigma: motion.waveSigma,
-  };
+): number {
+  const center = fract(timeSec / motion.wavePeriod);
+  const twin = center < 0.5 ? center + 0.5 : center - 0.5;
+  return Math.min(
+    1,
+    wrappedCosinePulse(u, center, motion.waveSigma) +
+      wrappedCosinePulse(u, twin, motion.waveSigma),
+  );
 }
 
 export type PadmasanaDrawTarget = {
@@ -185,20 +220,22 @@ export function paintPadmasanaFrame(
   motion: PadmasanaMotion,
 ): void {
   const amount = breathAmount(timeSec, motion);
-  const figureBreath = 1 + motion.breathAmp * (amount * 2 - 1);
+  const figureBreath = breathScale(timeSec, motion);
   const fieldBreath =
-    1 + motion.breathAmp * motion.fieldBreathShare * (amount * 2 - 1);
-  const { waveY, sigma } = waveFields(timeSec, scene.bounds, motion);
-  const invSigma = 1 / (2 * sigma * sigma);
+    1 +
+    motion.breathAmp *
+      motion.fieldBreathShare *
+      Math.sin((Math.PI * 2 * timeSec) / motion.breathPeriod);
   const minSide = Math.min(width, height);
 
   target.clear();
 
   for (const dot of scene.dots) {
-    const dy = dot.y - waveY;
+    const u = spineCoordinate(dot.y, scene.bounds);
     const dx = (dot.x - scene.bounds.spineX) * 0.85;
+    const lateral = Math.exp(-(dx * dx * 0.18) * LATERAL_INV_SIGMA);
     const wave = dot.isFigure
-      ? Math.exp(-(dy * dy + dx * dx * 0.18) * invSigma)
+      ? waveAmount(u, timeSec, motion) * lateral
       : 0;
     const shimmer = dot.isFigure
       ? motion.shimmerAmp * Math.sin(timeSec * 1.35 + dot.phase + dot.y * 6)
@@ -211,9 +248,9 @@ export function paintPadmasanaFrame(
     }
 
     const warm = dot.isFigure ? clamp01(wave * motion.waveBright) : 0;
-    const r = Math.round(mixChannel(dot.r, WAVE_ACCENT.r, warm * 0.82));
-    const g = Math.round(mixChannel(dot.g, WAVE_ACCENT.g, warm * 0.82));
-    const b = Math.round(mixChannel(dot.b, WAVE_ACCENT.b, warm * 0.82));
+    const r = Math.round(mixChannel(dot.r, WAVE_ACCENT.r, warm * WAVE_COLOR_MIX));
+    const g = Math.round(mixChannel(dot.g, WAVE_ACCENT.g, warm * WAVE_COLOR_MIX));
+    const b = Math.round(mixChannel(dot.b, WAVE_ACCENT.b, warm * WAVE_COLOR_MIX));
     const alpha = dot.isFigure
       ? clamp01(0.92 + amount * motion.figureOpacityAmp + warm * 0.1)
       : 1;
