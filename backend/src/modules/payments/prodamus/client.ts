@@ -1,6 +1,7 @@
 import { env } from '../../../config/env.js';
 import { ApiError } from '../../../lib/http.js';
 import { createProdamusRequestSignature } from './hmac.js';
+import { extractProdamusPaymentUrl } from './paymentUrl.js';
 
 export interface CreateProdamusPaymentLinkInput {
   orderId: string;
@@ -101,17 +102,21 @@ export const createProdamusPaymentLink = async (
       },
       body: new URLSearchParams(flattenPayload(payload)).toString(),
       signal: controller.signal,
+      redirect: 'manual',
     });
 
-    if (!response.ok) {
-      throw new ApiError('PROVIDER_UNAVAILABLE', 'Prodamus не вернул ссылку на оплату', {
+    const paymentUrl = extractProdamusPaymentUrl(
+      {
+        location: response.headers.get('location'),
+        body: await response.text(),
+      },
+      payformUrl,
+    );
+
+    if (!paymentUrl) {
+      throw new ApiError('PROVIDER_UNAVAILABLE', 'Prodamus вернул некорректную ссылку на оплату', {
         status: response.status,
       });
-    }
-
-    const paymentUrl = (await response.text()).trim();
-    if (!paymentUrl.startsWith('http')) {
-      throw new ApiError('PROVIDER_UNAVAILABLE', 'Prodamus вернул некорректную ссылку на оплату');
     }
 
     return {

@@ -5,6 +5,7 @@ import {
   normalizeProdamusWebhookPayload,
   parseWebhookBody,
 } from '../src/modules/payments/prodamus/payload.js';
+import { extractProdamusPaymentUrl } from '../src/modules/payments/prodamus/paymentUrl.js';
 import {
   readProdamusSignatureHeader,
   verifyProdamusSignature,
@@ -119,5 +120,35 @@ describe('Prodamus official HMAC (Hmac::verify)', () => {
         algorithm: 'sha256',
       }),
     ).toBe(true);
+  });
+});
+
+describe('extractProdamusPaymentUrl', () => {
+  const requestUrl = 'https://payform.ru/t5a23mO/';
+
+  it('reads a raw text URL body', () => {
+    expect(
+      extractProdamusPaymentUrl({ location: null, body: 'https://payform.ru/u8zDE/\n' }, requestUrl),
+    ).toBe('https://payform.ru/u8zDE/');
+  });
+
+  it('reads 302 Location onto the invoice payform', () => {
+    expect(
+      extractProdamusPaymentUrl(
+        {
+          location: 'https://online-yogatj.payform.ru/?invoice_id=abc&paylink=1',
+          body: '<html>redirect</html>',
+        },
+        requestUrl,
+      ),
+    ).toBe('https://online-yogatj.payform.ru/?invoice_id=abc&paylink=1');
+  });
+
+  it('reads meta-refresh URL when Location is missing', () => {
+    const body =
+      '<html><head><meta http-equiv="refresh" content="0;url=https://online-yogatj.payform.ru/?invoice_id=abc&amp;paylink=1"></head></html>';
+    expect(extractProdamusPaymentUrl({ location: null, body }, requestUrl)).toBe(
+      'https://online-yogatj.payform.ru/?invoice_id=abc&paylink=1',
+    );
   });
 });
