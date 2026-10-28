@@ -90,6 +90,7 @@ const Videos: React.FC = () => {
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
+          aria-pressed={category === 'all'}
           onClick={() => setCategory('all')}
           className={`min-h-[40px] rounded-lg border px-3 ${
             category === 'all' ? 'bg-terracotta text-light-text' : 'border-light-sandy bg-light-text'
@@ -101,6 +102,7 @@ const Videos: React.FC = () => {
           <button
             key={item.id}
             type="button"
+            aria-pressed={category === item.id}
             onClick={() => setCategory(item.id)}
             className={`min-h-[40px] rounded-lg border px-3 ${
               category === item.id

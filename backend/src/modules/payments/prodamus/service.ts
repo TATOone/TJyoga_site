@@ -20,7 +20,7 @@ const pickEventIdFromRawPayload = (rawPayload?: Record<string, unknown>): string
   return null;
 };
 
-export const buildProdamusDedupKey = (payload: ProdamusWebhookPayload): string => {
+const buildProdamusDedupKey = (payload: ProdamusWebhookPayload): string => {
   const eventId = pickEventIdFromRawPayload(payload.raw);
   if (eventId) {
     return `prodamus:${eventId}`;

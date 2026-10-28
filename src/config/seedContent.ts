@@ -1,15 +1,4 @@
-import type { ArticleCategoryId, VideoCategoryId } from './clubContent';
-
-export interface SeedVideo {
-  id: string;
-  kinescopeId: string;
-  title: string;
-  description: string;
-  category: VideoCategoryId;
-  accessLevel: 'club_active' | 'public';
-  durationMin: number;
-  publishedAt: string;
-}
+import type { ArticleCategoryId } from './clubContent';
 
 export interface SeedArticle {
   id: string;
@@ -22,50 +11,6 @@ export interface SeedArticle {
   publishedAt: string;
   updatedAt: string;
 }
-
-/** Демо-контент клуба (MVP). Kinescope IDs - плейсхолдеры до заполнения в админке. */
-export const SEED_VIDEOS: readonly SeedVideo[] = [
-  {
-    id: 'vid-practice-1',
-    kinescopeId: 'demo-practice-morning',
-    title: 'Утренняя хатха: мягкий старт',
-    description: '60 минут утренней практики.',
-    category: 'practices',
-    accessLevel: 'club_active',
-    durationMin: 60,
-    publishedAt: '2026-06-01T08:00:00Z',
-  },
-  {
-    id: 'vid-practice-2',
-    kinescopeId: 'demo-practice-evening',
-    title: 'Вечернее восстановление',
-    description: 'Вечерняя практика, чтобы спокойно закрыть день.',
-    category: 'practices',
-    accessLevel: 'club_active',
-    durationMin: 75,
-    publishedAt: '2026-06-05T19:30:00Z',
-  },
-  {
-    id: 'vid-seminar-1',
-    kinescopeId: 'demo-seminar-alignment',
-    title: 'Семинар: выравнивание в асанах',
-    description: 'Разбор ключевых точек внимания в базовых асанах.',
-    category: 'seminars',
-    accessLevel: 'club_active',
-    durationMin: 90,
-    publishedAt: '2026-06-08T11:00:00Z',
-  },
-  {
-    id: 'vid-philosophy-1',
-    kinescopeId: 'demo-philosophy-yoga-sutra',
-    title: 'Йога-сутры: введение',
-    description: 'Короткий разбор базовых понятий из первоисточников.',
-    category: 'philosophy',
-    accessLevel: 'club_active',
-    durationMin: 45,
-    publishedAt: '2026-06-10T12:00:00Z',
-  },
-] as const;
 
 export const SEED_ARTICLES: readonly SeedArticle[] = [
   {

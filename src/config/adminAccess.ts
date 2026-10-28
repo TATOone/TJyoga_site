@@ -9,9 +9,9 @@ export const ADMIN_ACCESS_EMAILS = [
 
 const ALLOWED_ADMIN_EMAILS = new Set<string>(ADMIN_ACCESS_EMAILS);
 
-export const normalizeAdminEmail = (email: string): string => email.trim().toLowerCase();
+const normalizeAdminEmail = (email: string): string => email.trim().toLowerCase();
 
-export const isAdminEmailAllowed = (email: string | null | undefined): boolean => {
+const isAdminEmailAllowed = (email: string | null | undefined): boolean => {
   if (!email) {
     return false;
   }

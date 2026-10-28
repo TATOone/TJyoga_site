@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import { ZodError } from 'zod';
 
 export type ApiErrorCode =
@@ -81,10 +81,6 @@ export const toErrorResponse = (
     request_id: request.id,
   },
 });
-
-export const sendApiError = (reply: FastifyReply, request: FastifyRequest, error: ApiError): void => {
-  reply.status(error.statusCode).send(toErrorResponse(request, error));
-};
 
 export const mapUnknownError = (error: unknown): ApiError => {
   if (error instanceof ApiError) {

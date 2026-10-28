@@ -1,7 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { FastifyRequest } from 'fastify';
 import {
-  PLAN_CATALOG,
   REQUIRED_CHECKOUT_CONSENTS,
   resolvePlanCode,
 } from '../../config/plans.js';
@@ -172,5 +171,3 @@ export const getCheckoutOrderStatus = async (
     subscription_status: subscription?.status ?? null,
   };
 };
-
-export const getPlanAmountRub = (planCode: string): number | null => PLAN_CATALOG[planCode]?.amountRub ?? null;

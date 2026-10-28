@@ -27,9 +27,20 @@ declare module '*.json' {
 
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL?: string;
+  readonly VITE_GA4_ID?: string;
+  readonly VITE_YANDEX_METRICA_ID?: string;
 }
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+interface Window {
+  dataLayer?: unknown[];
+  gtag?: (...args: unknown[]) => void;
+  ym?: ((counterId: number, method: string, ...rest: unknown[]) => void) & {
+    a?: unknown[];
+    l?: number;
+  };
 }
 

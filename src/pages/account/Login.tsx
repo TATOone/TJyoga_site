@@ -96,6 +96,7 @@ const Login: React.FC = () => {
             />
             <button
               type="button"
+              aria-pressed={showPassword}
               className="text-xs text-olive-green hover:underline"
               onClick={() => setShowPassword((v) => !v)}
             >
