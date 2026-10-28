@@ -137,19 +137,13 @@ const NotFound: React.FC = () => {
         >
           Этой страницы нет. Можно вернуться на главную или заглянуть в клуб.
         </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 rounded-lg bg-terracotta text-light-text px-6 py-3 text-sm font-medium transition-colors hover:bg-golden-sandy focus:outline-none focus:ring-2 focus:ring-terracotta focus:ring-offset-2"
         >
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 rounded-lg bg-terracotta text-light-text px-6 py-3 text-sm font-medium transition-colors hover:bg-golden-sandy focus:outline-none focus:ring-2 focus:ring-terracotta focus:ring-offset-2"
-          >
-            <Home className="w-4 h-4" />
-            Вернуться на главную
-          </Link>
-        </motion.div>
+          <Home className="w-4 h-4" />
+          Вернуться на главную
+        </Link>
 
         {/* Дополнительные ссылки */}
         <motion.div 

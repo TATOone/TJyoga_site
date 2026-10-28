@@ -194,6 +194,8 @@ const App: React.FC = () => {
                 </Suspense>
               }
             />
+            <Route path="/login" element={<Navigate to="/account/login" replace />} />
+            <Route path="/register" element={<Navigate to="/account/register" replace />} />
             <Route
               path="/account/login"
               element={

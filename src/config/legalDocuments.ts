@@ -22,6 +22,7 @@ export interface ConsentRequirement {
 
 export const LEGAL_BASELINE_VERSION = 'v1.0.0';
 export const LEGAL_EFFECTIVE_FROM = '2026-06-11';
+export const LEGAL_EFFECTIVE_FROM_LABEL = '11 июня 2026';
 
 export const OPERATOR_INFO = {
   brandName: 'TJ Yoga',

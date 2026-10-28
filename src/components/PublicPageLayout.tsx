@@ -17,9 +17,9 @@ const PublicPageLayout: React.FC<PublicPageLayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="min-h-screen bg-light-text">
+    <div className="flex min-h-screen flex-col bg-light-text">
       <Header />
-      <main id="main-content" className="pt-28 pb-16">
+      <main id="main-content" className="flex-1 pt-28 pb-16">
         <section className="container mx-auto px-4 mb-10">
           <div className="max-w-4xl mx-auto text-center">
             {eyebrow ? (
