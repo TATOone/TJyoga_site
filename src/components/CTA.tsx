@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { getActiveAccent } from '../config/campaignAccent';
+import { CLUB_SUPPORT } from '../config/clubContent';
 import { PRODUCTS } from '../config/products';
 import { useSectionInView } from '../hooks/useSectionInView';
 import { analyticsEvents } from '../utils/analytics';
@@ -49,7 +50,7 @@ const CTA: React.FC = () => {
             Выбрать тариф
           </Link>
           <a
-            href="https://t.me/starovoitovae"
+            href={CLUB_SUPPORT.telegram}
             className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center"
             aria-label="Написать преподавателю в Telegram"
             onClick={() => {

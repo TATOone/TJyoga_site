@@ -46,7 +46,6 @@ const envSchema = z.object({
   SUPABASE_ANON_KEY: z.string().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
 
-  PRODMODE: envBoolean.default(false),
   PRODAMUS_WEBHOOK_SECRET: z.string().default('dev-prodamus-webhook-secret'),
   PRODAMUS_SIGNATURE_HEADER: z.string().default('x-prodamus-signature'),
   PRODAMUS_SIGNATURE_ALGO: z.enum(['sha256']).default('sha256'),

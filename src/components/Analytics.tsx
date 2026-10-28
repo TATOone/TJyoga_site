@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 const Analytics: React.FC = () => {
   useEffect(() => {
     // Google Analytics 4
-    const ga4Id = (import.meta as any).env?.VITE_GA4_ID;
+    const ga4Id = import.meta.env.VITE_GA4_ID;
     if (ga4Id && typeof window !== 'undefined') {
       // Загружаем скрипт GA4
       const script1 = document.createElement('script');
@@ -12,10 +12,9 @@ const Analytics: React.FC = () => {
       script1.src = `https://www.googletagmanager.com/gtag/js?id=${ga4Id}`;
       document.head.appendChild(script1);
 
-      // Инициализируем gtag
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      function gtag(...args: any[]) {
-        (window as any).dataLayer.push(args);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(...args: unknown[]) {
+        window.dataLayer?.push(args);
       }
       window.gtag = gtag;
       gtag('js', new Date());
@@ -25,7 +24,7 @@ const Analytics: React.FC = () => {
     }
 
     // Яндекс.Метрика
-    const yandexId = (import.meta as any).env?.VITE_YANDEX_METRICA_ID;
+    const yandexId = import.meta.env.VITE_YANDEX_METRICA_ID;
     if (yandexId && typeof window !== 'undefined') {
       (function (m: any, e: any, t: string, r: string, i: string, k: any, a: any) {
         m[i] =

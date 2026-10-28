@@ -1,5 +1,3 @@
-/* Preconfigured App.tsx — modify only routes */
-      
 import React, { Suspense, lazy, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

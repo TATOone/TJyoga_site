@@ -1,5 +1,6 @@
 import React from 'react';
 import PublicPageLayout from '../components/PublicPageLayout';
+import { CLUB_SUPPORT } from '../config/clubContent';
 import { PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
 import { usePageMeta } from '../utils/usePageMeta';
@@ -33,7 +34,7 @@ const Personal: React.FC = () => {
           </ul>
           <p className="text-2xl font-bold text-olive-green mb-5">{personal.priceLabel}</p>
           <a
-            href="https://t.me/starovoitovae"
+            href={personal.bookingHref ?? CLUB_SUPPORT.telegram}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"

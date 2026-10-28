@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { CLUB_SUPPORT } from '../config/clubContent';
 import { FREE_CTA_LABEL, FREE_PAGE_PATH } from '../config/freePractices';
 import { LEGAL_LINKS, OPERATOR_INFO } from '../config/legalDocuments';
 import { analyticsEvents } from '../utils/analytics';
@@ -71,7 +72,7 @@ const Footer: React.FC = () => {
             </p>
             <p className="text-footer-muted">
               Telegram:{' '}
-              <a href="https://t.me/starovoitovae" className="text-golden-sandy hover:text-cream hover:underline">
+              <a href={CLUB_SUPPORT.telegram} className="text-golden-sandy hover:text-cream hover:underline">
                 {OPERATOR_INFO.legalTelegram}
               </a>
             </p>

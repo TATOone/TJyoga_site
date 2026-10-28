@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import { CLUB_SUPPORT } from '../config/clubContent';
 import { FUNNEL_PRIMARY_LABEL, FUNNEL_RATES_PATH } from '../config/funnel';
 import { MobileMenuContext } from '../context/mobileMenuContext';
 import { analyticsEvents } from '../utils/analytics';
@@ -186,7 +187,7 @@ const Header: React.FC = () => {
                     </Link>
                   </motion.div>
                   <motion.a
-                    href="https://t.me/starovoitovae"
+                    href={CLUB_SUPPORT.telegram}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full border-2 border-terracotta text-terracotta text-center py-3.5 min-h-touch rounded-lg font-medium hover:bg-terracotta/10 transition-colors"

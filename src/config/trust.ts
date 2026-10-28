@@ -1,4 +1,3 @@
-import { CLUB_SUPPORT } from './clubContent';
 import { CONSENT_BASELINE } from './legalDocuments';
 import { TEACHERS_HEADLINE } from './teachers';
 
@@ -17,7 +16,3 @@ export const TRUST_CHIPS: readonly TrustChip[] = [
   { id: 'access', label: 'Доступ обычно за несколько минут' },
   { id: 'grace', label: `${CONSENT_BASELINE.gracePeriodHours} часа, чтобы продлить без разрыва` },
 ] as const;
-
-export const TRUST_SUPPORT_SLA = CLUB_SUPPORT.sla;
-export const TRUST_RENEWAL_SLA = CONSENT_BASELINE.renewalSla;
-export const TRUST_GRACE_HOURS = CONSENT_BASELINE.gracePeriodHours;
