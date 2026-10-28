@@ -84,8 +84,8 @@ const Home: React.FC = () => {
             </h2>
             <ol className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
               {[
-                { step: '1', title: 'Тариф', text: 'Месяц или год. Наполнение одно.' },
-                { step: '2', title: 'Оплата', text: 'Картой. Цена как на сайте.' },
+                { step: '1', title: 'Тариф', text: 'Месяц или год. Доступ одинаковый.' },
+                { step: '2', title: 'Оплата', text: 'Оплата картой.' },
                 { step: '3', title: 'Кабинет', text: 'Обычно за несколько минут.' },
                 { step: '4', title: 'Практика', text: 'Zoom, записи и чат.' },
               ].map((item) => (

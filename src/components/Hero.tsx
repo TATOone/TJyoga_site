@@ -87,7 +87,7 @@ const Hero: React.FC = () => {
           <Link
             to="/club/rates"
             className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
-            aria-label="Выбрать тариф Йога-Клуба"
+            aria-label="Выбрать тариф клуба"
             data-hero-primary-cta=""
             onClick={() => {
               analyticsEvents.ctaClick('Выбрать тариф', 'hero');

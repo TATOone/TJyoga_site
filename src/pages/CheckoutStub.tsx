@@ -213,7 +213,7 @@ const CheckoutStub: React.FC = () => {
   if (!product) {
     return (
       <PublicPageLayout
-        title="Товар не найден"
+        title="Тариф не найден"
         subtitle="Проверьте ссылку или выберите тариф."
       >
         <div className="max-w-xl mx-auto text-center">
@@ -260,17 +260,48 @@ const CheckoutStub: React.FC = () => {
       );
     }
 
+    if (product.id === 'personal-session') {
+      return (
+        <PublicPageLayout
+          title="Запись на персональное занятие"
+          subtitle="Онлайн-оплаты персональных занятий на сайте нет. Напишите Жене."
+        >
+          <div className="max-w-xl mx-auto text-center space-y-3">
+            <p className="text-gray-brown">
+              Чтобы записаться, напишите Жене в Telegram:{' '}
+              <a
+                href={RETREAT_BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-terracotta underline underline-offset-2 hover:text-golden-sandy"
+                onClick={() => analyticsEvents.telegramClick('starovoitovae', 'checkout_personal')}
+              >
+                {RETREAT_BOOKING_HANDLE}
+              </a>
+              .
+            </p>
+            <Link
+              to="/personal"
+              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+            >
+              К персональным занятиям
+            </Link>
+          </div>
+        </PublicPageLayout>
+      );
+    }
+
     return (
       <PublicPageLayout
-        title="Онлайн-оплата скоро"
-        subtitle="Для этого продукта пока заявка через поддержку. Тариф клуба можно оплатить онлайн."
+        title="Этот тариф онлайн не оплачивается"
+        subtitle="Напишите нам в Telegram, если нужна помощь с записью."
       >
         <div className="max-w-xl mx-auto text-center">
           <Link
             to="/club/rates"
             className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
           >
-            Перейти к тарифам клуба
+            К тарифам клуба
           </Link>
         </div>
       </PublicPageLayout>
@@ -432,7 +463,7 @@ const CheckoutStub: React.FC = () => {
               <legend className="px-1 text-sm font-semibold text-gray-brown">Дополнительно</legend>
               <label className="flex min-h-touch items-start gap-3 text-sm text-dark-brown">
                 <input type="checkbox" className="mt-1 size-5 shrink-0" {...register('cookiesAccept')} />
-                <span>Согласен(а) на cookie для аналитики (опционально).</span>
+                <span>Согласен(а) на аналитику на сайте (необязательно).</span>
               </label>
             </fieldset>
           </section>

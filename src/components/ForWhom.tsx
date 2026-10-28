@@ -11,11 +11,11 @@ import { useSectionInView } from '../hooks/useSectionInView';
 const audienceLead = (id: CampaignAccentId): string => {
   switch (id) {
     case 'beginners':
-      return 'Можно приходить с нуля. Есть простой вариант позы. Разрешите себе быть новичком.';
+      return 'Можно приходить с нуля. Есть простой вариант асаны. Разрешите себе быть новичком.';
     case 'depth':
-      return 'Уровни, первоисточники и ритм недели. В клубе это уже собрано.';
+      return 'Уровни, первоисточники и ритм недели.';
     case 'office-restore':
-      return 'День за компьютером. Практика встраивается в неделю: утро, вечер или запись.';
+      return 'День за компьютером. Практика вписывается в неделю: утро, вечер или запись.';
     default: {
       const unreachable: never = id;
       return unreachable;
@@ -74,7 +74,7 @@ const ForWhom: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          Перед первым эфиром можно написать, что беспокоит в теле.
+          Перед первым эфиром можно написать нам, что беспокоит в теле и уме.
         </motion.p>
       </div>
     </section>

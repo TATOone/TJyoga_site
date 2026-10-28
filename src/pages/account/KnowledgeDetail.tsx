@@ -28,7 +28,7 @@ const KnowledgeDetail: React.FC = () => {
           setError(err.message);
           return;
         }
-        setError('Статья недоступна');
+        setError('Статья недоступна.');
       }
     };
     void load();

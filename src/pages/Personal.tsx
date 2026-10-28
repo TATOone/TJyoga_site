@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PublicPageLayout from '../components/PublicPageLayout';
 import { PRODUCTS } from '../config/products';
 import { analyticsEvents } from '../utils/analytics';
@@ -13,7 +12,7 @@ const Personal: React.FC = () => {
   return (
     <PublicPageLayout
       title="Персональные занятия"
-      subtitle="Один-на-один: смотрим ваше тело, дыхание и то, что сейчас мешает практиковать спокойно."
+      subtitle="Один-на-один: смотрим ваше тело, дыхание и технику."
     >
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         <img
@@ -33,27 +32,18 @@ const Personal: React.FC = () => {
             ))}
           </ul>
           <p className="text-2xl font-bold text-olive-green mb-5">{personal.priceLabel}</p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              to={personal.checkoutPath}
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
-              onClick={() => analyticsEvents.ctaClick('Оформить персональное занятие', 'personal_page')}
-            >
-              Оформить занятие
-            </Link>
-            <a
-              href="https://t.me/starovoitovae"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg border border-terracotta text-terracotta hover:bg-cream transition-colors"
-              onClick={() => {
-                analyticsEvents.ctaClick('Уточнить формат персонально', 'personal_page');
-                analyticsEvents.telegramClick('starovoitovae', 'personal_page');
-              }}
-            >
-              Задать вопрос в Telegram
-            </a>
-          </div>
+          <a
+            href="https://t.me/starovoitovae"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+            onClick={() => {
+              analyticsEvents.ctaClick('Написать Жене', 'personal_page');
+              analyticsEvents.telegramClick('starovoitovae', 'personal_page');
+            }}
+          >
+            Написать Жене
+          </a>
         </div>
       </div>
     </PublicPageLayout>

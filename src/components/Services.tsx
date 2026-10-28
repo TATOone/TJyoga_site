@@ -44,7 +44,7 @@ const Services: React.FC = () => {
       description: product.homeCard?.description ?? product.details,
       price: product.priceLabel,
       button: product.homeCard?.primaryCta ?? product.ctaLabel,
-      checkoutLabel: product.homeCard?.secondaryCta ?? 'Купить',
+      checkoutLabel: product.homeCard?.secondaryCta ?? (product.bookingHref ? 'Записаться' : 'Оплатить'),
       link: product.primaryPath,
       checkoutPath: product.checkoutPath,
       bookingHref: product.bookingHref,

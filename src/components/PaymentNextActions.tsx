@@ -67,7 +67,7 @@ const PaymentNextActions: React.FC<PaymentNextActionsProps> = ({ outcome, retryP
         analyticsEvents.telegramClick('starovoitovae', analyticsLocation);
       }}
     >
-      Telegram
+      Написать в Telegram
     </a>
   );
 

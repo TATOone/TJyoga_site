@@ -56,7 +56,7 @@ const Offer: React.FC = () => {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold mb-2">6. Подписка и grace-period</h2>
+        <h2 className="text-xl font-semibold mb-2">6. Подписка и 72 часа после окончания</h2>
         <p>
           Доступ к Йога-Клубу предоставляется на срок выбранного тарифа. Продление выполняется
           вручную повторной оплатой. После окончания оплаченного периода действует grace-period 72

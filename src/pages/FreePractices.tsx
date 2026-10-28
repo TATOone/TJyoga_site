@@ -16,7 +16,7 @@ const FreePractices: React.FC = () => {
   return (
     <PublicPageLayout
       title="Бесплатные практики"
-      subtitle="Три занятия с нашего YouTube. Кабинет не нужен."
+      subtitle="Три практики с нашего YouTube. Кабинет не нужен."
     >
       <div className="mx-auto w-full min-w-0 max-w-3xl space-y-10">
         <ol className="space-y-8">

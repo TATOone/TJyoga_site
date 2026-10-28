@@ -21,7 +21,7 @@ const ClubRates: React.FC = () => {
   return (
     <PublicPageLayout
       title="Тарифы"
-      subtitle={`${monthly.priceLabel} или ${yearly.priceLabel}. Наполнение одно.`}
+      subtitle={`${monthly.priceLabel} или ${yearly.priceLabel}. Доступ одинаковый.`}
     >
       <div className="mx-auto max-w-5xl space-y-8">
         <TrustStrip />
