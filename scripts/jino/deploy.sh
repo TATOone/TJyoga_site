@@ -330,9 +330,9 @@ deploy_backend() {
   remote "mkdir -p '$release'"
   echo "== sync backend (dist included, no .env, no node_modules) to $release =="
   tar -C "$ROOT_DIR/backend" \
-    --exclude node_modules \
-    --exclude .env \
-    --exclude .env.* \
+    --exclude 'node_modules' \
+    --exclude '.env' \
+    --exclude '.env.*' \
     -czf - . | remote "tar -C '$release' -xzf -"
 
   echo "== install prod deps + migrate (old API still serving) =="
