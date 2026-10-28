@@ -1,9 +1,14 @@
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
-  if (mode === "production" && !process.env.VITE_API_BASE_URL) {
+  const fileEnv = loadEnv(mode, process.cwd(), "VITE_");
+  const apiBaseUrl = process.env.VITE_API_BASE_URL || fileEnv.VITE_API_BASE_URL;
+  if (mode === "production" && !apiBaseUrl) {
     throw new Error("VITE_API_BASE_URL is required for production builds");
+  }
+  if (apiBaseUrl) {
+    process.env.VITE_API_BASE_URL = apiBaseUrl;
   }
 
   return {
