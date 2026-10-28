@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { z } from 'zod';
 import { success } from '../../lib/http.js';
 import { ApiError } from '../../lib/http.js';
 import { requireRoles } from '../../security/rbac.js';
@@ -53,7 +54,7 @@ export const checkoutRoutes: FastifyPluginAsync = async (app) => {
         throw new ApiError('UNAUTHORIZED', 'Требуется авторизация');
       }
 
-      const params = request.params as { orderId: string };
+      const params = z.object({ orderId: z.string().uuid() }).parse(request.params);
       const data = await getCheckoutOrderStatus(app.store, params.orderId, auth.userId);
       return success(request, data);
     },

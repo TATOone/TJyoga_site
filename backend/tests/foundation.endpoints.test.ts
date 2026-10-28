@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { ADMIN_ACCESS_EMAILS } from '../src/config/adminAccess.js';
 import { buildApp } from '../src/app.js';
+import { createProdamusRequestSignature } from '../src/modules/payments/prodamus/hmac.js';
 
 const PRODMUS_SECRET = 'dev-prodamus-webhook-secret';
 const KINESCOPE_SECRET = 'dev-kinescope-auth-secret';
@@ -107,6 +108,41 @@ describe('Stage 3 foundation endpoints', () => {
     expect(duplicateResponse.json().data.duplicate).toBe(true);
   });
 
+  it('accepts official urlencoded webhook signed with Sign over POST fields', async () => {
+    const nested = {
+      date: '2026-10-28 10:00:00',
+      order_id: '987654',
+      order_num: 'order_native_1',
+      sum: '6000.00',
+      payment_status: 'success',
+      products: [{ name: 'Club month', price: '6000', quantity: '1' }],
+    };
+    const signature = createProdamusRequestSignature(nested, PRODMUS_SECRET);
+    const raw = new URLSearchParams({
+      date: nested.date,
+      order_id: nested.order_id,
+      order_num: nested.order_num,
+      sum: nested.sum,
+      payment_status: nested.payment_status,
+      'products[0][name]': nested.products[0].name,
+      'products[0][price]': nested.products[0].price,
+      'products[0][quantity]': nested.products[0].quantity,
+    }).toString();
+
+    const response = await app.inject({
+      method: 'POST',
+      url: '/api/v1/payments/prodamus/webhook',
+      payload: raw,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        sign: signature,
+      },
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json().data.accepted).toBe(true);
+  });
+
   it('allows kinescope auth for active subscription', async () => {
     const response = await app.inject({
       method: 'POST',
@@ -114,8 +150,6 @@ describe('Stage 3 foundation endpoints', () => {
       headers: {
         'content-type': 'application/json',
         'x-kinescope-secret': KINESCOPE_SECRET,
-        'x-user-id': DEMO_STUDENT_ID,
-        'x-user-role': 'student',
       },
       payload: {
         user_id: DEMO_STUDENT_ID,
@@ -128,15 +162,30 @@ describe('Stage 3 foundation endpoints', () => {
     expect(response.json().data.decision).toBe('allow');
   });
 
-  it('rejects kinescope auth when payload user_id does not match session', async () => {
+  it('rejects kinescope auth without the server-side shared secret', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/api/v1/integrations/kinescope/auth',
+      headers: {
+        'content-type': 'application/json',
+      },
+      payload: {
+        user_id: DEMO_STUDENT_ID,
+        video_id: 'video_1',
+        video_access_level: 'club_active',
+      },
+    });
+
+    expect(response.statusCode).toBe(401);
+  });
+
+  it('rejects kinescope auth when payload user_id is unknown', async () => {
     const response = await app.inject({
       method: 'POST',
       url: '/api/v1/integrations/kinescope/auth',
       headers: {
         'content-type': 'application/json',
         'x-kinescope-secret': KINESCOPE_SECRET,
-        'x-user-id': DEMO_STUDENT_ID,
-        'x-user-role': 'student',
       },
       payload: {
         user_id: '00000000-0000-4000-8000-000000009999',
@@ -146,7 +195,7 @@ describe('Stage 3 foundation endpoints', () => {
     });
 
     expect(response.statusCode).toBe(403);
-    expect(response.json().error.details?.code).toBe('USER_ID_MISMATCH');
+    expect(response.json().error.details?.code).toBe('USER_NOT_FOUND');
   });
 
   it('denies kinescope auth when user lacks subscription', async () => {
@@ -156,8 +205,6 @@ describe('Stage 3 foundation endpoints', () => {
       headers: {
         'content-type': 'application/json',
         'x-kinescope-secret': KINESCOPE_SECRET,
-        'x-user-id': DEMO_ADMIN_ID,
-        'x-user-role': 'admin',
       },
       payload: {
         user_id: DEMO_ADMIN_ID,

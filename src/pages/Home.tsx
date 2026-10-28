@@ -48,7 +48,7 @@ const Home: React.FC = () => {
   return (
     <div>
       <Header />
-      <main>
+      <main id="main-content">
         <Hero />
         <SourceVerse />
         <Suspense fallback={<SectionLoader variant="cards" />}>

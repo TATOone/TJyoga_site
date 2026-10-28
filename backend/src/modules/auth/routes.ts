@@ -9,47 +9,70 @@ import {
 } from './schema.js';
 import { loginUser, logoutUser, refreshUserSession, registerUser } from './service.js';
 
+const authRateLimit = {
+  max: 20,
+  timeWindow: '1 minute' as const,
+};
+
 export const authRoutes: FastifyPluginAsync = async (app) => {
-  app.post('/auth/register', async (request, reply) => {
-    const payload = registerRequestSchema.parse(request.body);
-    const data = await registerUser(app.store, {
-      email: payload.email,
-      password: payload.password,
-      firstName: payload.first_name,
-      phone: payload.phone,
-    });
+  app.post(
+    '/auth/register',
+    {
+      config: { rateLimit: authRateLimit },
+    },
+    async (request, reply) => {
+      const payload = registerRequestSchema.parse(request.body);
+      const data = await registerUser(app.store, {
+        email: payload.email,
+        password: payload.password,
+        firstName: payload.first_name,
+        phone: payload.phone,
+      });
 
-    reply.status(201);
-    return success(request, {
-      user_id: data.userId,
-      role: data.role,
-      status: data.status,
-    });
-  });
+      reply.status(201);
+      return success(request, {
+        user_id: data.userId,
+        role: data.role,
+        status: data.status,
+      });
+    },
+  );
 
-  app.post('/auth/login', async (request) => {
-    const payload = loginRequestSchema.parse(request.body);
-    const data = await loginUser(app.store, payload);
+  app.post(
+    '/auth/login',
+    {
+      config: { rateLimit: authRateLimit },
+    },
+    async (request) => {
+      const payload = loginRequestSchema.parse(request.body);
+      const data = await loginUser(app.store, payload);
 
-    return success(request, {
-      access_token: data.accessToken,
-      refresh_token: data.refreshToken,
-      expires_in_sec: data.expiresInSec,
-      user: data.user,
-    });
-  });
+      return success(request, {
+        access_token: data.accessToken,
+        refresh_token: data.refreshToken,
+        expires_in_sec: data.expiresInSec,
+        user: data.user,
+      });
+    },
+  );
 
-  app.post('/auth/refresh', async (request) => {
-    const payload = refreshRequestSchema.parse(request.body);
-    const data = await refreshUserSession(app.store, payload.refresh_token);
+  app.post(
+    '/auth/refresh',
+    {
+      config: { rateLimit: authRateLimit },
+    },
+    async (request) => {
+      const payload = refreshRequestSchema.parse(request.body);
+      const data = await refreshUserSession(app.store, payload.refresh_token);
 
-    return success(request, {
-      access_token: data.accessToken,
-      refresh_token: data.refreshToken,
-      expires_in_sec: data.expiresInSec,
-      user: data.user,
-    });
-  });
+      return success(request, {
+        access_token: data.accessToken,
+        refresh_token: data.refreshToken,
+        expires_in_sec: data.expiresInSec,
+        user: data.user,
+      });
+    },
+  );
 
   app.post('/auth/logout', async (request, reply) => {
     const payload = logoutRequestSchema.parse(request.body);

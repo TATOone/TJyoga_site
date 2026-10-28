@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { env } from '../../../config/env.js';
 import { ApiError, success } from '../../../lib/http.js';
 import { evaluateSubscriptionAccess } from '../../subscriptions/access.js';
-import { requireRoles } from '../../../security/rbac.js';
 
 const kinescopeAuthSchema = z.object({
   user_id: z.string().uuid(),
@@ -15,7 +14,6 @@ export const kinescopeRoutes: FastifyPluginAsync = async (app) => {
   app.post(
     '/integrations/kinescope/auth',
     {
-      preHandler: [app.authenticate, requireRoles(['user'])],
       config: {
         rateLimit: {
           max: 100,
@@ -30,16 +28,11 @@ export const kinescopeRoutes: FastifyPluginAsync = async (app) => {
       }
 
       const payload = kinescopeAuthSchema.parse(request.body);
-
-      if (!request.auth || payload.user_id !== request.auth.userId) {
-        throw new ApiError('FORBIDDEN', 'Идентификатор пользователя не совпадает с авторизованной сессией', {
-          code: 'USER_ID_MISMATCH',
-        });
-      }
-
       const user = await app.store.getUserById(payload.user_id);
       if (!user) {
-        throw new ApiError('FORBIDDEN', 'Пользователь не найден');
+        throw new ApiError('FORBIDDEN', 'Пользователь не найден', {
+          code: 'USER_NOT_FOUND',
+        });
       }
 
       if (payload.video_access_level === 'public') {

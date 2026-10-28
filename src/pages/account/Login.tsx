@@ -90,6 +90,7 @@ const Login: React.FC = () => {
               type={showPassword ? 'text' : 'password'}
               required
               minLength={8}
+              maxLength={128}
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

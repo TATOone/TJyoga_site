@@ -100,7 +100,7 @@ const AdminDashboard: React.FC = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 space-y-8">
+      <main id="main-content" className="container mx-auto px-4 py-8 space-y-8">
         {error ? <p className="text-red-700">{error}</p> : null}
         {message ? <p className="text-olive-green">{message}</p> : null}
 

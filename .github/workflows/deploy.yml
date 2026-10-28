@@ -32,6 +32,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_API_BASE_URL: https://tjyoga.ru/api/v1
         run: npm run build
 
       - name: Copy rates page to dist

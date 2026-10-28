@@ -20,7 +20,7 @@ const Register: React.FC = () => {
   const [password, setPassword] = React.useState('');
   const [firstName, setFirstName] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
-  const [rememberMe, setRememberMe] = React.useState(true);
+  const [rememberMe, setRememberMe] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
 
@@ -96,6 +96,7 @@ const Register: React.FC = () => {
               type={showPassword ? 'text' : 'password'}
               required
               minLength={8}
+              maxLength={128}
               autoComplete="new-password"
               hint="Не менее 8 символов"
               value={password}
