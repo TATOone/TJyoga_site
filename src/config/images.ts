@@ -4,7 +4,7 @@
 export const IMAGES = {
   hero: {
     main: "/images/hero-main.jpg",
-    alt: 'TJ Yoga - Женя и Тим, преподаватели классической хатха йоги'
+    alt: 'TJ Yoga - Женя и Тим, преподаватели классической хатха-йоги'
   },
   about: {
     teachers: "/images/about-teachers.jpg",

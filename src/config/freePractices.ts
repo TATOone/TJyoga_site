@@ -15,9 +15,9 @@ export interface FreePracticeVideo {
 }
 
 export const FREE_PRACTICE_VIDEOS: readonly FreePracticeVideo[] = [
-  { id: 'UFyHLtLSQ6w', title: 'Йога утро 60 минут' },
-  { id: 'WOAslQXbnYo', title: 'Йога вечер 60 минут' },
-  { id: 'U0ZGlseSFK0', title: 'Йога утро 20 минут' },
+  { id: 'UFyHLtLSQ6w', title: 'Утренняя практика, 60 минут' },
+  { id: 'WOAslQXbnYo', title: 'Вечерняя практика, 60 минут' },
+  { id: 'U0ZGlseSFK0', title: 'Короткая утренняя практика, 20 минут' },
 ];
 
 export const youtubeThumbnailUrl = (videoId: string): string =>

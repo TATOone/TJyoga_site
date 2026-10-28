@@ -70,10 +70,10 @@ const Header: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <Link to="/" aria-label="TJ yoga - перейти на главную">
+          <Link to="/" aria-label="TJ Yoga - на главную">
             <img
               src="/images/logo/full_logo.png"
-              alt="TJ yoga logo"
+              alt="Логотип TJ Yoga"
               className="h-12 md:h-16 w-auto max-w-[9.5rem] sm:max-w-none"
               width="250"
               height="64"

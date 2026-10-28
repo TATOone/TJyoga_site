@@ -30,7 +30,7 @@ const Blog: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Открытые заметки о практике, как в канале yogaTJ.
+          Открытые заметки о практике, как в канале TJyoga.
         </motion.p>
         <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2">
           {publicPosts.map((post, index) => (
@@ -74,13 +74,6 @@ const Blog: React.FC = () => {
             onClick={() => analyticsEvents.ctaClick('Все записи блога', 'home_blog')}
           >
             Все записи блога
-          </Link>
-          <Link
-            to="/account/knowledge"
-            className="inline-flex min-h-touch items-center justify-center rounded-soft border border-olive-green px-6 py-3 text-olive-green transition-colors hover:bg-cream"
-            onClick={() => analyticsEvents.ctaClick('Знания клуба', 'home_blog')}
-          >
-            Знания клуба
           </Link>
         </motion.div>
       </div>

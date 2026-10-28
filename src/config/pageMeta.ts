@@ -64,7 +64,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   clubRates: {
     title: 'Тарифы Йога-Клуба: 6 000 ₽/месяц или 60 000 ₽/год - TJ Yoga',
     description:
-      'Месяц 6 000 ₽ или год 60 000 ₽. Наполнение одно: Zoom, записи, чат.',
+      'Месяц 6 000 ₽ или год 60 000 ₽. Доступ одинаковый: Zoom, записи и чат.',
     path: '/club/rates',
     robots: 'index,follow',
     keywords: 'тарифы йога клуба, цена подписки на хатха йогу, годовая подписка йога',
@@ -104,14 +104,14 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   howToBuy: {
     title: 'Как оформить подписку на Йога-Клуб TJ Yoga',
     description:
-      'Как оплатить месяц или год клуба: тариф, оплата, кабинет. Цена как на сайте.',
+      'Как оплатить месяц или год клуба: тариф, оплата картой, кабинет.',
     path: '/how-to-buy',
     robots: 'index,follow',
     keywords: 'как купить подписку на йогу, оплата йога клуба, TJ Yoga доступ',
   },
   checkout: {
     title: 'Оплата - TJ Yoga',
-    description: 'Тариф, согласия и переход к оплате.',
+    description: 'Выбор тарифа, согласия и переход к оплате.',
     path: '/checkout',
     robots: 'noindex,nofollow',
   },
@@ -181,7 +181,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   },
   blog: {
     title: 'Блог TJ Yoga - открытые заметки о практике',
-    description: 'Открытые заметки о хатха-йоге и практике, как в канале yogaTJ.',
+    description: 'Открытые заметки о хатха-йоге и практике, как в канале TJyoga.',
     path: '/blog',
     robots: 'index,follow',
     keywords: 'блог о йоге, статьи о йоге, хатха йога блог',

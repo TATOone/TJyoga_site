@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { EmptyState, SectionHeader, StatusBadge } from '../../components/ui';
+import { ARTICLE_CATEGORIES } from '../../config/clubContent';
 import { FUNNEL_RATES_PATH } from '../../config/funnel';
 import { apiClient, ApiClientError, type ArticleListItem, type MeResponse } from '../../lib/apiClient';
 import { loadAuthSession } from '../../lib/authStorage';
@@ -17,7 +18,7 @@ const Knowledge: React.FC = () => {
     const load = async () => {
       const session = loadAuthSession();
       if (!session) {
-        setError('Чтобы читать Знания, войдите в кабинет.');
+        setError('Чтобы читать этот раздел, войдите в кабинет.');
         setLoading(false);
         return;
       }
@@ -109,7 +110,10 @@ const Knowledge: React.FC = () => {
             >
               <div className="mb-2 flex items-center gap-2">
                 <StatusBadge label="Знания" tone="success" />
-                <span className="text-xs text-gray-brown">{article.category}</span>
+                <span className="text-xs text-gray-brown">
+                  {ARTICLE_CATEGORIES.find((item) => item.id === article.category)?.title ??
+                    article.category}
+                </span>
               </div>
               <h3 className="font-display text-lg font-semibold text-dark-brown">{article.title}</h3>
               <p className="mt-2 text-sm text-gray-brown">{article.excerpt}</p>

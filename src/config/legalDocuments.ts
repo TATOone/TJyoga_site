@@ -96,7 +96,7 @@ export const CONSENT_REQUIREMENTS: readonly ConsentRequirement[] = [
   },
   {
     type: 'cookies_accept',
-    label: 'Согласен(а) на использование cookie для аналитики',
+    label: 'Согласен(а) на аналитику на сайте (необязательно)',
     documentType: 'policy',
     required: false,
   },

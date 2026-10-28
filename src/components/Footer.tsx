@@ -61,15 +61,6 @@ const Footer: React.FC = () => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  to="/how-to-buy"
-                  className="text-cream hover:text-golden-sandy transition-colors"
-                  onClick={() => analyticsEvents.ctaClick('footer_how_to_buy', 'footer_legal')}
-                >
-                  Как оформить
-                </Link>
-              </li>
             </ul>
 
             <p className="text-footer-muted">

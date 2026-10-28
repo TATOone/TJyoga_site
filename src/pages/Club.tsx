@@ -108,7 +108,7 @@ const Club: React.FC = () => {
         <section>
           <h2 className="text-2xl font-semibold text-dark-brown mb-2">Тарифы</h2>
           <p className="text-gray-brown mb-4 text-sm md:text-base">
-            {monthly.priceLabel} или {yearly.priceLabel}. Наполнение одно.
+            {monthly.priceLabel} или {yearly.priceLabel}. Доступ одинаковый.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <article className="bg-light-text border border-light-sandy rounded-2xl p-6 shadow-sm">
@@ -171,7 +171,7 @@ const Club: React.FC = () => {
           <div>
             <h2 className="text-2xl font-semibold text-dark-brown mb-2">{accent.ctaHint}</h2>
             <p className="text-gray-brown">
-              Месяц или год, или напишите нам в Telegram. {CLUB_SUPPORT.sla}
+              Месяц или год. Если есть вопрос - напишите нам. {CLUB_SUPPORT.sla}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">

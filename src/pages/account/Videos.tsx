@@ -32,7 +32,7 @@ const Videos: React.FC = () => {
           setErrorCode(err.code);
           setError(err.message);
         } else {
-          setError('Не удалось загрузить видео. Попробуйте обновить страницу.');
+          setError('Не удалось загрузить записи. Попробуйте обновить страницу.');
         }
       } finally {
         setLoading(false);
@@ -55,7 +55,7 @@ const Videos: React.FC = () => {
   };
 
   if (loading) {
-    return <p className="text-gray-brown">Загрузка видео...</p>;
+    return <p className="text-gray-brown">Загрузка записей...</p>;
   }
 
   if (errorCode === 'SUBSCRIPTION_REQUIRED') {
@@ -152,7 +152,9 @@ const Videos: React.FC = () => {
         <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {filtered.map((video) => (
             <li key={video.id} className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft">
-              <p className="mb-1 text-xs uppercase tracking-wide text-terracotta">{video.category}</p>
+              <p className="mb-1 text-xs uppercase tracking-wide text-terracotta">
+                {VIDEO_CATEGORIES.find((item) => item.id === video.category)?.title ?? video.category}
+              </p>
               <h3 className="mb-2 font-semibold text-dark-brown">{video.title}</h3>
               <p className="mb-4 text-sm text-gray-brown">{video.description}</p>
               <button

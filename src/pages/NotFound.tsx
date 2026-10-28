@@ -176,7 +176,7 @@ const NotFound: React.FC = () => {
             rel="noopener noreferrer"
             className="text-olive-green hover:text-golden-sandy transition-colors"
           >
-            Telegram
+            Канал в Telegram
           </a>
         </motion.div>
       </div>

@@ -14,14 +14,14 @@ const HowToBuy: React.FC = () => {
   const yearly = PRODUCTS['club-yearly'];
 
   const steps = [
-    'Выберите месяц или год. Наполнение одно.',
+    'Выберите месяц или год. Доступ одинаковый.',
     'Имя, почта, Telegram и пароль для кабинета.',
     'Оферта, политика данных и медицинский отказ - без этого оплата не начнётся.',
     'Кабинет открывается сам, обычно за несколько минут. Если нет - напишите в Telegram.',
   ];
 
   return (
-    <PublicPageLayout title="Как оформить" subtitle="Картой. Цена как на сайте.">
+    <PublicPageLayout title="Как оформить" subtitle="Оплата картой. Кабинет обычно за несколько минут.">
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="bg-cream border border-light-sandy rounded-2xl p-6 md:p-8">
           <ol className="space-y-3">
@@ -40,8 +40,7 @@ const HowToBuy: React.FC = () => {
           <article className="bg-light-text border border-light-sandy rounded-2xl p-6">
             <h3 className="text-xl font-semibold text-dark-brown mb-3">Если доступ не пришёл</h3>
             <p className="text-gray-brown mb-3">
-              Напишите в Telegram. В рабочие часы включим вручную в течение{' '}
-              {CONSENT_BASELINE.renewalSla}.
+              Напишите в Telegram. В рабочие часы включим вручную {CONSENT_BASELINE.renewalSla}.
             </p>
             <p className="text-gray-brown">
               После окончания подписки остаётся {CONSENT_BASELINE.gracePeriodHours} часа, чтобы
@@ -50,7 +49,6 @@ const HowToBuy: React.FC = () => {
           </article>
           <article className="bg-light-text border border-light-sandy rounded-2xl p-6">
             <h3 className="text-xl font-semibold text-dark-brown mb-3">Документы перед оплатой</h3>
-            <p className="text-gray-brown mb-3">Версия документов: {CONSENT_BASELINE.version}.</p>
             <PurchaseLegalLinks analyticsLocation="how_to_buy_legal" />
           </article>
         </div>

@@ -64,7 +64,7 @@ const Dashboard: React.FC = () => {
       setZoomError(
         err instanceof ApiClientError
           ? err.message
-          : 'Не удалось открыть Zoom. Попробуйте ещё раз или напишите в поддержку.',
+          : 'Не удалось открыть занятие. Попробуйте ещё раз или напишите нам.',
       );
     }
   };
@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button onClick={() => void openZoom()}>Войти в Zoom</Button>
+              <Button onClick={() => void openZoom()}>Войти в занятие</Button>
               <Link
                 to="/account/videos"
                 className="inline-flex min-h-touch items-center justify-center rounded-soft border border-terracotta px-5 font-medium text-terracotta transition-colors hover:bg-cream"
@@ -118,16 +118,16 @@ const Dashboard: React.FC = () => {
               </p>
             ) : (
               <p className="text-sm text-gray-brown">
-                Ссылка на комнату не показывается здесь - только безопасный переход.
+                Ссылка откроется в новом окне.
               </p>
             )}
           </div>
         ) : (
           <div className="space-y-4">
             <div>
-              <h2 className="font-display text-xl font-semibold text-dark-brown">Сначала тариф</h2>
+              <h2 className="font-display text-xl font-semibold text-dark-brown">Сначала выберите тариф</h2>
               <p className="mt-1 text-sm text-gray-brown">
-                Zoom и записи откроются после оплаты. Когда доступ появится, кабинет сразу покажет практику.
+                Живые занятия и записи откроются после оплаты.
               </p>
             </div>
             <Button
@@ -176,7 +176,7 @@ const Dashboard: React.FC = () => {
             ) : null}
           </div>
         ) : (
-          <p className="text-gray-brown">Активной подписки нет. Zoom и записи откроются после оплаты.</p>
+          <p className="text-gray-brown">Активной подписки нет. Живые занятия и записи откроются после оплаты.</p>
         )}
       </section>
 

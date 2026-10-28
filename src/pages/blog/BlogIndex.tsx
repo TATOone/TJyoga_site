@@ -19,7 +19,7 @@ const BlogIndex: React.FC = () => {
         setArticles(data.articles.filter((item) => item.access === 'public'));
         analyticsEvents.ctaClick('blog_open', 'blog_index');
       } catch (err) {
-        setError(err instanceof ApiClientError ? err.message : 'Не удалось загрузить блог');
+        setError(err instanceof ApiClientError ? err.message : 'Не удалось загрузить блог.');
       } finally {
         setLoading(false);
       }
@@ -28,7 +28,7 @@ const BlogIndex: React.FC = () => {
   }, []);
 
   return (
-    <PublicPageLayout title="Блог" subtitle="Открытые заметки о практике, как в канале yogaTJ.">
+    <PublicPageLayout title="Блог" subtitle="Открытые заметки о практике, как в канале TJyoga.">
       <div className="mx-auto max-w-3xl">
         {loading ? <p className="text-gray-brown">Загрузка...</p> : null}
         {error ? <p className="text-danger">{error}</p> : null}
