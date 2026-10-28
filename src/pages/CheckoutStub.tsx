@@ -27,7 +27,10 @@ const PRODUCT_PLAN_MAP: Partial<Record<ProductId, string>> = {
 const checkoutSchema = z.object({
   fullName: z.string().min(2, 'Введите имя и фамилию.'),
   email: z.string().email('Введите корректный email.'),
-  password: z.string().min(8, 'Пароль должен содержать минимум 8 символов.'),
+  password: z
+    .string()
+    .min(8, 'Пароль должен содержать минимум 8 символов.')
+    .max(128, 'Пароль не длиннее 128 символов.'),
   telegram: z
     .string()
     .regex(/^@?[A-Za-z0-9_]{5,32}$/, 'Укажите Telegram username в формате @username.'),
@@ -183,7 +186,7 @@ const CheckoutStub: React.FC = () => {
         }
       }
 
-      saveAuthSession(session, true);
+      saveAuthSession(session, false);
 
       const checkoutSession = await apiClient.createCheckoutSession(
         {

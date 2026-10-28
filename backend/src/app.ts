@@ -6,7 +6,7 @@ import rateLimit from '@fastify/rate-limit';
 import rawBody from 'fastify-raw-body';
 import { allowedOrigins, assertSecureEnvironment, env } from './config/env.js';
 import { loggerOptions } from './config/logger.js';
-import { ApiError, ensureRequestId, mapUnknownError, toErrorResponse } from './lib/http.js';
+import { ensureRequestId, mapUnknownError, toErrorResponse } from './lib/http.js';
 import { healthRoutes } from './modules/health/routes.js';
 import { buildStore } from './persistence/factory.js';
 import type { BackendStore } from './persistence/store.js';
@@ -39,6 +39,23 @@ export const buildApp = async (options: BuildAppOptions = {}): Promise<FastifyIn
     runFirst: true,
   });
 
+  app.addContentTypeParser(
+    'application/x-www-form-urlencoded',
+    { parseAs: 'string' },
+    (_request, body, done) => {
+      try {
+        const record: Record<string, unknown> = {};
+        const params = new URLSearchParams(typeof body === 'string' ? body : body.toString('utf8'));
+        for (const [key, value] of params.entries()) {
+          record[key] = value;
+        }
+        done(null, record);
+      } catch (error) {
+        done(error as Error);
+      }
+    },
+  );
+
   await app.register(helmet, {
     contentSecurityPolicy: false,
   });
@@ -46,12 +63,17 @@ export const buildApp = async (options: BuildAppOptions = {}): Promise<FastifyIn
   await app.register(cors, {
     credentials: true,
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) {
+        callback(null, false);
+        return;
+      }
+
+      if (allowedOrigins.includes(origin)) {
         callback(null, true);
         return;
       }
 
-      callback(new ApiError('FORBIDDEN', 'CORS origin запрещен', { origin }), false);
+      callback(null, false);
     },
   });
 

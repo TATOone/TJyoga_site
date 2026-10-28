@@ -1,57 +1,56 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    allowedHosts: true,
-  },
-  esbuild: {
-    logOverride: {
-      'ignored-directive': 'silent', 
+export default defineConfig(({ mode }) => {
+  if (mode === "production" && !process.env.VITE_API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL is required for production builds");
+  }
+
+  return {
+    plugins: [react()],
+    server: {
+      allowedHosts: true,
     },
-  },
-  logLevel: 'info', 
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Разделяем большие библиотеки в отдельные чанки
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-ui': ['framer-motion'],
-          'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          'vendor-utils': ['react-toastify', 'lucide-react'],
+    esbuild: {
+      logOverride: {
+        'ignored-directive': 'silent',
+      },
+    },
+    logLevel: 'info',
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-ui': ['framer-motion'],
+            'vendor-forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+            'vendor-utils': ['react-toastify', 'lucide-react'],
+          },
+          chunkFileNames: 'assets/js/[name]-[hash].js',
+          entryFileNames: 'assets/js/[name]-[hash].js',
+          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
         },
-        // Оптимизация имен файлов для кеширования
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+        onwarn(warning, warn) {
+          if (
+            warning.message.includes('Module level directives') ||
+            warning.message.includes('"use client"') ||
+            warning.message.includes('"was ignored"')
+          ) {
+            return;
+          }
+
+          if (warning.code === 'UNRESOLVED_IMPORT') {
+            throw new Error(`Build failed due to unresolved import:\n${warning.message}`);
+          }
+
+          if (warning.code === 'PLUGIN_WARNING' && /is not exported/.test(warning.message)) {
+            throw new Error(`Build failed due to missing export:\n${warning.message}`);
+          }
+
+          warn(warning);
+        },
       },
-      onwarn(warning, warn) {
-        // ignore certain harmless warnings
-        if (
-          warning.message.includes('Module level directives') ||
-          warning.message.includes('"use client"')  ||
-          warning.message.includes('"was ignored"')
-        ) {
-          return; 
-        }
-
-        // FAIL build on unresolved imports
-        if (warning.code === 'UNRESOLVED_IMPORT') {
-          throw new Error(`Build failed due to unresolved import:\n${warning.message}`);
-        }
-
-        // FAIL build on missing exports (like your Input error)
-        if (warning.code === 'PLUGIN_WARNING' && /is not exported/.test(warning.message)) {
-          throw new Error(`Build failed due to missing export:\n${warning.message}`);
-        }
-
-        // other warnings: log normally
-        warn(warning);
-      },
+      chunkSizeWarningLimit: 500,
     },
-    // Оптимизация размера чанков
-    chunkSizeWarningLimit: 500,
-  },
+  };
 });

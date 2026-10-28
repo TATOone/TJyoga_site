@@ -19,7 +19,7 @@ const PublicPageLayout: React.FC<PublicPageLayoutProps> = ({
   return (
     <div className="min-h-screen bg-light-text">
       <Header />
-      <main className="pt-28 pb-16">
+      <main id="main-content" className="pt-28 pb-16">
         <section className="container mx-auto px-4 mb-10">
           <div className="max-w-4xl mx-auto text-center">
             {eyebrow ? (

@@ -107,7 +107,7 @@ const AccountLayout: React.FC = () => {
           </a>
         </nav>
 
-        <main className="min-w-0">
+        <main id="main-content" className="min-w-0">
           <Outlet />
         </main>
       </div>

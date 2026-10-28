@@ -8,7 +8,7 @@ const NotFound: React.FC = () => {
   usePageMeta('notFound');
 
   return (
-    <section className="relative flex py-10 min-h-screen items-center justify-center overflow-hidden bg-cream">
+    <main id="main-content" className="relative flex py-10 min-h-screen items-center justify-center overflow-hidden bg-cream">
       <div className="mx-auto relative z-30 w-full max-w-[600px] text-center px-4">
         {/* Large 404 Text */}
         <motion.div 
@@ -221,7 +221,7 @@ const NotFound: React.FC = () => {
           </defs>
         </svg>
       </div>
-    </section>
+    </main>
   );
 };
 

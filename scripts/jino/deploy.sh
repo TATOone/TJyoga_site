@@ -78,6 +78,7 @@ build_frontend() {
       npm install
     fi
     VITE_API_BASE_URL="${VITE_API_BASE_URL:-https://tjyoga.ru/api/v1}" npm run build
+    cp -R "$ROOT_DIR/rates" "$ROOT_DIR/dist/rates"
   )
 }
 

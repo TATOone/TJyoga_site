@@ -26,6 +26,9 @@ declare module '*.json' {
 }
 
 interface ImportMetaEnv {
+  readonly MODE: string;
+  readonly DEV: boolean;
+  readonly PROD: boolean;
   readonly VITE_API_BASE_URL?: string;
   readonly VITE_GA4_ID?: string;
   readonly VITE_YANDEX_METRICA_ID?: string;

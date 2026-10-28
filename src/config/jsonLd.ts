@@ -194,12 +194,12 @@ const blogArticleJsonLd = (slug: string): JsonLdNode | null => {
 };
 
 /**
- * Страничный @graph. Organization + WebSite уже есть в index.html —
- * здесь только сущности маршрута. Без aggregateRating и выдуманных отзывов.
+ * Страничный @graph: Organization + WebSite (дублируют index.html для клиентской навигации)
+ * плюс сущности маршрута. Без aggregateRating и выдуманных отзывов.
  */
 export const getRouteJsonLdGraph = (pathname: string): JsonLdNode[] => {
   const key = getPageMetaKeyForPath(pathname);
-  const graph: JsonLdNode[] = [breadcrumbJsonLd(pathname)];
+  const graph: JsonLdNode[] = [organizationJsonLd(), websiteJsonLd(), breadcrumbJsonLd(pathname)];
 
   switch (key) {
     case 'home':

@@ -53,10 +53,8 @@ const App: React.FC = () => {
       <Router>
         <RoutePageMeta />
         <RouteJsonLd />
-        <motion.main 
-          id="main-content" 
-          className="min-h-screen font-body overflow-x-hidden" 
-          role="main"
+        <motion.div
+          className="min-h-screen font-body overflow-x-hidden"
           animate={{
             x: isMobileMenuOpen ? '-85%' : '0%',
           }}
@@ -299,7 +297,7 @@ const App: React.FC = () => {
             closeOnClick
             pauseOnHover
           />
-        </motion.main>
+        </motion.div>
       </Router>
     </MobileMenuContext.Provider>
   );

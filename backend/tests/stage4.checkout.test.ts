@@ -288,6 +288,70 @@ describe('Stage 4 checkout and auth', () => {
 
     expect(logoutResponse.statusCode).toBe(204);
   });
+
+  it('rejects checkout return URLs from untrusted origins', async () => {
+    const email = `redirect-${randomUUID()}@example.com`;
+    const password = 'StrongPass!23';
+
+    await app.inject({
+      method: 'POST',
+      url: '/api/v1/auth/register',
+      payload: { email, password },
+    });
+    const loginResponse = await app.inject({
+      method: 'POST',
+      url: '/api/v1/auth/login',
+      payload: { email, password },
+    });
+    const accessToken = loginResponse.json().data.access_token as string;
+
+    const response = await app.inject({
+      method: 'POST',
+      url: '/api/v1/checkout/session',
+      payload: {
+        plan_code: 'club-month',
+        return_url_success: 'https://evil.example/phish',
+        return_url_error: 'http://localhost:5173/payment/error',
+        accept_consents: [
+          { doc_type: 'offer', version: '1.0.0' },
+          { doc_type: 'privacy', version: '1.0.0' },
+          { doc_type: 'medical_disclaimer', version: '1.0.0' },
+        ],
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'idempotency-key': randomUUID(),
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('rejects non-uuid order ids', async () => {
+    const email = `orderid-${randomUUID()}@example.com`;
+    const password = 'StrongPass!23';
+    await app.inject({
+      method: 'POST',
+      url: '/api/v1/auth/register',
+      payload: { email, password },
+    });
+    const loginResponse = await app.inject({
+      method: 'POST',
+      url: '/api/v1/auth/login',
+      payload: { email, password },
+    });
+    const accessToken = loginResponse.json().data.access_token as string;
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/api/v1/checkout/orders/not-a-uuid',
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+  });
 });
 
 describe('Stage 4 prodamus hmac', () => {
