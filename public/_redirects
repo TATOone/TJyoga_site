@@ -1,2 +1,3 @@
+/login     /account/login     301
+/register  /account/register  301
 /*    /index.html   200
-
