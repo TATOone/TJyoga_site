@@ -29,7 +29,7 @@ export const OPERATOR_INFO = {
   operatorName: 'Старовойтова Евгения Викторовна',
   operatorStatus: 'самозанятая',
   /** Замените на фактический ИНН самозанятого перед production-публикацией оферты. */
-  inn: '000000000000',
+  inn: '910825677813',
   legalEmail: 'legal@tjyoga.ru',
   supportEmail: 'support@tjyoga.ru',
   legalTelegram: '@starovoitovae',
