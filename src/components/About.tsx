@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { IMAGES } from '../config/images';
 import { useSectionInView } from '../hooks/useSectionInView';
+import { REVEAL_HIDDEN, REVEAL_VISIBLE, revealTransition } from '../lib/motion';
 
 const About: React.FC = () => {
   const { ref, isInView } = useSectionInView();
@@ -12,18 +13,18 @@ const About: React.FC = () => {
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center text-dark-brown mb-8"
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={REVEAL_HIDDEN}
+          animate={isInView ? REVEAL_VISIBLE : {}}
+          transition={revealTransition()}
         >
           Женя и Тим
         </motion.h2>
         <div className="flex flex-col md:flex-row items-center gap-8">
           <motion.div
             className="md:w-1/2"
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={REVEAL_HIDDEN}
+            animate={isInView ? REVEAL_VISIBLE : {}}
+            transition={revealTransition(0.12)}
           >
             <img
               src={IMAGES.about.teachers}
@@ -44,9 +45,9 @@ const About: React.FC = () => {
           </motion.div>
           <motion.div
             className="md:w-1/2"
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            initial={REVEAL_HIDDEN}
+            animate={isInView ? REVEAL_VISIBLE : {}}
+            transition={revealTransition(0.2)}
           >
             <p className="text-dark-brown mb-4">
               Мы - Женя и Тим. Практикуем и преподаём классическую хатха-йогу школы Патанджали. Эту линию мы получили в Ришикеше: из текстов и живой практики.
@@ -55,8 +56,8 @@ const About: React.FC = () => {
               Мы активные и энергичные, во многом благодаря йоге.
             </p>
             <div className="space-y-2">
-              <p className="font-semibold text-olive-green">Женя Старовойтова - основной преподаватель, 10+ лет личной практики, 5+ лет преподавания</p>
-              <p className="font-semibold text-olive-green">Тим - ассистент преподавателя, 5+ лет практики, вдохновитель и поддержка</p>
+              <p className="font-semibold text-olive-ink">Женя Старовойтова - основной преподаватель, 10+ лет личной практики, 5+ лет преподавания</p>
+              <p className="font-semibold text-olive-ink">Тим - ассистент преподавателя, 5+ лет практики, вдохновитель и поддержка</p>
             </div>
           </motion.div>
         </div>

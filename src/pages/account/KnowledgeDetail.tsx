@@ -50,7 +50,7 @@ const KnowledgeDetail: React.FC = () => {
     return (
       <div className="space-y-3">
         <p className="text-danger">{error}</p>
-        <Link to="/account/knowledge" className="text-terracotta hover:underline">
+        <Link to="/account/knowledge" className="text-terracotta-ink hover:underline">
           Назад к Знаниям
         </Link>
       </div>
@@ -63,7 +63,7 @@ const KnowledgeDetail: React.FC = () => {
 
   return (
     <article className="space-y-4 rounded-card border border-light-sandy bg-light-text p-6 shadow-soft">
-      <Link to="/account/knowledge" className="text-sm text-terracotta hover:underline">
+      <Link to="/account/knowledge" className="text-sm text-terracotta-ink hover:underline">
         ← К Знаниям
       </Link>
       <div className="flex items-center gap-2">

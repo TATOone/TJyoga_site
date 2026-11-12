@@ -46,7 +46,7 @@ const BlogPost: React.FC = () => {
       <PublicPageLayout title="Блог" subtitle="Запись недоступна">
         <div className="mx-auto max-w-2xl space-y-4 text-center">
           <p className="text-danger">{error}</p>
-          <Link to="/blog" className="text-terracotta hover:underline">
+          <Link to="/blog" className="text-terracotta-ink hover:underline">
             ← Ко всем записям
           </Link>
         </div>
@@ -65,7 +65,7 @@ const BlogPost: React.FC = () => {
   return (
     <PublicPageLayout title={article.title} subtitle={article.excerpt}>
       <article className="mx-auto max-w-2xl rounded-card border border-light-sandy bg-light-text p-6 shadow-soft md:p-8">
-        <Link to="/blog" className="text-sm text-terracotta hover:underline">
+        <Link to="/blog" className="text-sm text-terracotta-ink hover:underline">
           ← К блогу
         </Link>
         <div className="mt-4 mb-3 flex items-center gap-2">

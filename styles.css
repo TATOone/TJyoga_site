@@ -6,14 +6,18 @@
 
 :root {
   --color-terracotta: #c85c3c;
+  --color-terracotta-ink: #a44b31;
+  --color-terracotta-ink-hover: #8e3e28;
   --color-golden-sandy: #d4a574;
   --color-olive-green: #8b956d;
+  --color-olive-ink: #5f6849;
+  --color-olive-ink-hover: #4e563c;
   --color-cream: #f5efe7;
   --color-light-sandy: #ede3d5;
   --color-light-olive: #e8ebe0;
   --color-dark-brown: #3d3229;
   --color-light-text: #ffffff;
-  --color-gray-brown: #736b5e;
+  --color-gray-brown: #5c564c;
   --color-footer-muted: #d8cbb8;
   --color-danger: #b42318;
   --color-success: #3f6212;
@@ -26,9 +30,22 @@
   --radius-lg: 1rem;
   --radius-xl: 1.25rem;
 
+  --space-25: 0.125rem;
+  --space-50: 0.25rem;
+  --space-75: 0.5rem;
+  --space-100: 0.75rem;
+  --space-200: 1rem;
+  --space-300: 1.5rem;
+  --space-400: 2rem;
+  --space-500: 2.5rem;
+  --space-600: 3rem;
+  --space-700: 4rem;
+  --space-800: 5rem;
+  --space-900: 6rem;
   --space-touch: 2.75rem;
   --shadow-soft: 0 1px 2px rgba(61, 50, 41, 0.06), 0 8px 24px rgba(61, 50, 41, 0.06);
   --focus-ring: 2px solid var(--color-olive-green);
+  --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html,
@@ -47,9 +64,19 @@ body {
 h1,
 h2,
 h3,
+h4,
+h5,
+h6,
 .font-display {
   font-family: var(--font-display);
   letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+p,
+li,
+label {
+  text-wrap: pretty;
 }
 
 .sr-only {
@@ -85,6 +112,56 @@ a:focus-visible {
   outline: var(--focus-ring);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+@layer components {
+  .heading-4 {
+    @apply font-display text-3xl font-semibold leading-9;
+  }
+
+  .heading-5 {
+    @apply font-display text-2xl font-semibold leading-8;
+  }
+
+  .title-1 {
+    @apply text-xl font-medium leading-7;
+  }
+
+  .title-2 {
+    @apply text-lg font-medium leading-7;
+  }
+
+  .title-4 {
+    @apply text-sm font-medium leading-5;
+  }
+
+  .body-3 {
+    @apply text-base font-normal leading-6;
+  }
+
+  .body-6 {
+    @apply text-sm font-normal leading-5;
+  }
+
+  .button-md {
+    @apply text-base font-semibold leading-6;
+  }
+
+  .button-sm {
+    @apply text-sm font-semibold leading-5;
+  }
+
+  .caption-2 {
+    @apply text-sm font-normal leading-5;
+  }
+
+  .cta-primary {
+    @apply inline-flex min-h-touch items-center justify-center rounded-lg bg-terracotta-ink px-5 font-semibold text-light-text transition-[transform,background-color,opacity] duration-300 ease-out-quart hover:bg-terracotta-ink-hover active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60;
+  }
+
+  .cta-secondary {
+    @apply inline-flex min-h-touch items-center justify-center rounded-lg border border-terracotta bg-transparent px-5 font-semibold text-terracotta-ink transition-[transform,background-color,opacity] duration-300 ease-out-quart hover:bg-cream active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2;
+  }
 }
 
 /* Countdown — современный сегментированный таймер */
@@ -132,13 +209,14 @@ a:focus-visible {
   font-size: 1rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--color-terracotta);
+  color: var(--color-terracotta-ink);
   box-shadow: 0 1px 2px rgba(61, 50, 41, 0.06);
 }
 
 .countdown-unit__label {
-  margin-top: 0.2rem;
-  font-size: 0.625rem;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
   color: var(--color-gray-brown);
   text-transform: lowercase;
 }
@@ -168,7 +246,7 @@ a:focus-visible {
   height: 0.5rem;
   border-radius: 50%;
   background: var(--color-olive-green);
-  animation: countdown-pulse 2s ease-in-out infinite;
+  animation: countdown-pulse 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
 .countdown-live__text {
@@ -233,8 +311,14 @@ a:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .countdown-live__dot {
+  .countdown-live__dot,
+  .animate-pulse {
     animation: none;
+  }
+
+  .cta-primary:active,
+  .cta-secondary:active {
+    transform: none;
   }
 }
 

@@ -106,7 +106,7 @@ const Dashboard: React.FC = () => {
               <Button onClick={() => void openZoom()}>Войти в занятие</Button>
               <Link
                 to="/account/videos"
-                className="inline-flex min-h-touch items-center justify-center rounded-soft border border-terracotta px-5 font-medium text-terracotta transition-colors hover:bg-cream"
+                className="cta-secondary"
                 onClick={() => analyticsEvents.ctaClick('open_videos', 'account_dashboard')}
               >
                 Смотреть записи
@@ -168,7 +168,7 @@ const Dashboard: React.FC = () => {
             {me.subscription.status === 'grace' ? (
               <Link
                 to={FUNNEL_RATES_PATH}
-                className="inline-flex min-h-touch items-center font-medium text-terracotta hover:underline"
+                className="inline-flex min-h-touch items-center font-medium text-terracotta-ink hover:underline"
                 onClick={() => analyticsEvents.ctaClick('renew', 'account_dashboard')}
               >
                 Продлить доступ
@@ -185,14 +185,14 @@ const Dashboard: React.FC = () => {
           to="/account/videos"
           className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft transition-colors hover:border-terracotta"
         >
-          <h3 className="mb-1 font-semibold text-terracotta">Записи</h3>
+          <h3 className="mb-1 font-semibold text-terracotta-ink">Записи</h3>
           <p className="text-sm text-gray-brown">Если пропустили эфир</p>
         </Link>
         <Link
           to="/account/knowledge"
           className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft transition-colors hover:border-terracotta"
         >
-          <h3 className="mb-1 font-semibold text-terracotta">Знания</h3>
+          <h3 className="mb-1 font-semibold text-terracotta-ink">Знания</h3>
           <p className="text-sm text-gray-brown">Клубные материалы</p>
         </Link>
       </section>

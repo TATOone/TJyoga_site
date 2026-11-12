@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { HOME_SERVICE_PRODUCT_IDS, PRODUCTS } from '../config/products';
 import type { ProductId } from '../config/products';
 import { useSectionInView } from '../hooks/useSectionInView';
+import { REVEAL_HIDDEN, REVEAL_VISIBLE, revealTransition } from '../lib/motion';
 
 type Service = {
   id: ProductId;
@@ -68,14 +69,14 @@ const Services: React.FC = () => {
           {services.map((service, index) => (
             <motion.div
               key={service.id}
-              className={`service-card bg-light-text rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border ${
+              className={`service-card bg-light-text rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-[transform,box-shadow] duration-300 ease-out-quart flex flex-col border ${
                 service.id === 'club-monthly'
                   ? 'border-terracotta/30 ring-1 ring-terracotta/10 md:-translate-y-1'
                   : 'border-light-sandy'
               }`}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              initial={REVEAL_HIDDEN}
+              animate={isInView ? REVEAL_VISIBLE : {}}
+              transition={revealTransition(index * 0.12)}
             >
               <img 
                 src={service.image} 
@@ -89,17 +90,17 @@ const Services: React.FC = () => {
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center mb-4">
                   {service.icon}
-                  <h3 className="ml-2 text-xl font-semibold text-terracotta">{service.title}</h3>
+                  <h3 className="ml-2 text-xl font-semibold text-terracotta-ink">{service.title}</h3>
                 </div>
                 <p className="text-dark-brown mb-2 flex-grow whitespace-pre-line">{service.description}</p>
                 {service.showCountdown && (
                   <Countdown targetDate={RETREAT_START} />
                 )}
-                <p className="text-2xl font-bold text-olive-green mb-4 mt-1">{service.price}</p>
+                <p className="text-2xl font-bold text-olive-ink mb-4 mt-1">{service.price}</p>
                 <div className="mt-auto space-y-2">
                   <Link
                     to={service.link}
-                    className="service-card__cta bg-terracotta text-light-text px-4 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                    className="service-card__cta cta-primary w-full px-4"
                     aria-label={service.button}
                     onClick={() => {
                       analyticsEvents.serviceClick(service.title);
@@ -113,7 +114,7 @@ const Services: React.FC = () => {
                       href={service.bookingHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                      className="service-card__cta cta-secondary w-full px-4"
                       aria-label={`${service.checkoutLabel}: ${service.title}`}
                       onClick={() => {
                         analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services');
@@ -125,7 +126,7 @@ const Services: React.FC = () => {
                   ) : (
                     <Link
                       to={service.checkoutPath}
-                      className="service-card__cta border border-terracotta text-terracotta px-4 py-3 rounded-lg hover:bg-cream transition-colors duration-300 block text-center focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] flex items-center justify-center font-medium"
+                      className="service-card__cta cta-secondary w-full px-4"
                       aria-label={`${service.checkoutLabel}: ${service.title}`}
                       onClick={() => analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services')}
                     >

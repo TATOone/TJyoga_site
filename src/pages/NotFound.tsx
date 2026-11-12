@@ -139,7 +139,7 @@ const NotFound: React.FC = () => {
         </motion.p>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-lg bg-terracotta text-light-text px-6 py-3 text-sm font-medium transition-colors hover:bg-golden-sandy focus:outline-none focus:ring-2 focus:ring-terracotta focus:ring-offset-2"
+          className="cta-primary button-sm gap-2 px-6"
         >
           <Home className="w-4 h-4" />
           Вернуться на главную
@@ -152,23 +152,23 @@ const NotFound: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <Link to="/" className="text-olive-green hover:text-golden-sandy transition-colors">
+          <Link to="/" className="text-olive-ink hover:text-olive-ink-hover transition-colors duration-300 ease-out-quart">
             Главная
           </Link>
-          <Link to="/club" className="text-olive-green hover:text-golden-sandy transition-colors">
+          <Link to="/club" className="text-olive-ink hover:text-olive-ink-hover transition-colors duration-300 ease-out-quart">
             Клуб
           </Link>
-          <Link to="/free" className="text-olive-green hover:text-golden-sandy transition-colors">
+          <Link to="/free" className="text-olive-ink hover:text-olive-ink-hover transition-colors duration-300 ease-out-quart">
             Бесплатные практики
           </Link>
-          <Link to="/how-to-buy" className="text-olive-green hover:text-golden-sandy transition-colors">
+          <Link to="/how-to-buy" className="text-olive-ink hover:text-olive-ink-hover transition-colors duration-300 ease-out-quart">
             Как оформить
           </Link>
           <a
             href="https://t.me/TJyoga"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-olive-green hover:text-golden-sandy transition-colors"
+            className="text-olive-ink hover:text-olive-ink-hover transition-colors duration-300 ease-out-quart"
           >
             Канал в Telegram
           </a>

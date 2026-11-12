@@ -45,7 +45,7 @@ const TeachersTeaser: React.FC<TeachersTeaserProps> = ({ analyticsLocation }) =>
           </p>
           <Link
             to={TEACHERS_ABOUT_PATH}
-            className="mt-2 inline-flex min-h-touch items-center text-sm font-medium text-terracotta transition-colors hover:text-golden-sandy"
+            className="mt-2 inline-flex min-h-touch items-center text-sm font-medium text-terracotta-ink transition-colors duration-300 ease-out-quart hover:text-terracotta-ink-hover"
             onClick={() => analyticsEvents.ctaClick(TEACHERS_ABOUT_LABEL, analyticsLocation)}
           >
             {TEACHERS_ABOUT_LABEL}

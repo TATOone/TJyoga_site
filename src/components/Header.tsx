@@ -6,6 +6,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { CLUB_SUPPORT } from '../config/clubContent';
 import { FUNNEL_PRIMARY_LABEL, FUNNEL_RATES_PATH } from '../config/funnel';
 import { MobileMenuContext } from '../context/mobileMenuContext';
+import { EASE_OUT_QUART } from '../lib/motion';
 import { analyticsEvents } from '../utils/analytics';
 
 const Header: React.FC = () => {
@@ -55,12 +56,14 @@ const Header: React.FC = () => {
   }, [isMobileMenuOpen]);
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-olive-green focus:ring-offset-2 rounded px-2 py-1 ${
-      isActive ? 'text-terracotta' : 'text-dark-brown hover:text-olive-green'
+    `inline-flex min-h-touch items-center rounded px-2 py-1 transition-colors duration-300 ease-out-quart focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2 ${
+      isActive
+        ? 'font-semibold text-terracotta-ink'
+        : 'text-dark-brown hover:text-olive-ink'
     }`;
 
   const headerCtaClass =
-    'inline-flex min-h-touch min-w-[44px] shrink-0 items-center justify-center rounded-lg bg-terracotta px-3 text-sm font-medium text-light-text transition-colors hover:bg-golden-sandy focus:outline-none focus:ring-2 focus:ring-olive-green focus:ring-offset-2 sm:px-4';
+    'cta-primary button-sm min-w-[44px] shrink-0 px-3 sm:px-4';
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-light-text/90 backdrop-blur-sm shadow-sm">
@@ -69,7 +72,7 @@ const Header: React.FC = () => {
           className="flex min-w-0 items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: EASE_OUT_QUART }}
         >
           <Link to="/" aria-label="TJ Yoga - на главную">
             <img
@@ -89,6 +92,7 @@ const Header: React.FC = () => {
               <li key={item.to}>
                 <NavLink
                   to={item.to}
+                  end={item.to !== '/account' && item.to !== '/blog'}
                   className={navLinkClass}
                   onClick={() => analyticsEvents.ctaClick(`nav_${item.label}`, 'header_desktop')}
                   aria-label={`Перейти на страницу ${item.label}`}
@@ -113,12 +117,18 @@ const Header: React.FC = () => {
           </Link>
 
           <button
-            className="lg:hidden text-dark-brown p-2 focus:outline-none focus:ring-2 focus:ring-olive-green focus:ring-offset-2 rounded min-h-touch min-w-[44px] inline-flex items-center justify-center"
+            className="lg:hidden text-dark-brown p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2 rounded min-h-touch min-w-[44px] inline-flex items-center justify-center"
             onClick={() => setIsMobileMenuOpen(true)}
             aria-label="Открыть меню"
             aria-expanded={isMobileMenuOpen}
           >
-            <Menu className="w-6 h-6" />
+            <motion.span
+              className="inline-flex"
+              animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
+              transition={{ duration: 0.5, ease: EASE_OUT_QUART }}
+            >
+              <Menu className="w-6 h-6" />
+            </motion.span>
           </button>
         </div>
       </nav>
@@ -128,15 +138,15 @@ const Header: React.FC = () => {
           {isMobileMenuOpen && (
             <motion.div
               className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-cream shadow-2xl border-l-4 border-light-sandy z-[9999] lg:hidden overflow-y-auto"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={{ duration: 0.5, ease: EASE_OUT_QUART }}
             >
               <div className="flex flex-col min-h-full justify-between p-8 pt-20 pb-8 bg-cream">
                 <button
                   onClick={closeMenu}
-                  className="absolute top-6 right-6 text-dark-brown p-2 min-h-touch min-w-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-olive-green rounded-full hover:bg-light-sandy/50 transition-colors z-10"
+                  className="absolute top-6 right-6 text-dark-brown p-2 min-h-touch min-w-[44px] inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green rounded-full hover:bg-light-sandy/50 transition-colors duration-300 ease-out-quart z-10"
                   aria-label="Закрыть меню"
                 >
                   <X className="w-7 h-7" />
@@ -147,15 +157,22 @@ const Header: React.FC = () => {
                     {menuItems.map((item, index) => (
                       <motion.li
                         key={item.to}
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 + index * 0.05, type: 'spring', stiffness: 300 }}
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: Math.min(index * 0.06, 0.36),
+                          duration: 0.5,
+                          ease: EASE_OUT_QUART,
+                        }}
                       >
                         <NavLink
                           to={item.to}
+                          end={item.to !== '/account' && item.to !== '/blog'}
                           className={({ isActive }) =>
-                            `block w-full text-left transition-colors duration-300 py-3 min-h-touch text-xl font-medium focus:outline-none focus:ring-2 focus:ring-olive-green rounded-lg ${
-                              isActive ? 'text-terracotta' : 'text-dark-brown hover:text-olive-green'
+                            `block w-full text-left transition-colors duration-300 ease-out-quart py-3 min-h-touch text-xl font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green rounded-lg ${
+                              isActive
+                                ? 'font-semibold text-terracotta-ink'
+                                : 'text-dark-brown hover:text-olive-ink'
                             }`
                           }
                           onClick={() =>
@@ -172,13 +189,13 @@ const Header: React.FC = () => {
 
                 <div className="space-y-3 mt-8">
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                    transition={{ delay: 0.36, duration: 0.5, ease: EASE_OUT_QUART }}
                   >
                     <Link
                       to={FUNNEL_RATES_PATH}
-                      className="block w-full bg-terracotta text-white text-center py-3.5 min-h-touch rounded-lg font-medium hover:bg-terracotta/90 transition-colors shadow-md"
+                      className="cta-primary w-full shadow-md"
                       onClick={() =>
                         analyticsEvents.ctaClick(FUNNEL_PRIMARY_LABEL, 'header_mobile')
                       }
@@ -190,15 +207,15 @@ const Header: React.FC = () => {
                     href={CLUB_SUPPORT.telegram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full border-2 border-terracotta text-terracotta text-center py-3.5 min-h-touch rounded-lg font-medium hover:bg-terracotta/10 transition-colors"
+                    className="cta-secondary w-full border-2"
                     onClick={() => {
                       analyticsEvents.ctaClick('Написать Жене', 'header_mobile');
                       analyticsEvents.telegramClick('starovoitovae', 'header_mobile');
                       closeMenu();
                     }}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
+                    transition={{ delay: 0.4, duration: 0.5, ease: EASE_OUT_QUART }}
                   >
                     Написать Жене
                   </motion.a>

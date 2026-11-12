@@ -21,7 +21,7 @@ const desktopLinkClass = (isActive: boolean): string =>
     'flex min-h-touch items-center gap-2 rounded-soft px-4 py-2 text-sm font-medium transition-colors',
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2',
     isActive
-      ? 'bg-terracotta text-light-text shadow-soft'
+      ? 'bg-terracotta-ink text-light-text shadow-soft'
       : 'border border-light-sandy bg-light-text text-dark-brown hover:border-terracotta hover:bg-cream',
   ].join(' ');
 
@@ -29,7 +29,7 @@ const mobileLinkClass = (isActive: boolean): string =>
   [
     'flex min-h-touch min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-[11px] font-medium',
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-inset',
-    isActive ? 'text-terracotta' : 'text-gray-brown',
+    isActive ? 'text-terracotta-ink font-semibold' : 'text-gray-brown',
   ].join(' ');
 
 const AccountLayout: React.FC = () => {
@@ -62,15 +62,15 @@ const AccountLayout: React.FC = () => {
               href={CLUB_SUPPORT.telegram}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden text-olive-green hover:underline sm:inline"
+              className="hidden text-olive-ink hover:underline sm:inline"
             >
               Telegram
             </a>
-            <Link to="/blog" className="text-olive-green hover:underline">
+            <Link to="/blog" className="text-olive-ink hover:underline">
               Блог
             </Link>
             {canAccessAdminPanel(session?.user) ? (
-              <Link to="/admin" className="text-terracotta hover:underline">
+              <Link to="/admin" className="text-terracotta-ink hover:underline">
                 Админка
               </Link>
             ) : null}
@@ -101,7 +101,7 @@ const AccountLayout: React.FC = () => {
             href={CLUB_SUPPORT.telegram}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex min-h-touch items-center rounded-soft border border-olive-green px-4 py-2 text-sm font-medium text-olive-green hover:bg-light-olive"
+            className="flex min-h-touch items-center rounded-soft border border-olive-ink px-4 py-2 text-sm font-medium text-olive-ink hover:bg-light-olive"
           >
             Написать в Telegram
           </a>

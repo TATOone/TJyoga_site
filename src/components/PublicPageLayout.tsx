@@ -24,7 +24,7 @@ const PublicPageLayout: React.FC<PublicPageLayoutProps> = ({
           <div className="max-w-4xl mx-auto text-center">
             {eyebrow ? (
               <p className="mb-4">
-                <span className="inline-flex items-center rounded-full border border-terracotta/30 bg-cream px-3 py-1 text-sm font-medium text-terracotta">
+                <span className="inline-flex items-center rounded-full border border-terracotta/30 bg-cream px-3 py-1 text-sm font-medium text-terracotta-ink">
                   {eyebrow}
                 </span>
               </p>

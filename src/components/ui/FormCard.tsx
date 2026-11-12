@@ -22,8 +22,8 @@ export const FormCard: React.FC<FormCardProps> = ({
         className,
       ].join(' ')}
     >
-      {title ? <h2 className="font-display text-2xl font-semibold text-dark-brown">{title}</h2> : null}
-      {subtitle ? <p className="mt-2 text-sm text-gray-brown">{subtitle}</p> : null}
+      {title ? <h2 className="heading-5 text-dark-brown">{title}</h2> : null}
+      {subtitle ? <p className="body-6 mt-2 text-gray-brown">{subtitle}</p> : null}
       <div className={title || subtitle ? 'mt-6 space-y-4' : 'space-y-4'}>{children}</div>
       {footer ? <div className="mt-6 border-t border-light-sandy pt-4">{footer}</div> : null}
     </div>

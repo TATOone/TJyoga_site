@@ -26,7 +26,7 @@ const Support: React.FC = () => {
           </a>
           <a
             href={`mailto:${CLUB_SUPPORT.email}`}
-            className="inline-flex min-h-touch items-center justify-center rounded-soft border border-terracotta px-5 font-medium text-terracotta hover:bg-cream"
+            className="cta-secondary"
           >
             {CLUB_SUPPORT.email}
           </a>

@@ -83,7 +83,7 @@ const AdminDashboard: React.FC = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold text-dark-brown">Админка TJ Yoga</h1>
           <div className="flex gap-3">
-            <Link to="/account" className="text-terracotta hover:underline">
+            <Link to="/account" className="text-terracotta-ink hover:underline">
               Кабинет
             </Link>
             <button
@@ -102,7 +102,7 @@ const AdminDashboard: React.FC = () => {
 
       <main id="main-content" className="container mx-auto px-4 py-8 space-y-8">
         {error ? <p className="text-red-700">{error}</p> : null}
-        {message ? <p className="text-olive-green">{message}</p> : null}
+        {message ? <p className="text-olive-ink">{message}</p> : null}
 
         {overview ? (
           <section className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -133,7 +133,7 @@ const AdminDashboard: React.FC = () => {
           />
           <button
             type="button"
-            className="min-h-[44px] px-4 rounded-lg bg-terracotta text-light-text"
+            className="cta-primary button-sm px-4"
             onClick={() =>
               withToken(async (accessToken) => {
                 await apiClient.updateZoomLink(accessToken, { target_url: zoomUrl, room: 'main' });
@@ -249,7 +249,7 @@ const AdminDashboard: React.FC = () => {
           />
           <button
             type="button"
-            className="min-h-[44px] px-4 rounded-lg bg-terracotta text-light-text"
+            className="cta-primary button-sm px-4"
             onClick={() =>
               withToken(async (accessToken) => {
                 const endsAt = new Date(extendForm.ends_at).toISOString();

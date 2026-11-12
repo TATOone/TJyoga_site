@@ -7,6 +7,7 @@ import {
   type CampaignAccentId,
 } from '../config/campaignAccent';
 import { useSectionInView } from '../hooks/useSectionInView';
+import { REVEAL_HIDDEN, REVEAL_VISIBLE, revealTransition } from '../lib/motion';
 
 const audienceLead = (id: CampaignAccentId): string => {
   switch (id) {
@@ -33,9 +34,9 @@ const ForWhom: React.FC = () => {
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center text-dark-brown mb-10"
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={REVEAL_HIDDEN}
+          animate={isInView ? REVEAL_VISIBLE : {}}
+          transition={revealTransition()}
         >
           Можно с нуля. Можно уже с практикой.
         </motion.h2>
@@ -52,13 +53,13 @@ const ForWhom: React.FC = () => {
                     ? 'border-terracotta/40 bg-cream shadow-sm'
                     : 'border-transparent bg-transparent'
                 }`}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
+                initial={REVEAL_HIDDEN}
+                animate={isInView ? REVEAL_VISIBLE : {}}
+                transition={revealTransition(index * 0.12)}
               >
                 <h3
                   className={`text-xl font-semibold mb-2 flex-shrink-0 ${
-                    index % 2 === 0 ? 'text-terracotta' : 'text-olive-green'
+                    index % 2 === 0 ? 'text-terracotta-ink' : 'text-olive-ink'
                   }`}
                 >
                   {accent.label}
@@ -72,7 +73,7 @@ const ForWhom: React.FC = () => {
           className="text-center text-gray-brown max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={revealTransition(0.36)}
         >
           Перед первым эфиром можно написать нам, что беспокоит в теле и уме.
         </motion.p>

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS, TESTIMONIALS_TITLE } from '../config/testimonials';
 import { useSectionInView } from '../hooks/useSectionInView';
+import { REVEAL_HIDDEN, REVEAL_VISIBLE, revealTransition } from '../lib/motion';
 
 interface TestimonialsProps {
   variant?: 'full' | 'compact';
@@ -33,7 +34,7 @@ const TestimonialCard: React.FC<{
             target.style.display = 'none';
           }}
         />
-        <p className="mt-3 font-semibold text-olive-green">{name}</p>
+        <p className="mt-3 font-semibold text-olive-ink">{name}</p>
       </div>
       <p className="text-dark-brown">«{text}»</p>
     </article>
@@ -71,9 +72,9 @@ const Testimonials: React.FC<TestimonialsProps> = ({ variant = 'full' }) => {
         <motion.h2
           className="mb-12 text-center font-display text-3xl font-bold text-dark-brown md:text-4xl"
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={REVEAL_HIDDEN}
+          animate={isInView ? REVEAL_VISIBLE : {}}
+          transition={revealTransition()}
         >
           {TESTIMONIALS_TITLE}
         </motion.h2>
@@ -81,9 +82,9 @@ const Testimonials: React.FC<TestimonialsProps> = ({ variant = 'full' }) => {
           {TESTIMONIALS.map((testimonial, index) => (
             <motion.div
               key={testimonial.name}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              initial={REVEAL_HIDDEN}
+              animate={isInView ? REVEAL_VISIBLE : {}}
+              transition={revealTransition(index * 0.12)}
             >
               <TestimonialCard
                 name={testimonial.name}

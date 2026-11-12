@@ -56,7 +56,7 @@ const Login: React.FC = () => {
               Нет аккаунта?{' '}
               <Link
                 to={`/account/register?next=${encodeURIComponent(nextPath)}`}
-                className="font-medium text-terracotta hover:underline"
+                className="font-medium text-terracotta-ink hover:underline"
               >
                 Зарегистрироваться
               </Link>
@@ -67,7 +67,7 @@ const Login: React.FC = () => {
                 href={CLUB_SUPPORT.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-olive-green hover:underline"
+                className="text-olive-ink hover:underline"
               >
                 Напишите в Telegram
               </a>
@@ -98,7 +98,7 @@ const Login: React.FC = () => {
             <button
               type="button"
               aria-pressed={showPassword}
-              className="text-xs text-olive-green hover:underline"
+              className="text-xs text-olive-ink hover:underline"
               onClick={() => setShowPassword((v) => !v)}
             >
               {showPassword ? 'Скрыть пароль' : 'Показать пароль'}
@@ -122,7 +122,7 @@ const Login: React.FC = () => {
             Войти в кабинет
           </Button>
           <p className="text-center text-xs text-gray-brown">
-            <Link to="/blog" className="text-olive-green hover:underline">
+            <Link to="/blog" className="text-olive-ink hover:underline">
               Читать блог без входа
             </Link>
             {nextPath !== ACCOUNT_HOME_PATH ? (

@@ -81,7 +81,7 @@ const Knowledge: React.FC = () => {
         />
         <p className="text-sm text-gray-brown">
           Открытые заметки - в{' '}
-          <Link to="/blog" className="text-terracotta hover:underline">
+          <Link to="/blog" className="text-terracotta-ink hover:underline">
             блоге
           </Link>
           .
@@ -119,7 +119,7 @@ const Knowledge: React.FC = () => {
               <p className="mt-2 text-sm text-gray-brown">{article.excerpt}</p>
               <Link
                 to={`/account/knowledge/${article.slug}`}
-                className="mt-3 inline-flex min-h-touch items-center text-terracotta hover:underline"
+                className="mt-3 inline-flex min-h-touch items-center text-terracotta-ink hover:underline"
                 onClick={() => analyticsEvents.ctaClick('knowledge_article_open', 'account_knowledge')}
               >
                 Читать

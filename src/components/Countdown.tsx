@@ -5,6 +5,7 @@ import {
   RETREAT_LIVE_MESSAGE_DAYS,
   RETREAT_START,
 } from '../config/retreat';
+import { EASE_OUT_QUART } from '../lib/motion';
 import type { CountdownPhase, TimeLeft } from '../utils/countdownPhase';
 import {
   getCountdownPhase,
@@ -56,7 +57,7 @@ const Countdown: React.FC<CountdownProps> = ({
         className="countdown-live"
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
+        transition={{ duration: 0.5, ease: EASE_OUT_QUART }}
         role="status"
         aria-live="polite"
       >
