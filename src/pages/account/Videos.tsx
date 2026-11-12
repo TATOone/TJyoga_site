@@ -92,8 +92,8 @@ const Videos: React.FC = () => {
           type="button"
           aria-pressed={category === 'all'}
           onClick={() => setCategory('all')}
-          className={`min-h-[40px] rounded-lg border px-3 ${
-            category === 'all' ? 'bg-terracotta text-light-text' : 'border-light-sandy bg-light-text'
+          className={`min-h-touch rounded-lg border px-3 transition-[background-color] duration-300 ease-out-quart ${
+            category === 'all' ? 'bg-terracotta-ink text-light-text' : 'border-light-sandy bg-light-text text-dark-brown hover:bg-cream'
           }`}
         >
           Все
@@ -104,10 +104,10 @@ const Videos: React.FC = () => {
             type="button"
             aria-pressed={category === item.id}
             onClick={() => setCategory(item.id)}
-            className={`min-h-[40px] rounded-lg border px-3 ${
+            className={`min-h-touch rounded-lg border px-3 transition-[background-color] duration-300 ease-out-quart ${
               category === item.id
-                ? 'bg-terracotta text-light-text'
-                : 'border-light-sandy bg-light-text'
+                ? 'bg-terracotta-ink text-light-text'
+                : 'border-light-sandy bg-light-text text-dark-brown hover:bg-cream'
             }`}
           >
             {item.title}
@@ -121,7 +121,7 @@ const Videos: React.FC = () => {
             <h2 className="font-display text-xl font-semibold text-dark-brown">{activeVideo.title}</h2>
             <button
               type="button"
-              className="text-sm text-terracotta"
+              className="text-sm text-terracotta-ink"
               onClick={() => setActiveVideo(null)}
             >
               Закрыть
@@ -154,7 +154,7 @@ const Videos: React.FC = () => {
         <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {filtered.map((video) => (
             <li key={video.id} className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft">
-              <p className="mb-1 text-xs uppercase tracking-wide text-terracotta">
+              <p className="mb-1 text-xs uppercase tracking-wide text-terracotta-ink">
                 {VIDEO_CATEGORIES.find((item) => item.id === video.category)?.title ?? video.category}
               </p>
               <h3 className="mb-2 font-semibold text-dark-brown">{video.title}</h3>

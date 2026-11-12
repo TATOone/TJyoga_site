@@ -63,14 +63,14 @@ const HowToBuy: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               to="/club/rates"
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg border border-terracotta text-terracotta hover:bg-cream transition-colors"
+              className="cta-secondary px-5"
               onClick={() => analyticsEvents.ctaClick('Сравнить тарифы', 'how_to_buy')}
             >
               Тарифы
             </Link>
             <Link
               to={monthly.checkoutPath}
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+              className="cta-primary px-5"
               onClick={() => analyticsEvents.ctaClick('Оформить клуб из how-to-buy', 'how_to_buy')}
             >
               {monthly.ctaLabel}

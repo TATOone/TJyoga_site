@@ -29,7 +29,7 @@ const Club: React.FC = () => {
         <div className="flex justify-center">
           <Link
             to={FREE_PAGE_PATH}
-            className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg border border-terracotta text-terracotta hover:bg-cream transition-colors"
+            className="cta-secondary px-5"
             onClick={() => analyticsEvents.ctaClick(FREE_CTA_LABEL, 'club_page')}
           >
             {FREE_CTA_LABEL}
@@ -44,7 +44,7 @@ const Club: React.FC = () => {
               key={item.label}
               className="bg-cream border border-light-sandy rounded-2xl p-4 text-center"
             >
-              <p className="text-xl font-bold text-olive-green">{item.value}</p>
+              <p className="text-xl font-bold text-olive-ink">{item.value}</p>
               <p className="text-sm text-gray-brown mt-1">{item.label}</p>
             </li>
           ))}
@@ -58,7 +58,7 @@ const Club: React.FC = () => {
                 key={pillar.id}
                 className="bg-light-text border border-light-sandy rounded-xl p-4"
               >
-                <h3 className="text-lg font-semibold text-terracotta mb-2">{pillar.title}</h3>
+                <h3 className="text-lg font-semibold text-terracotta-ink mb-2">{pillar.title}</h3>
                 <p className="text-gray-brown text-sm md:text-base">{pillar.description}</p>
               </article>
             ))}
@@ -74,7 +74,7 @@ const Club: React.FC = () => {
                 key={level.id}
                 className="border border-light-sandy rounded-xl p-4 bg-cream"
               >
-                <h3 className="text-lg font-semibold text-olive-green mb-2">{level.title}</h3>
+                <h3 className="text-lg font-semibold text-olive-ink mb-2">{level.title}</h3>
                 <p className="text-gray-brown text-sm md:text-base">{level.description}</p>
               </article>
             ))}
@@ -112,41 +112,41 @@ const Club: React.FC = () => {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <article className="bg-light-text border border-light-sandy rounded-2xl p-6 shadow-sm">
-              <h3 className="text-xl font-semibold text-terracotta mb-2">{monthly.shortTitle}</h3>
+              <h3 className="text-xl font-semibold text-terracotta-ink mb-2">{monthly.shortTitle}</h3>
               <p className="text-gray-brown mb-4">{monthly.description}</p>
               <ul className="mb-4 space-y-2 text-sm text-dark-brown">
                 {monthly.includes.map((item) => (
                   <li key={item} className="relative pl-4">
-                    <span className="absolute left-0 text-olive-green">•</span>
+                    <span className="absolute left-0 text-olive-ink">•</span>
                     {item}
                   </li>
                 ))}
               </ul>
-              <p className="text-2xl font-bold text-olive-green mb-4">{monthly.priceLabel}</p>
+              <p className="text-2xl font-bold text-olive-ink mb-4">{monthly.priceLabel}</p>
               <Link
                 to={monthly.checkoutPath}
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+                className="cta-primary px-5"
                 onClick={() => analyticsEvents.ctaClick('Оформить месячный тариф', 'club_page')}
               >
                 {monthly.ctaLabel}
               </Link>
             </article>
             <article className="bg-light-text border border-terracotta/35 rounded-2xl p-6 shadow-sm">
-              <p className="text-xs text-terracotta font-semibold mb-2">На 12 000 ₽ меньше за год</p>
-              <h3 className="text-xl font-semibold text-terracotta mb-2">{yearly.shortTitle}</h3>
+              <p className="text-xs text-terracotta-ink font-semibold mb-2">На 12 000 ₽ меньше за год</p>
+              <h3 className="text-xl font-semibold text-terracotta-ink mb-2">{yearly.shortTitle}</h3>
               <p className="text-gray-brown mb-4">{yearly.description}</p>
               <ul className="mb-4 space-y-2 text-sm text-dark-brown">
                 {yearly.includes.map((item) => (
                   <li key={item} className="relative pl-4">
-                    <span className="absolute left-0 text-olive-green">•</span>
+                    <span className="absolute left-0 text-olive-ink">•</span>
                     {item}
                   </li>
                 ))}
               </ul>
-              <p className="text-2xl font-bold text-olive-green mb-4">{yearly.priceLabel}</p>
+              <p className="text-2xl font-bold text-olive-ink mb-4">{yearly.priceLabel}</p>
               <Link
                 to={yearly.checkoutPath}
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+                className="cta-primary px-5"
                 onClick={() => analyticsEvents.ctaClick('Оформить годовой тариф', 'club_page')}
               >
                 {yearly.ctaLabel}
@@ -177,7 +177,7 @@ const Club: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               to="/club/rates"
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg border border-terracotta text-terracotta hover:bg-cream transition-colors"
+              className="cta-secondary px-5"
               onClick={() => analyticsEvents.ctaClick('Смотреть тарифы', 'club_page')}
             >
               Смотреть тарифы
@@ -186,7 +186,7 @@ const Club: React.FC = () => {
               href={CLUB_SUPPORT.telegram}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-olive-green text-light-text hover:bg-golden-sandy transition-colors"
+              className="inline-flex min-h-touch items-center justify-center rounded-lg bg-olive-ink px-5 py-3 font-semibold text-light-text transition-[transform,background-color] duration-300 ease-out-quart hover:bg-olive-ink-hover active:scale-[0.98]"
               onClick={() => {
                 analyticsEvents.ctaClick('Написать в Telegram', 'club_page');
                 analyticsEvents.telegramClick('starovoitovae', 'club_page_consultation');

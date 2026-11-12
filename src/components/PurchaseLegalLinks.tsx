@@ -22,7 +22,7 @@ const PurchaseLegalLinks: React.FC<PurchaseLegalLinksProps> = ({ analyticsLocati
           <li key={doc.path}>
             <Link
               to={doc.path}
-              className="inline-flex min-h-touch items-center text-sm font-medium text-terracotta transition-colors hover:text-golden-sandy"
+              className="inline-flex min-h-touch items-center text-sm font-medium text-terracotta-ink transition-colors duration-300 ease-out-quart hover:text-terracotta-ink-hover"
               onClick={() => analyticsEvents.ctaClick(`legal_${doc.type}`, analyticsLocation)}
             >
               {label}

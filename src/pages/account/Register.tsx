@@ -55,7 +55,7 @@ const Register: React.FC = () => {
               Уже есть аккаунт?{' '}
               <Link
                 to={`/account/login?next=${encodeURIComponent(nextPath)}`}
-                className="font-medium text-terracotta hover:underline"
+                className="font-medium text-terracotta-ink hover:underline"
               >
                 Войти
               </Link>
@@ -66,7 +66,7 @@ const Register: React.FC = () => {
                 href={CLUB_SUPPORT.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-olive-green hover:underline"
+                className="text-olive-ink hover:underline"
               >
                 Напишите в Telegram
               </a>
@@ -105,7 +105,7 @@ const Register: React.FC = () => {
             <button
               type="button"
               aria-pressed={showPassword}
-              className="text-xs text-olive-green hover:underline"
+              className="text-xs text-olive-ink hover:underline"
               onClick={() => setShowPassword((v) => !v)}
             >
               {showPassword ? 'Скрыть пароль' : 'Показать пароль'}

@@ -5,6 +5,7 @@ import { getActiveAccent } from '../config/campaignAccent';
 import { CLUB_SUPPORT } from '../config/clubContent';
 import { PRODUCTS } from '../config/products';
 import { useSectionInView } from '../hooks/useSectionInView';
+import { REVEAL_HIDDEN, REVEAL_VISIBLE, revealTransition } from '../lib/motion';
 import { analyticsEvents } from '../utils/analytics';
 
 const CTA: React.FC = () => {
@@ -19,9 +20,9 @@ const CTA: React.FC = () => {
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-dark-brown mb-4"
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={REVEAL_HIDDEN}
+          animate={isInView ? REVEAL_VISIBLE : {}}
+          transition={revealTransition()}
         >
           {accent.ctaHint}
         </motion.h2>
@@ -29,19 +30,19 @@ const CTA: React.FC = () => {
           className="text-lg text-dark-brown mb-8 max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={revealTransition(0.12)}
         >
           {monthly.priceLabel} или {yearly.priceLabel}. Если есть вопрос - напишите нам.
         </motion.p>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          initial={REVEAL_HIDDEN}
+          animate={isInView ? REVEAL_VISIBLE : {}}
+          transition={revealTransition(0.2)}
         >
           <Link
             to="/club/rates"
-            className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center"
+            className="cta-primary px-6"
             aria-label="Выбрать тариф клуба"
             onClick={() => {
               analyticsEvents.ctaClick('Выбрать тариф', 'cta');
@@ -51,7 +52,7 @@ const CTA: React.FC = () => {
           </Link>
           <a
             href={CLUB_SUPPORT.telegram}
-            className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center"
+            className="cta-secondary px-6"
             aria-label="Написать преподавателю в Telegram"
             onClick={() => {
               analyticsEvents.ctaClick('Написать в Telegram', 'cta');

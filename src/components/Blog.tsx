@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { IMAGES } from '../config/images';
 import { SEED_ARTICLES } from '../config/seedContent';
 import { useSectionInView } from '../hooks/useSectionInView';
+import { REVEAL_HIDDEN, REVEAL_VISIBLE, revealTransition } from '../lib/motion';
 import { analyticsEvents } from '../utils/analytics';
 
 const Blog: React.FC = () => {
@@ -18,9 +19,9 @@ const Blog: React.FC = () => {
         <motion.h2
           className="mb-4 text-center font-display text-3xl font-bold text-dark-brown md:text-4xl"
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={REVEAL_HIDDEN}
+          animate={isInView ? REVEAL_VISIBLE : {}}
+          transition={revealTransition()}
         >
           Блог
         </motion.h2>
@@ -28,7 +29,7 @@ const Blog: React.FC = () => {
           className="mx-auto mb-8 max-w-2xl text-center text-dark-brown"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={revealTransition(0.12)}
         >
           Открытые заметки о практике, как в канале TJyoga.
         </motion.p>
@@ -36,29 +37,31 @@ const Blog: React.FC = () => {
           {publicPosts.map((post, index) => (
             <motion.article
               key={post.id}
-              className="rounded-card border border-light-sandy bg-light-olive p-4 shadow-soft"
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              className="overflow-hidden rounded-2xl border border-light-sandy bg-light-olive shadow-soft"
+              initial={REVEAL_HIDDEN}
+              animate={isInView ? REVEAL_VISIBLE : {}}
+              transition={revealTransition(index * 0.12)}
             >
               <img
                 src={images[index] ?? images[0]}
                 alt={post.title}
-                className="mb-4 h-32 w-full rounded object-cover"
+                className="h-32 w-full object-cover"
                 loading="lazy"
                 width="800"
                 height="320"
                 decoding="async"
               />
-              <h3 className="mb-2 font-display text-lg font-semibold text-terracotta">{post.title}</h3>
-              <p className="mb-3 text-sm text-dark-brown">{post.excerpt}</p>
-              <Link
-                to={`/blog/${post.slug}`}
-                className="text-sm font-medium text-olive-green hover:underline"
-                onClick={() => analyticsEvents.ctaClick('blog_article', 'home_blog')}
-              >
-                Читать
-              </Link>
+              <div className="p-4">
+                <h3 className="mb-2 font-display text-lg font-semibold text-terracotta-ink">{post.title}</h3>
+                <p className="mb-3 text-sm text-dark-brown">{post.excerpt}</p>
+                <Link
+                  to={`/blog/${post.slug}`}
+                  className="text-sm font-medium text-olive-ink hover:underline"
+                  onClick={() => analyticsEvents.ctaClick('blog_article', 'home_blog')}
+                >
+                  Читать
+                </Link>
+              </div>
             </motion.article>
           ))}
         </div>
@@ -66,11 +69,11 @@ const Blog: React.FC = () => {
           className="flex flex-col justify-center gap-3 text-center sm:flex-row"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={revealTransition(0.24)}
         >
           <Link
             to="/blog"
-            className="inline-flex min-h-touch items-center justify-center rounded-soft bg-olive-green px-6 py-3 text-light-text transition-colors hover:bg-golden-sandy"
+            className="inline-flex min-h-touch items-center justify-center rounded-lg bg-olive-ink px-6 py-3 font-semibold text-light-text transition-[transform,background-color] duration-300 ease-out-quart hover:bg-olive-ink-hover active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2"
             onClick={() => analyticsEvents.ctaClick('Все записи блога', 'home_blog')}
           >
             Все записи блога

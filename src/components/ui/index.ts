@@ -4,3 +4,4 @@ export { default as FormCard } from './FormCard';
 export { default as EmptyState } from './EmptyState';
 export { default as StatusBadge } from './StatusBadge';
 export { default as SectionHeader } from './SectionHeader';
+export { default as Skeleton, ArticleListSkeleton } from './Skeleton';

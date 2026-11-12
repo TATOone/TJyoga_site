@@ -2,7 +2,8 @@ import React, { Suspense, lazy, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { MotionConfig, motion } from 'framer-motion';
+import { EASE_OUT_QUART } from './src/lib/motion';
 
 import Home from './src/pages/Home.tsx';
 import SkipLinks from './src/components/SkipLinks';
@@ -43,10 +44,18 @@ const App: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const suspenseFallback = (
-    <div className="min-h-screen flex items-center justify-center">Загрузка...</div>
+    <div className="flex min-h-screen items-center justify-center bg-cream px-4" role="status">
+      <span className="sr-only">Загрузка…</span>
+      <div className="w-full max-w-md space-y-3">
+        <div className="mx-auto h-8 w-40 animate-pulse rounded-md bg-light-sandy" />
+        <div className="h-4 w-full animate-pulse rounded-md bg-light-sandy" />
+        <div className="mx-auto h-4 w-2/3 animate-pulse rounded-md bg-light-sandy" />
+      </div>
+    </div>
   );
 
   return (
+    <MotionConfig reducedMotion="user" transition={{ ease: EASE_OUT_QUART }}>
     <MobileMenuContext.Provider value={{ isMobileMenuOpen, setIsMobileMenuOpen }}>
       <Analytics />
       <SkipLinks />
@@ -58,7 +67,7 @@ const App: React.FC = () => {
           animate={{
             x: isMobileMenuOpen ? '-85%' : '0%',
           }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          transition={{ duration: 0.5, ease: EASE_OUT_QUART }}
         >
           <Routes>
             <Route path="/" element={<Home />} />
@@ -302,6 +311,7 @@ const App: React.FC = () => {
         </motion.div>
       </Router>
     </MobileMenuContext.Provider>
+    </MotionConfig>
   );
 }
 

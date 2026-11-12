@@ -27,17 +27,17 @@ const Personal: React.FC = () => {
           <ul className="space-y-2 text-dark-brown mb-6">
             {personal.includes.map((item) => (
               <li key={item} className="pl-4 relative">
-                <span className="absolute left-0 text-olive-green">•</span>
+                <span className="absolute left-0 text-olive-ink">•</span>
                 {item}
               </li>
             ))}
           </ul>
-          <p className="text-2xl font-bold text-olive-green mb-5">{personal.priceLabel}</p>
+          <p className="text-2xl font-bold text-olive-ink mb-5">{personal.priceLabel}</p>
           <a
             href={personal.bookingHref ?? CLUB_SUPPORT.telegram}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+            className="cta-primary px-5"
             onClick={() => {
               analyticsEvents.ctaClick('Написать Жене', 'personal_page');
               analyticsEvents.telegramClick('starovoitovae', 'personal_page');

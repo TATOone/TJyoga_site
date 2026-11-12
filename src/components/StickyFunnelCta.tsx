@@ -67,7 +67,7 @@ const StickyFunnelCta: React.FC = () => {
             <div className="mx-auto flex w-full min-w-0 max-w-lg gap-2 px-3">
               <Link
                 to={primary.to}
-                className="inline-flex min-h-touch min-w-0 flex-[1.15] items-center justify-center rounded-soft bg-terracotta px-2 py-2 text-center text-sm font-medium leading-tight text-light-text transition-colors hover:bg-golden-sandy focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2"
+                className="inline-flex min-h-touch min-w-0 flex-[1.15] items-center justify-center rounded-lg bg-terracotta-ink px-2 py-2 text-center text-sm font-semibold leading-tight text-light-text transition-[transform,background-color] duration-300 ease-out-quart hover:bg-terracotta-ink-hover active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2"
                 onClick={() => analyticsEvents.ctaClick(primary.label, analyticsLocation)}
               >
                 {primary.label}
@@ -75,7 +75,7 @@ const StickyFunnelCta: React.FC = () => {
               {secondary ? (
                 <Link
                   to={secondary.to}
-                  className="inline-flex min-h-touch min-w-0 flex-1 items-center justify-center rounded-soft border border-terracotta px-2 py-2 text-center text-sm font-medium leading-tight text-terracotta transition-colors hover:bg-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2"
+                  className="inline-flex min-h-touch min-w-0 flex-1 items-center justify-center rounded-lg border border-terracotta px-2 py-2 text-center text-sm font-semibold leading-tight text-terracotta-ink transition-[transform,background-color] duration-300 ease-out-quart hover:bg-cream active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2"
                   onClick={() => analyticsEvents.ctaClick(secondary.label, analyticsLocation)}
                 >
                   {secondary.label}

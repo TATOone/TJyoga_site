@@ -222,7 +222,7 @@ const CheckoutStub: React.FC = () => {
         <div className="max-w-xl mx-auto text-center">
           <Link
             to="/club/rates"
-            className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+            className="cta-primary px-5"
           >
             Перейти к тарифам
           </Link>
@@ -245,7 +245,7 @@ const CheckoutStub: React.FC = () => {
                 href={RETREAT_BOOKING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-terracotta underline underline-offset-2 hover:text-golden-sandy"
+                className="text-terracotta-ink underline underline-offset-2 hover:text-terracotta-ink-hover"
                 onClick={() => analyticsEvents.telegramClick('starovoitovae', 'checkout_retreat')}
               >
                 {RETREAT_BOOKING_HANDLE}
@@ -254,7 +254,7 @@ const CheckoutStub: React.FC = () => {
             </p>
             <Link
               to="/retreats"
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+              className="cta-primary px-5"
             >
               К ретриту
             </Link>
@@ -276,7 +276,7 @@ const CheckoutStub: React.FC = () => {
                 href={RETREAT_BOOKING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-terracotta underline underline-offset-2 hover:text-golden-sandy"
+                className="text-terracotta-ink underline underline-offset-2 hover:text-terracotta-ink-hover"
                 onClick={() => analyticsEvents.telegramClick('starovoitovae', 'checkout_personal')}
               >
                 {RETREAT_BOOKING_HANDLE}
@@ -285,7 +285,7 @@ const CheckoutStub: React.FC = () => {
             </p>
             <Link
               to="/personal"
-              className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+              className="cta-primary px-5"
             >
               К персональным занятиям
             </Link>
@@ -302,7 +302,7 @@ const CheckoutStub: React.FC = () => {
         <div className="max-w-xl mx-auto text-center">
           <Link
             to="/club/rates"
-            className="inline-flex items-center justify-center min-h-[44px] px-5 py-3 rounded-lg bg-terracotta text-light-text hover:bg-golden-sandy transition-colors"
+            className="cta-primary px-5"
           >
             К тарифам клуба
           </Link>
@@ -321,7 +321,7 @@ const CheckoutStub: React.FC = () => {
         <article className="rounded-card border border-light-sandy bg-cream p-6 shadow-soft">
           <h2 className="mb-2 font-display text-xl font-semibold text-dark-brown">{product.shortTitle}</h2>
           <p className="mb-3 text-gray-brown">{product.description}</p>
-          <p className="text-2xl font-bold text-olive-green">{product.priceLabel}</p>
+          <p className="text-2xl font-bold text-olive-ink">{product.priceLabel}</p>
         </article>
 
         <TrustStrip />
@@ -398,7 +398,7 @@ const CheckoutStub: React.FC = () => {
                 <input type="checkbox" className="mt-1 size-5 shrink-0" {...register('offerAccept')} />
                 <span>
                   Принимаю условия{' '}
-                  <Link className="text-terracotta hover:text-golden-sandy" to={LEGAL_DOCUMENTS.offer.path}>
+                  <Link className="text-terracotta-ink hover:text-terracotta-ink-hover" to={LEGAL_DOCUMENTS.offer.path}>
                     оферты
                   </Link>
                   .
@@ -419,7 +419,7 @@ const CheckoutStub: React.FC = () => {
                 <input type="checkbox" className="mt-1 size-5 shrink-0" {...register('privacyAccept')} />
                 <span>
                   Согласен(а) с{' '}
-                  <Link className="text-terracotta hover:text-golden-sandy" to={LEGAL_DOCUMENTS.policy.path}>
+                  <Link className="text-terracotta-ink hover:text-terracotta-ink-hover" to={LEGAL_DOCUMENTS.policy.path}>
                     политикой обработки данных
                   </Link>
                   .
@@ -445,7 +445,7 @@ const CheckoutStub: React.FC = () => {
                 <span>
                   Ознакомлен(а) с{' '}
                   <Link
-                    className="text-terracotta hover:text-golden-sandy"
+                    className="text-terracotta-ink hover:text-terracotta-ink-hover"
                     to={LEGAL_DOCUMENTS['medical-disclaimer'].path}
                   >
                     медицинским отказом
@@ -479,7 +479,7 @@ const CheckoutStub: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="hidden min-h-12 w-full items-center justify-center rounded-lg bg-terracotta px-5 py-3 font-medium text-light-text transition-colors hover:bg-golden-sandy disabled:opacity-70 md:inline-flex"
+              className="cta-primary hidden w-full disabled:opacity-70 md:inline-flex"
             >
               {submitLabel}
             </button>
@@ -506,7 +506,7 @@ const CheckoutStub: React.FC = () => {
               type="submit"
               form={CHECKOUT_FORM_ID}
               disabled={isSubmitting}
-              className="inline-flex min-h-touch w-full min-w-0 items-center justify-center rounded-soft bg-terracotta px-3 py-2 text-sm font-medium text-light-text transition-colors hover:bg-golden-sandy disabled:opacity-70"
+              className="cta-primary button-sm w-full min-w-0 px-3 disabled:opacity-70"
             >
               {submitLabel}
             </button>

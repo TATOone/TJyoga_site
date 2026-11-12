@@ -19,9 +19,9 @@ const actionClass = (variant: ActionVariant): string => {
   const variantClass = (() => {
     switch (variant) {
       case 'primary':
-        return 'bg-terracotta text-light-text hover:bg-golden-sandy shadow-soft';
+        return 'bg-terracotta-ink text-light-text hover:bg-terracotta-ink-hover shadow-soft';
       case 'secondary':
-        return 'border border-terracotta text-terracotta bg-transparent hover:bg-cream';
+        return 'border border-terracotta text-terracotta-ink bg-transparent hover:bg-cream';
       case 'ghost':
         return 'border border-light-sandy text-dark-brown bg-light-text hover:bg-cream';
       default: {
@@ -33,7 +33,7 @@ const actionClass = (variant: ActionVariant): string => {
 
   return [
     'inline-flex w-full min-h-touch items-center justify-center rounded-soft px-5 text-base font-medium',
-    'transition-colors duration-200 focus:outline-none',
+    'transition-[transform,background-color] duration-300 ease-out-quart active:scale-[0.98] focus:outline-none',
     'focus-visible:ring-2 focus-visible:ring-olive-green focus-visible:ring-offset-2',
     variantClass,
   ].join(' ');

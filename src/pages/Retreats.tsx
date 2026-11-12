@@ -32,19 +32,19 @@ const Retreats: React.FC = () => {
             <ul className="space-y-2 text-dark-brown mt-4 mb-6">
               {retreat.includes.map((item) => (
                 <li key={item} className="pl-4 relative">
-                  <span className="absolute left-0 text-olive-green">•</span>
+                  <span className="absolute left-0 text-olive-ink">•</span>
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="text-2xl font-bold text-olive-green mb-3">{retreat.priceLabel}</p>
+            <p className="text-2xl font-bold text-olive-ink mb-3">{retreat.priceLabel}</p>
             <p className="text-dark-brown mb-5">
               Одноместное проживание 57 000 ₽. Чтобы записаться, напишите Жене:{' '}
               <a
                 href={RETREAT_BOOKING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-terracotta underline underline-offset-2 hover:text-golden-sandy"
+                className="text-terracotta-ink underline underline-offset-2 hover:text-terracotta-ink-hover"
                 onClick={() => {
                   analyticsEvents.ctaClick('Запись на ретрит', 'retreats_page');
                   analyticsEvents.telegramClick('starovoitovae', 'retreats_page');

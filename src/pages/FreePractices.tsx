@@ -36,7 +36,7 @@ const FreePractices: React.FC = () => {
             href={YOUTUBE_CHANNEL_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-[44px] items-center font-medium text-terracotta transition-colors hover:text-golden-sandy"
+            className="inline-flex min-h-touch items-center font-medium text-terracotta-ink transition-colors duration-300 ease-out-quart hover:text-terracotta-ink-hover"
             onClick={() => analyticsEvents.ctaClick('Канал YouTube', 'free_practices')}
           >
             Канал {YOUTUBE_CHANNEL_HANDLE} на YouTube
@@ -49,14 +49,14 @@ const FreePractices: React.FC = () => {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               to="/club"
-              className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-terracotta px-5 py-3 text-terracotta transition-colors hover:bg-cream"
+              className="cta-secondary px-5"
               onClick={() => analyticsEvents.ctaClick('Как устроен клуб', 'free_practices')}
             >
               Как устроен клуб
             </Link>
             <Link
               to="/club/rates"
-              className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-terracotta px-5 py-3 text-light-text transition-colors hover:bg-golden-sandy"
+              className="cta-primary px-5"
               onClick={() => analyticsEvents.ctaClick('Тарифы', 'free_practices')}
             >
               Тарифы

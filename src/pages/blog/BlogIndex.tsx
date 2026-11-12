@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PublicPageLayout from '../../components/PublicPageLayout';
-import { EmptyState, StatusBadge } from '../../components/ui';
+import { ArticleListSkeleton, EmptyState, StatusBadge } from '../../components/ui';
 import { apiClient, ApiClientError, type ArticleListItem } from '../../lib/apiClient';
 import { analyticsEvents } from '../../utils/analytics';
 import { usePageMeta } from '../../utils/usePageMeta';
@@ -30,7 +30,7 @@ const BlogIndex: React.FC = () => {
   return (
     <PublicPageLayout title="Блог" subtitle="Открытые заметки о практике, как в канале TJyoga.">
       <div className="mx-auto max-w-3xl">
-        {loading ? <p className="text-gray-brown">Загрузка...</p> : null}
+        {loading ? <ArticleListSkeleton /> : null}
         {error ? <p className="text-danger">{error}</p> : null}
 
         {!loading && !error && articles.length === 0 ? (
@@ -56,7 +56,7 @@ const BlogIndex: React.FC = () => {
               <p className="mt-2 text-sm text-gray-brown">{article.excerpt}</p>
               <Link
                 to={`/blog/${article.slug}`}
-                className="mt-4 inline-flex min-h-touch items-center font-medium text-terracotta hover:underline"
+                className="mt-4 inline-flex min-h-touch items-center font-medium text-terracotta-ink hover:underline"
                 onClick={() => analyticsEvents.ctaClick('blog_post_open', 'blog_index')}
               >
                 Читать
@@ -67,7 +67,7 @@ const BlogIndex: React.FC = () => {
 
         <p className="mt-10 rounded-card border border-light-olive bg-light-olive/50 p-5 text-sm text-dark-brown">
           Клубные материалы - в{' '}
-          <Link to="/account/knowledge" className="font-medium text-terracotta hover:underline">
+          <Link to="/account/knowledge" className="font-medium text-terracotta-ink hover:underline">
             Знаниях
           </Link>{' '}
           (нужна подписка).

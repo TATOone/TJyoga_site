@@ -20,9 +20,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   onActionClick,
 }) => {
   return (
-    <div className="rounded-card border border-dashed border-light-sandy bg-cream/60 px-6 py-10 text-center">
-      <h3 className="font-display text-xl font-semibold text-dark-brown">{title}</h3>
-      <p className="mx-auto mt-2 max-w-md text-sm text-gray-brown">{description}</p>
+    <div className="rounded-2xl border border-dashed border-light-sandy bg-cream/60 px-6 py-10 text-center">
+      <h3 className="heading-5 text-dark-brown">{title}</h3>
+      <p className="body-6 mx-auto mt-2 max-w-md text-gray-brown">{description}</p>
       {actionLabel && actionTo ? (
         <div className="mt-5">
           <Link to={actionTo} onClick={onActionClick}>

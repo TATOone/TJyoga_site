@@ -9,7 +9,7 @@ interface StatusBadgeProps {
 
 const toneClass: Record<StatusTone, string> = {
   neutral: 'bg-light-olive text-dark-brown',
-  success: 'bg-olive-green/15 text-olive-green',
+  success: 'bg-olive-green/15 text-olive-ink',
   warning: 'bg-golden-sandy/25 text-dark-brown',
   danger: 'bg-danger/10 text-danger',
 };
@@ -18,7 +18,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ label, tone = 'neutral
   return (
     <span
       className={[
-        'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wide',
+        'inline-flex min-h-8 items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide',
         toneClass[tone],
       ].join(' ')}
     >

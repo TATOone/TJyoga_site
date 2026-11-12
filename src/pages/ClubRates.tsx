@@ -41,7 +41,7 @@ const ClubRates: React.FC = () => {
                 }`}
               >
                 {featured ? (
-                  <p className="mb-3 inline-flex w-fit rounded-full bg-terracotta/10 px-3 py-1 text-sm font-semibold text-terracotta">
+                  <p className="mb-3 inline-flex w-fit rounded-full bg-terracotta/10 px-3 py-1 text-sm font-semibold text-terracotta-ink">
                     На 12 000 ₽ меньше за год
                   </p>
                 ) : (
@@ -58,7 +58,7 @@ const ClubRates: React.FC = () => {
                 </h2>
                 <p className="mb-4 text-gray-brown">{product.description}</p>
                 <p
-                  className={`mb-5 font-bold text-olive-green ${
+                  className={`mb-5 font-bold text-olive-ink ${
                     featured ? 'text-3xl' : 'text-2xl'
                   }`}
                 >
@@ -68,7 +68,7 @@ const ClubRates: React.FC = () => {
                 <ul className="mb-6 flex-1 space-y-2 text-dark-brown">
                   {product.includes.map((item) => (
                     <li key={item} className="relative pl-4">
-                      <span className="absolute left-0 text-olive-green">•</span>
+                      <span className="absolute left-0 text-olive-ink">•</span>
                       {item}
                     </li>
                   ))}
@@ -101,7 +101,7 @@ const ClubRates: React.FC = () => {
           </p>
           <Link
             to="/how-to-buy"
-            className="inline-flex min-h-touch items-center font-medium text-terracotta transition-colors hover:text-golden-sandy"
+            className="inline-flex min-h-touch items-center font-medium text-terracotta-ink transition-colors duration-300 ease-out-quart hover:text-terracotta-ink-hover"
             onClick={() => analyticsEvents.ctaClick('Перейти в как купить', 'club_rates')}
           >
             Как оформить
