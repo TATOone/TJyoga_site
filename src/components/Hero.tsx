@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { getActiveAccent } from '../config/campaignAccent';
 import { FREE_CTA_LABEL, FREE_PAGE_PATH } from '../config/freePractices';
 import { IMAGES } from '../config/images';
-import { EASE_OUT_QUART } from '../lib/motion';
 import { analyticsEvents } from '../utils/analytics';
 
 const HERO_CHIPS = [
@@ -41,10 +40,10 @@ const Hero: React.FC = () => {
       )}
       <div className="relative z-10 text-center px-4 max-w-4xl">
         <motion.p
-          className="text-sm md:text-base text-terracotta-ink font-semibold mb-3"
+          className="text-sm md:text-base text-terracotta font-semibold mb-3"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: EASE_OUT_QUART }}
+          transition={{ duration: 0.6 }}
         >
           {accent.heroEyebrow}
         </motion.p>
@@ -52,7 +51,7 @@ const Hero: React.FC = () => {
           className="text-4xl md:text-6xl font-bold text-dark-brown mb-4"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: EASE_OUT_QUART }}
+          transition={{ duration: 0.8 }}
         >
           {accent.heroHeadline}
         </motion.h1>
@@ -60,7 +59,7 @@ const Hero: React.FC = () => {
           className="text-lg md:text-xl text-dark-brown mb-6"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: EASE_OUT_QUART }}
+          transition={{ duration: 0.8, delay: 0.2 }}
         >
           {accent.heroSubhead}
         </motion.p>
@@ -68,7 +67,7 @@ const Hero: React.FC = () => {
           className="flex flex-wrap justify-center gap-3 mb-8 text-sm md:text-base text-dark-brown"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: EASE_OUT_QUART }}
+          transition={{ duration: 0.7, delay: 0.3 }}
         >
           {HERO_CHIPS.map((chip) => (
             <li
@@ -83,11 +82,11 @@ const Hero: React.FC = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: EASE_OUT_QUART }}
+          transition={{ duration: 0.8, delay: 0.4 }}
         >
           <Link
             to="/club/rates"
-            className="cta-primary px-6"
+            className="bg-terracotta text-light-text px-6 py-3 rounded-lg hover:bg-golden-sandy transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
             aria-label="Выбрать тариф клуба"
             data-hero-primary-cta=""
             onClick={() => {
@@ -98,7 +97,7 @@ const Hero: React.FC = () => {
           </Link>
           <Link
             to={FREE_PAGE_PATH}
-            className="cta-secondary px-6"
+            className="border border-terracotta text-terracotta px-6 py-3 rounded-lg hover:bg-cream transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-terracotta min-h-[44px] inline-flex items-center justify-center font-medium"
             aria-label="Посмотреть бесплатные практики на YouTube"
             onClick={() => {
               analyticsEvents.ctaClick(FREE_CTA_LABEL, 'hero');

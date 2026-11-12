@@ -79,6 +79,13 @@ label {
   text-wrap: pretty;
 }
 
+/* Approved hero: keep production wrapping, not balance/pretty. */
+#hero h1,
+#hero p,
+#hero li {
+  text-wrap: wrap;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
