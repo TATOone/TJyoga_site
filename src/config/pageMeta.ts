@@ -39,7 +39,7 @@ export const OG_IMAGE_PATH = '/images/og-image.png';
 export const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 export const OG_IMAGE_WIDTH = '1200';
 export const OG_IMAGE_HEIGHT = '630';
-export const OG_IMAGE_ALT = 'TJ Yoga - Женя и Тим, классическая хатха-йога';
+export const OG_IMAGE_ALT = 'TJ Yoga - Тим и Женя, классическая хатха-йога';
 export const OG_IMAGE_TYPE = 'image/png';
 export const TWITTER_CARD = 'summary_large_image';
 
@@ -47,16 +47,16 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   home: {
     title: 'Онлайн Йога-Клуб TJ Yoga - классическая хатха в Zoom и в записях',
     description:
-      'Мы, Тим и Женя. Классическая хатха-йога: живые практики в Zoom, записи и чат. 6 000 ₽/месяц или 60 000 ₽/год.',
+      'Мы Тим и Женя, преподаём классическую хатха-йогу. В нашем клубе живые практики в Zoom, записи занятий и чат с нами. 6 000 ₽/месяц или 60 000 ₽/год.',
     path: '/',
     robots: 'index,follow',
     keywords:
       'йога клуб онлайн, хатха йога из первоисточников, занятия йогой в zoom, йога для начинающих, TJ Yoga',
   },
   club: {
-    title: 'Онлайн Йога-Клуб TJ Yoga: эфиры, записи, чат',
+    title: 'Онлайн Йога-Клуб TJ Yoga: живые практики в Zoom, записи и чат',
     description:
-      'Четыре практики в неделю в Zoom, записи и чат с преподавателем. Классическая хатха из первоисточников.',
+      'Четыре живые практики в неделю в Zoom, записи занятий и чат с нами. Классическая хатха-йога по традиции нашей школы, для любого уровня.',
     path: '/club',
     robots: 'index,follow',
     keywords: 'йога клуб онлайн, расписание хатха йоги, подписка на йогу, йога с преподавателем',
@@ -64,7 +64,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   clubRates: {
     title: 'Тарифы Йога-Клуба: 6 000 ₽/месяц или 60 000 ₽/год - TJ Yoga',
     description:
-      'Месяц 6 000 ₽ или год 60 000 ₽. Доступ одинаковый: Zoom, записи и чат.',
+      'Клуб на месяц за 6 000 ₽ или на год за 60 000 ₽. Доступ одинаковый: живые практики в Zoom, записи и чат.',
     path: '/club/rates',
     robots: 'index,follow',
     keywords: 'тарифы йога клуба, цена подписки на хатха йогу, годовая подписка йога',
@@ -72,31 +72,31 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   free: {
     title: 'Бесплатные практики хатха-йоги на YouTube - TJ Yoga',
     description:
-      'Три открытые практики: утро 60 минут, вечер 60 минут и короткая утренняя. Кабинет не нужен.',
+      'Три бесплатные практики с нашего YouTube: утренняя и вечерняя по 60 минут и короткая утренняя на 20 минут.',
     path: '/free',
     robots: 'index,follow',
     keywords: 'бесплатная йога онлайн, хатха йога youtube, йога утро, йога вечер, TJ Yoga',
   },
   retreats: {
-    title: 'Йогические выходные с Тимом и Женей - с 3 по 6 января - TJ Yoga',
+    title: 'Йогические выходные с Тимом и Женей - TJ Yoga',
     description:
-      'С 3 по 6 января в эко-отеле в Налибокской пуще. Практика, лес и хорошие люди рядом. Трансфер из Минска.',
+      'Время от времени мы уезжаем вместе практиковать на несколько дней. Анонсы новых ретритов - в Telegram-канале @TJyogatrip.',
     path: '/retreats',
     robots: 'index,follow',
-    keywords: 'йога ретрит, ретрит январь, Налибокская пуща, TJ Yoga',
+    keywords: 'йога ретрит, йогические выходные, ретрит с Тимом и Женей, TJ Yoga',
   },
   personal: {
     title: 'Персональные занятия йогой - TJ Yoga',
     description:
-      'Один-на-один: смотрим ваше тело, дыхание и технику. Для регулярной практики есть клуб.',
+      'Персональные занятия йогой с Женей один на один: разбираем дыхание и технику. Для регулярной практики у нас есть клуб.',
     path: '/personal',
     robots: 'index,follow',
     keywords: 'персональные занятия йогой, индивидуальная йога',
   },
   about: {
-    title: 'Женя и Тим - TJ Yoga, классическая хатха из первоисточников',
+    title: 'Тим и Женя - TJ Yoga, классическая хатха-йога',
     description:
-      'Мы, Женя и Тим. Классическая хатха-йога школы Патанджали. Эту линию мы получили в Ришикеше.',
+      'Мы Тим и Женя, преподаём классическую хатха-йогу школы Патанджали. Учились в ашраме в Ришикеше и продолжаем учиться у своих учителей.',
     path: '/about',
     robots: 'index,follow',
     keywords: 'Женя Старовойтова йога, преподаватели хатха йоги, TJ Yoga о нас',
@@ -104,7 +104,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   howToBuy: {
     title: 'Как оформить подписку на Йога-Клуб TJ Yoga',
     description:
-      'Как оплатить месяц или год клуба: тариф, оплата картой, кабинет.',
+      'Как оформить подписку на клуб на месяц или на год: выбрать тариф, оплатить картой и войти в кабинет.',
     path: '/how-to-buy',
     robots: 'index,follow',
     keywords: 'как купить подписку на йогу, оплата йога клуба, TJ Yoga доступ',
@@ -117,7 +117,7 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   },
   paymentSuccess: {
     title: 'Оплата успешна - TJ Yoga',
-    description: 'Оплата прошла. Дальше - кабинет.',
+    description: 'Оплата прошла. Теперь можно войти в кабинет.',
     path: '/payment/success',
     robots: 'noindex,nofollow',
   },
@@ -181,7 +181,8 @@ export const PAGE_META: Record<PageMetaKey, PageMetaConfig> = {
   },
   blog: {
     title: 'Блог TJ Yoga - открытые заметки о практике',
-    description: 'Открытые заметки о хатха-йоге и практике, как в канале TJyoga.',
+    description:
+      'Заметки о хатха-йоге и практике от Тима и Жени, так же как в нашем Telegram-канале TJyoga.',
     path: '/blog',
     robots: 'index,follow',
     keywords: 'блог о йоге, статьи о йоге, хатха йога блог',

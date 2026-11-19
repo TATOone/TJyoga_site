@@ -14,14 +14,17 @@ const HowToBuy: React.FC = () => {
   const yearly = PRODUCTS['club-yearly'];
 
   const steps = [
-    'Выберите месяц или год. Доступ одинаковый.',
-    'Имя, почта, Telegram и пароль для кабинета.',
-    'Оферта, политика данных и медицинский отказ - без этого оплата не начнётся.',
-    'Кабинет открывается сам, обычно за несколько минут. Если нет - напишите в Telegram.',
+    'Выберите месяц или год, доступ в обоих тарифах одинаковый.',
+    'Укажите имя, почту и Telegram и придумайте пароль для кабинета.',
+    'Отметьте согласие с офертой, политикой обработки данных и медицинским отказом. Без этих отметок оплата не откроется.',
+    'Кабинет откроется сам, обычно через несколько минут. Если этого не случилось, напишите нам в Telegram.',
   ];
 
   return (
-    <PublicPageLayout title="Как оформить" subtitle="Оплата картой. Кабинет обычно за несколько минут.">
+    <PublicPageLayout
+      title="Как оформить"
+      subtitle="Оплатить клуб можно картой. Кабинет обычно открывается через несколько минут после оплаты."
+    >
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="bg-cream border border-light-sandy rounded-2xl p-6 md:p-8">
           <ol className="space-y-3">
@@ -40,11 +43,11 @@ const HowToBuy: React.FC = () => {
           <article className="bg-light-text border border-light-sandy rounded-2xl p-6">
             <h3 className="text-xl font-semibold text-dark-brown mb-3">Если доступ не пришёл</h3>
             <p className="text-gray-brown mb-3">
-              Напишите в Telegram. В рабочие часы включим вручную {CONSENT_BASELINE.renewalSla}.
+              Напишите нам в Telegram, и мы включим доступ вручную {CONSENT_BASELINE.renewalSla}.
             </p>
             <p className="text-gray-brown">
-              После окончания подписки остаётся {CONSENT_BASELINE.gracePeriodHours} часа, чтобы
-              продлить без разрыва.
+              После окончания подписки доступ сохраняется ещё {CONSENT_BASELINE.gracePeriodHours} часа,
+              чтобы вы успели продлить её без перерыва.
             </p>
           </article>
           <article className="bg-light-text border border-light-sandy rounded-2xl p-6">

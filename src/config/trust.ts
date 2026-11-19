@@ -14,5 +14,5 @@ export const TRUST_CHIPS: readonly TrustChip[] = [
   { id: 'teachers', label: `Ведут ${TEACHERS_HEADLINE}` },
   { id: 'support', label: 'Поддержка 10:00–22:00 МСК' },
   { id: 'access', label: 'Доступ обычно за несколько минут' },
-  { id: 'grace', label: `${CONSENT_BASELINE.gracePeriodHours} часа, чтобы продлить без разрыва` },
+  { id: 'grace', label: `${CONSENT_BASELINE.gracePeriodHours} часа, чтобы продлить без перерыва` },
 ] as const;

@@ -40,7 +40,7 @@ const PaymentSuccess: React.FC = () => {
       try {
         const order = await apiClient.getCheckoutOrder(orderId, session.accessToken);
         if (order.status === 'paid' || order.subscription_status === 'active') {
-          setMessage('Оплата подтверждена. Дальше - кабинет.');
+          setMessage('Оплата подтверждена, спасибо! Теперь можно войти в кабинет. До встречи на практике 🌷');
           setTone('success');
           return;
         }
@@ -50,7 +50,7 @@ const PaymentSuccess: React.FC = () => {
       } catch (error) {
         if (error instanceof ApiClientError && error.code === 'NOT_FOUND') {
           setMessage(
-            'Заказ ещё не появился в кабинете. Если оплата прошла, доступ обычно за несколько минут.',
+            'Заказ ещё не появился в кабинете. Если оплата прошла, доступ обычно открывается через несколько минут.',
           );
           setTone('warning');
           return;
@@ -67,7 +67,7 @@ const PaymentSuccess: React.FC = () => {
   return (
     <PublicPageLayout
       title="Оплата"
-      subtitle="Дальше - кабинет."
+      subtitle="Спасибо! Теперь можно войти в кабинет."
     >
       <FormCard className="text-center">
         <div className="mb-3 flex justify-center">

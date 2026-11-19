@@ -96,7 +96,9 @@ const Services: React.FC = () => {
                 {service.showCountdown && (
                   <Countdown targetDate={RETREAT_START} />
                 )}
-                <p className="text-2xl font-bold text-olive-ink mb-4 mt-1">{service.price}</p>
+                {service.price ? (
+                  <p className="text-2xl font-bold text-olive-ink mb-4 mt-1">{service.price}</p>
+                ) : null}
                 <div className="mt-auto space-y-2">
                   <Link
                     to={service.link}
@@ -118,7 +120,10 @@ const Services: React.FC = () => {
                       aria-label={`${service.checkoutLabel}: ${service.title}`}
                       onClick={() => {
                         analyticsEvents.ctaClick(`${service.checkoutLabel} ${service.title}`, 'services');
-                        analyticsEvents.telegramClick('starovoitovae', 'services');
+                        analyticsEvents.telegramClick(
+                          (service.bookingHref ?? '').split('/').filter(Boolean).pop() ?? 'starovoitovae',
+                          'services',
+                        );
                       }}
                     >
                       {service.checkoutLabel}

@@ -12,11 +12,11 @@ import { REVEAL_HIDDEN, REVEAL_VISIBLE, revealTransition } from '../lib/motion';
 const audienceLead = (id: CampaignAccentId): string => {
   switch (id) {
     case 'beginners':
-      return 'Можно приходить с нуля. Есть простой вариант асаны. Разрешите себе быть новичком.';
+      return 'Если вы никогда не занимались йогой, приходите. У каждой асаны есть базовая форма, с неё и начнёте.';
     case 'depth':
-      return 'Первоисточники и ритм недели.';
+      return 'Если вы уже практикуете, вас ждёт постоянный ритм недели: четыре живые практики и длинная воскресная практика на полтора часа.';
     case 'office-restore':
-      return 'День за компьютером. Практика вписывается в неделю: утро, вечер или запись.';
+      return 'Если вы весь день за компьютером, практику легко вписать в неделю: вечером в среду и пятницу или утром в воскресенье и понедельник. А если не успели, можно позаниматься по записи.';
     default: {
       const unreachable: never = id;
       return unreachable;
@@ -38,7 +38,7 @@ const ForWhom: React.FC = () => {
           animate={isInView ? REVEAL_VISIBLE : {}}
           transition={revealTransition()}
         >
-          Можно с нуля. Можно уже с практикой.
+          Клуб подойдёт и тем, кто начинает с нуля, и тем, кто уже практикует
         </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {CAMPAIGN_ACCENT_IDS.map((id, index) => {
@@ -75,7 +75,7 @@ const ForWhom: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={revealTransition(0.36)}
         >
-          Перед первым эфиром можно написать нам, что беспокоит в теле и уме.
+          Перед первым занятием можно написать нам, если что-то беспокоит, и мы подскажем, с чего начать.
         </motion.p>
       </div>
     </section>

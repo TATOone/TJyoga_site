@@ -45,7 +45,7 @@ export const getSubscriptionStatusView = (status: string): SubscriptionStatusVie
         label: 'Ещё открыта',
         tone: 'warning',
         description:
-          'Оплаченный срок закончился, доступ ещё 72 часа. Можно продлить без разрыва.',
+          'Оплаченный срок закончился, но доступ сохраняется ещё 72 часа. За это время подписку можно продлить без перерыва.',
       };
     case 'expired':
       return { label: 'Истекла', tone: 'danger' };

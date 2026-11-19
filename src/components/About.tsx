@@ -17,7 +17,7 @@ const About: React.FC = () => {
           animate={isInView ? REVEAL_VISIBLE : {}}
           transition={revealTransition()}
         >
-          Женя и Тим
+          Тим и Женя
         </motion.h2>
         <div className="flex flex-col md:flex-row items-center gap-8">
           <motion.div
@@ -50,14 +50,14 @@ const About: React.FC = () => {
             transition={revealTransition(0.2)}
           >
             <p className="text-dark-brown mb-4">
-              Мы - Женя и Тим. Практикуем и преподаём классическую хатха-йогу школы Патанджали. Эту линию мы получили в Ришикеше: из текстов и живой практики.
+              Мы - Тим и Женя. Практикуем и преподаём классическую хатха-йогу школы Патанджали. Мы учились у наших учителей в ашраме в Ришикеше, а сейчас проходим более продвинутый курс онлайн.
             </p>
             <p className="text-dark-brown mb-4">
               Мы активные и энергичные, во многом благодаря йоге.
             </p>
             <div className="space-y-2">
-              <p className="font-semibold text-olive-ink">Женя Старовойтова - основной преподаватель, 10+ лет личной практики, 5+ лет преподавания</p>
-              <p className="font-semibold text-olive-ink">Тим - ассистент преподавателя, 5+ лет практики, вдохновитель и поддержка</p>
+              <p className="font-semibold text-olive-ink">Женя Старовойтова - основной преподаватель, практикует больше 10 лет, преподаёт больше 5 лет</p>
+              <p className="font-semibold text-olive-ink">Тим - помощник преподавателя, практикует больше 5 лет, ведёт йога-зарядку по понедельникам</p>
             </div>
           </motion.div>
         </div>

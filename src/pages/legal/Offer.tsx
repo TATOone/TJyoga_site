@@ -14,9 +14,9 @@ const Offer: React.FC = () => {
       <section>
         <h2 className="text-xl font-semibold mb-2">1. Общие положения</h2>
         <p>
-          Настоящий документ является официальным предложением {OPERATOR_INFO.operatorName} (
-          {OPERATOR_INFO.operatorStatus}) о заключении договора на оказание услуг TJ Yoga.
-          Акцептом оферты считается оформление заказа через форму оплаты и совершение оплаты.
+          Настоящий документ является официальным предложением Старовойтовой Евгении Викторовны
+          (самозанятой) о заключении договора на оказание услуг TJ Yoga. Акцептом оферты считается
+          оформление заказа через форму оплаты и совершение оплаты.
         </p>
       </section>
 
@@ -49,7 +49,7 @@ const Offer: React.FC = () => {
       <section>
         <h2 className="text-xl font-semibold mb-2">5. Ответственность</h2>
         <p>
-          Стороны несут ответственность в соответствии с законодательством РФ. Исполнитель не несет
+          Стороны несут ответственность в соответствии с законодательством РФ. Исполнитель не несёт
           ответственности за невозможность оказания услуг по причинам, зависящим от пользователя
           (некорректные данные, блокировки мессенджера, отсутствие интернет-доступа).
         </p>
@@ -69,7 +69,6 @@ const Offer: React.FC = () => {
         <p>Оператор: {OPERATOR_INFO.operatorName}</p>
         <p>Статус: {OPERATOR_INFO.operatorStatus}</p>
         <p>ИНН: {OPERATOR_INFO.inn}</p>
-        <p>{OPERATOR_INFO.taxInfo}</p>
         <p>{OPERATOR_INFO.bankDetailsNote}</p>
         <p>Юридический контакт: {OPERATOR_INFO.legalEmail}</p>
         <p>Поддержка: {OPERATOR_INFO.supportEmail}, Telegram {OPERATOR_INFO.legalTelegram}</p>

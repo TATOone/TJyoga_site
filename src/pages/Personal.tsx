@@ -13,7 +13,7 @@ const Personal: React.FC = () => {
   return (
     <PublicPageLayout
       title="Персональные занятия"
-      subtitle="Один-на-один: смотрим ваше тело, дыхание и технику."
+      subtitle="Женя занимается с вами один на один: смотрит, как вы дышите и выполняете асаны, и направляет."
     >
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         <img

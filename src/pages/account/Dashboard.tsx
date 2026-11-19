@@ -25,7 +25,7 @@ const Dashboard: React.FC = () => {
     const load = async () => {
       const session = loadAuthSession();
       if (!session) {
-        setError('Сессия не найдена. Войдите снова, чтобы открыть кабинет.');
+        setError('Похоже, вы вышли из кабинета. Войдите снова, пожалуйста.');
         setLoading(false);
         return;
       }
@@ -99,7 +99,7 @@ const Dashboard: React.FC = () => {
               <p className="mt-1 text-sm text-gray-brown">
                 {nextSession
                   ? `Ближайшее занятие: ${nextSession.dayLabel}, ${nextSession.timeLabel} МСК - ${nextSession.title}.`
-                  : 'Живое занятие открывается через защищённый переход.'}
+                  : 'Нажмите кнопку, и занятие откроется в Zoom.'}
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -176,7 +176,7 @@ const Dashboard: React.FC = () => {
             ) : null}
           </div>
         ) : (
-          <p className="text-gray-brown">Активной подписки нет. Живые занятия и записи откроются после оплаты.</p>
+          <p className="text-gray-brown">Сейчас у вас нет активной подписки. Живые занятия и записи откроются после оплаты.</p>
         )}
       </section>
 
@@ -186,14 +186,14 @@ const Dashboard: React.FC = () => {
           className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft transition-colors hover:border-terracotta"
         >
           <h3 className="mb-1 font-semibold text-terracotta-ink">Записи</h3>
-          <p className="text-sm text-gray-brown">Если пропустили эфир</p>
+          <p className="text-sm text-gray-brown">Все занятия в записи</p>
         </Link>
         <Link
           to="/account/knowledge"
           className="rounded-card border border-light-sandy bg-light-text p-5 shadow-soft transition-colors hover:border-terracotta"
         >
           <h3 className="mb-1 font-semibold text-terracotta-ink">Знания</h3>
-          <p className="text-sm text-gray-brown">Клубные материалы</p>
+          <p className="text-sm text-gray-brown">Материалы о практике для участников клуба</p>
         </Link>
       </section>
     </div>
