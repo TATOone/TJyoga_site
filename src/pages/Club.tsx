@@ -6,12 +6,10 @@ import Testimonials from '../components/Testimonials';
 import { getActiveAccent } from '../config/campaignAccent';
 import {
   ALL_LEVELS_NOTE,
-  CLUB_SCHEDULE_TIME_NOTE,
   CLUB_SOCIAL_PROOF,
   CLUB_STRUCTURE,
   CLUB_SUPPORT,
   ZOOM_SCHEDULE,
-  formatScheduleLine,
 } from '../config/clubContent';
 import { FREE_CTA_LABEL, FREE_PAGE_PATH } from '../config/freePractices';
 import { PRODUCTS } from '../config/products';
@@ -70,7 +68,7 @@ const Club: React.FC = () => {
         <section className="bg-light-text border border-light-sandy rounded-2xl p-6 md:p-8">
           <h2 className="text-2xl font-semibold text-dark-brown mb-2">Расписание Zoom</h2>
           <p className="text-gray-brown mb-4 text-sm">
-            {CLUB_SCHEDULE_TIME_NOTE} {ALL_LEVELS_NOTE}. Ссылка открывается из кабинета.
+            Время по Москве. {ALL_LEVELS_NOTE}. Ссылка открывается из кабинета.
           </p>
           <ul className="space-y-3">
             {ZOOM_SCHEDULE.map((item) => (
@@ -80,7 +78,9 @@ const Club: React.FC = () => {
               >
                 <div>
                   <p className="font-semibold text-dark-brown">{item.title}</p>
-                  <p className="text-sm text-gray-brown">{formatScheduleLine(item)}</p>
+                  <p className="text-sm text-gray-brown">
+                    {item.dayLabel} · {item.timeLabel} МСК · {item.durationMin} мин · {item.level}
+                  </p>
                 </div>
               </li>
             ))}

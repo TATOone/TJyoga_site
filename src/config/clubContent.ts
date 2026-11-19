@@ -42,39 +42,36 @@ export interface ZoomScheduleItem {
   timeLabel: string;
   title: string;
   durationMin: number;
-  /** Короткая йога-зарядка, не полная практика. */
-  warmup?: boolean;
-  /** Кто ведёт, если это зафиксировано. */
-  instructor?: string;
+  /**
+   * Прежний слот уровня. Сейчас здесь кто ведёт занятие:
+   * отдельных уровней у практик нет.
+   */
+  level: 'ведёт Тим' | 'ведёт Женя';
 }
 
 /**
- * Пояс занятий. Сейчас совпадает с Москвой (UTC+3, без перевода часов),
- * поэтому на витрине рядом с часами остаётся привычное «МСК».
+ * Расписание Zoom, время МСК.
+ * Id стабильны: на них может опираться переход в Zoom.
+ * Вторник, четверг и суббота без занятий.
+ * `tue-morning-charge` — прежняя зарядка, теперь в понедельник.
+ * `fri-morning` — прежнее утро пятницы, теперь вечер.
  */
-export const CLUB_SCHEDULE_TIME_ZONE = 'Europe/Minsk';
-
-export const CLUB_SCHEDULE_TIME_NOTE = 'Время по Минску (совпадает с Москвой).';
-
-export const CLUB_SCHEDULE_TIME_SUFFIX = 'МСК';
-
-/** Расписание Zoom. Ссылка на комнату хранится только на backend. Вторник, четверг и суббота — без занятий. */
 export const ZOOM_SCHEDULE: readonly ZoomScheduleItem[] = [
   {
-    id: 'sun-practice',
+    id: 'sun-evening',
     dayLabel: 'Воскресенье',
     timeLabel: '09:30–11:00',
     title: 'Хатха-практика',
     durationMin: 90,
+    level: 'ведёт Женя',
   },
   {
-    id: 'mon-charge',
+    id: 'tue-morning-charge',
     dayLabel: 'Понедельник',
     timeLabel: '08:00–08:30',
     title: 'Йога-зарядка',
     durationMin: 30,
-    warmup: true,
-    instructor: 'Тим',
+    level: 'ведёт Тим',
   },
   {
     id: 'wed-evening',
@@ -82,14 +79,15 @@ export const ZOOM_SCHEDULE: readonly ZoomScheduleItem[] = [
     timeLabel: '20:00–21:00',
     title: 'Вечерняя практика и восстановление',
     durationMin: 60,
+    level: 'ведёт Женя',
   },
   {
-    id: 'fri-evening',
+    id: 'fri-morning',
     dayLabel: 'Пятница',
     timeLabel: '20:00–21:00',
     title: 'Хатха-практика',
     durationMin: 60,
-    instructor: 'Женя',
+    level: 'ведёт Женя',
   },
 ] as const;
 
@@ -114,8 +112,8 @@ const DAY_ACCUSATIVE: Record<string, string> = {
 };
 
 const describeLiveClass = (item: ZoomScheduleItem): string => {
-  const lead = item.instructor ? ` (ведёт ${item.instructor})` : '';
-  if (item.warmup) {
+  const lead = ` (${item.level})`;
+  if (item.id === 'tue-morning-charge') {
     const day = DAY_ACCUSATIVE[item.dayLabel] ?? item.dayLabel.toLowerCase();
     return `${item.title.toLowerCase()} в ${day} ${item.timeLabel}${lead}`;
   }
@@ -135,16 +133,6 @@ const joinWithAnd = (parts: readonly string[]): string => {
 export const LIVE_CLASSES_WHEN = joinWithAnd(ZOOM_SCHEDULE.map(describeLiveClass));
 
 export const LIVE_CLASSES_SUMMARY = `Живые практики в Zoom: ${LIVE_CLASSES_WHEN}`;
-
-export const formatScheduleLine = (item: ZoomScheduleItem): string => {
-  const who = item.instructor ? ` · ведёт ${item.instructor}` : '';
-  return `${item.dayLabel} · ${item.timeLabel} ${CLUB_SCHEDULE_TIME_SUFFIX} · ${item.durationMin} мин${who}`;
-};
-
-export const formatNextSessionLead = (item: ZoomScheduleItem): string => {
-  const who = item.instructor ? `, ведёт ${item.instructor}` : '';
-  return `${item.dayLabel}, ${item.timeLabel} ${CLUB_SCHEDULE_TIME_SUFFIX} - ${item.title}${who}`;
-};
 
 export type VideoCategoryId = 'practices' | 'seminars' | 'philosophy' | 'new';
 

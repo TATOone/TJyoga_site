@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, EmptyState, SectionHeader, StatusBadge } from '../../components/ui';
-import { formatNextSessionLead, formatScheduleLine } from '../../config/clubContent';
 import { FUNNEL_RATES_PATH } from '../../config/funnel';
 import { apiClient, ApiClientError, type MeResponse } from '../../lib/apiClient';
 import { loadAuthSession } from '../../lib/authStorage';
@@ -99,7 +98,7 @@ const Dashboard: React.FC = () => {
               <h2 className="font-display text-xl font-semibold text-dark-brown">Открыть практику</h2>
               <p className="mt-1 text-sm text-gray-brown">
                 {nextSession
-                  ? `Ближайшее занятие: ${formatNextSessionLead(nextSession)}.`
+                  ? `Ближайшее занятие: ${nextSession.dayLabel}, ${nextSession.timeLabel} МСК - ${nextSession.title}.`
                   : 'Живое занятие открывается через защищённый переход.'}
               </p>
             </div>
@@ -148,7 +147,8 @@ const Dashboard: React.FC = () => {
           <h2 className="font-display text-xl font-semibold text-dark-brown">Ближайшее по расписанию</h2>
           <p className="mt-2 text-dark-brown">{nextSession.title}</p>
           <p className="mt-1 text-sm text-gray-brown">
-            {formatScheduleLine(nextSession)}
+            {nextSession.dayLabel} · {nextSession.timeLabel} МСК · {nextSession.durationMin} мин ·{' '}
+            {nextSession.level}
           </p>
         </section>
       ) : null}
