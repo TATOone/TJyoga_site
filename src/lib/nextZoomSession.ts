@@ -1,6 +1,8 @@
-import { ZOOM_SCHEDULE, type ZoomScheduleItem } from '../config/clubContent';
-
-const MOSCOW_TZ = 'Europe/Moscow';
+import {
+  CLUB_SCHEDULE_TIME_ZONE,
+  ZOOM_SCHEDULE,
+  type ZoomScheduleItem,
+} from '../config/clubContent';
 
 const DAY_NAME_TO_INDEX: Record<string, number> = {
   Воскресенье: 0,
@@ -22,14 +24,14 @@ const WEEKDAY_SHORT_TO_INDEX: Record<string, number> = {
   Sat: 6,
 };
 
-interface MoscowClock {
+interface ScheduleClock {
   weekday: number;
   minutes: number;
 }
 
-export const getMoscowClock = (now: Date = new Date()): MoscowClock => {
+export const getScheduleClock = (now: Date = new Date()): ScheduleClock => {
   const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: MOSCOW_TZ,
+    timeZone: CLUB_SCHEDULE_TIME_ZONE,
     weekday: 'short',
     hour: '2-digit',
     minute: '2-digit',
@@ -61,7 +63,7 @@ export const getNextZoomSession = (
     return null;
   }
 
-  const clock = getMoscowClock(now);
+  const clock = getScheduleClock(now);
   let best: ZoomScheduleItem | null = null;
   let bestWait = Number.POSITIVE_INFINITY;
 

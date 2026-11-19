@@ -2,7 +2,12 @@
  * Утверждённый контент клуба для публичной витрины.
  * Цены синхронизированы с PRODUCTS и backend PLAN_CATALOG (копейки).
  * Сезонный тон читается из campaignAccent.ts — этот файл держит устойчивые факты.
+ * Расписание Zoom — единственный источник дней и часов. Та же формулировка
+ * вручную повторена в rates/index.html: это статическая страница без сборки.
  */
+
+/** Все занятия клуба подходят любому уровню. Отдельных уровней у практик нет. */
+export const ALL_LEVELS_NOTE = 'Каждое занятие подходит для любого уровня';
 
 export const CLUB_STRUCTURE = {
   title: 'Что входит в клуб',
@@ -10,8 +15,7 @@ export const CLUB_STRUCTURE = {
     {
       id: 'live',
       title: 'Живые практики',
-      description:
-        'Четыре раза в неделю в Zoom. Классическая хатха, с вариантами под разный уровень.',
+      description: `Четыре раза в неделю в Zoom. Классическая хатха. ${ALL_LEVELS_NOTE}.`,
     },
     {
       id: 'recordings',
@@ -32,56 +36,45 @@ export const CLUB_STRUCTURE = {
   ],
 } as const;
 
-export const CLUB_PROGRAM = {
-  title: 'Уровни',
-  intro: 'У каждой практики указан уровень. Воскресенье длиннее - новичкам не обязательно.',
-  levels: [
-    {
-      id: 'all',
-      title: 'Все уровни',
-      description:
-        'Зарядка во вторник, утро в пятницу и вечер в среду. Можно с нуля: есть простой вариант асаны.',
-    },
-    {
-      id: 'beginners',
-      title: 'Начинающие',
-      description:
-        'Темп спокойный, объяснения подробные. Названия асан знать заранее не нужно.',
-    },
-    {
-      id: 'continuing',
-      title: 'Продолжающие',
-      description: 'Воскресенье вечером: более длинная практика. Новичкам не обязательно.',
-    },
-  ],
-} as const;
-
 export interface ZoomScheduleItem {
   id: string;
   dayLabel: string;
   timeLabel: string;
   title: string;
   durationMin: number;
-  level: 'все уровни' | 'начинающие' | 'продолжающие';
+  /** Короткая йога-зарядка, не полная практика. */
+  warmup?: boolean;
+  /** Кто ведёт, если это зафиксировано. */
+  instructor?: string;
 }
 
-/** Расписание Zoom (МСК). Ссылка на комнату хранится только на backend. */
+/**
+ * Пояс занятий. Сейчас совпадает с Москвой (UTC+3, без перевода часов),
+ * поэтому на витрине рядом с часами остаётся привычное «МСК».
+ */
+export const CLUB_SCHEDULE_TIME_ZONE = 'Europe/Minsk';
+
+export const CLUB_SCHEDULE_TIME_NOTE = 'Время по Минску (совпадает с Москвой).';
+
+export const CLUB_SCHEDULE_TIME_SUFFIX = 'МСК';
+
+/** Расписание Zoom. Ссылка на комнату хранится только на backend. Вторник, четверг и суббота — без занятий. */
 export const ZOOM_SCHEDULE: readonly ZoomScheduleItem[] = [
   {
-    id: 'sun-evening',
+    id: 'sun-practice',
     dayLabel: 'Воскресенье',
-    timeLabel: '19:30–21:00',
-    title: 'Вечерняя практика',
+    timeLabel: '09:30–11:00',
+    title: 'Хатха-практика',
     durationMin: 90,
-    level: 'продолжающие',
   },
   {
-    id: 'tue-morning-charge',
-    dayLabel: 'Вторник',
+    id: 'mon-charge',
+    dayLabel: 'Понедельник',
     timeLabel: '08:00–08:30',
-    title: 'Зарядка',
+    title: 'Йога-зарядка',
     durationMin: 30,
-    level: 'все уровни',
+    warmup: true,
+    instructor: 'Тим',
   },
   {
     id: 'wed-evening',
@@ -89,17 +82,69 @@ export const ZOOM_SCHEDULE: readonly ZoomScheduleItem[] = [
     timeLabel: '20:00–21:00',
     title: 'Вечерняя практика и восстановление',
     durationMin: 60,
-    level: 'все уровни',
   },
   {
-    id: 'fri-morning',
+    id: 'fri-evening',
     dayLabel: 'Пятница',
-    timeLabel: '08:00–09:00',
-    title: 'Утренняя хатха-практика',
+    timeLabel: '20:00–21:00',
+    title: 'Хатха-практика',
     durationMin: 60,
-    level: 'все уровни',
+    instructor: 'Женя',
   },
 ] as const;
+
+const DAY_NOMINATIVE: Record<string, string> = {
+  Воскресенье: 'воскресенье',
+  Понедельник: 'понедельник',
+  Вторник: 'вторник',
+  Среда: 'среда',
+  Четверг: 'четверг',
+  Пятница: 'пятница',
+  Суббота: 'суббота',
+};
+
+const DAY_ACCUSATIVE: Record<string, string> = {
+  Воскресенье: 'воскресенье',
+  Понедельник: 'понедельник',
+  Вторник: 'вторник',
+  Среда: 'среду',
+  Четверг: 'четверг',
+  Пятница: 'пятницу',
+  Суббота: 'субботу',
+};
+
+const describeLiveClass = (item: ZoomScheduleItem): string => {
+  const lead = item.instructor ? ` (ведёт ${item.instructor})` : '';
+  if (item.warmup) {
+    const day = DAY_ACCUSATIVE[item.dayLabel] ?? item.dayLabel.toLowerCase();
+    return `${item.title.toLowerCase()} в ${day} ${item.timeLabel}${lead}`;
+  }
+  const day = DAY_NOMINATIVE[item.dayLabel] ?? item.dayLabel.toLowerCase();
+  return `${day} ${item.timeLabel}${lead}`;
+};
+
+const joinWithAnd = (parts: readonly string[]): string => {
+  if (parts.length <= 1) {
+    return parts[0] ?? '';
+  }
+  const head = parts.slice(0, -1).join(', ');
+  return `${head} и ${parts[parts.length - 1]}`;
+};
+
+/** Дни и часы одной фразой, без названия продукта. */
+export const LIVE_CLASSES_WHEN = joinWithAnd(ZOOM_SCHEDULE.map(describeLiveClass));
+
+export const LIVE_CLASSES_SUMMARY = `Живые практики в Zoom: ${LIVE_CLASSES_WHEN}`;
+
+export const formatScheduleLine = (item: ZoomScheduleItem): string => {
+  const who = item.instructor ? ` · ведёт ${item.instructor}` : '';
+  return `${item.dayLabel} · ${item.timeLabel} ${CLUB_SCHEDULE_TIME_SUFFIX} · ${item.durationMin} мин${who}`;
+};
+
+export const formatNextSessionLead = (item: ZoomScheduleItem): string => {
+  const who = item.instructor ? `, ведёт ${item.instructor}` : '';
+  return `${item.dayLabel}, ${item.timeLabel} ${CLUB_SCHEDULE_TIME_SUFFIX} - ${item.title}${who}`;
+};
 
 export type VideoCategoryId = 'practices' | 'seminars' | 'philosophy' | 'new';
 
@@ -155,7 +200,7 @@ export const CLUB_SUPPORT = {
   faq: [
     {
       q: 'Можно ли приходить с нуля?',
-      a: 'Да. Зарядка, утро и вечер - для всех уровней, есть простой вариант асаны. Воскресенье длиннее: новичкам не обязательно. Перед первым эфиром можно написать в чат, что беспокоит в теле и уме.',
+      a: `Да. ${ALL_LEVELS_NOTE}. Можно приходить с нуля. Перед первым эфиром можно написать в чат, что беспокоит в теле и уме.`,
     },
     {
       q: 'Что за йога у вас?',

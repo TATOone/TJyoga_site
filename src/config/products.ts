@@ -1,3 +1,4 @@
+import { ALL_LEVELS_NOTE, LIVE_CLASSES_SUMMARY } from './clubContent';
 import { IMAGES } from './images';
 
 export type ProductId = 'club-monthly' | 'club-yearly' | 'retreat-pass' | 'personal-session';
@@ -40,9 +41,9 @@ export interface ProductConfig {
  * (на backend алиасы club-monthly → club-month, club-yearly → club-year).
  */
 const clubCoreIncludes = [
-  'Живые практики в Zoom: воскресенье, зарядка во вторник, среда и пятница',
+  LIVE_CLASSES_SUMMARY,
   'Записи всех занятий - если пропустили эфир',
-  'У каждой практики указан уровень: все уровни, начинающие, продолжающие',
+  ALL_LEVELS_NOTE,
   'Чат с преподавателем, ответ ежедневно 10:00–22:00 МСК',
   'Классическая хатха-йога из первоисточников',
 ] as const;
@@ -77,7 +78,7 @@ export const PRODUCTS: Record<ProductId, ProductConfig> = {
     shortTitle: 'Годовая подписка',
     description:
       '12 месяцев того же доступа за 60 000 ₽. Если платить помесячно, выйдет 72 000 ₽.',
-    details: 'Тот же клуб: эфиры, записи, уровни, чат.',
+    details: 'Тот же клуб: эфиры, записи и чат.',
     priceLabel: '60 000 ₽/год (5 000 ₽/мес)',
     priceAmount: 60000,
     priceCurrency: 'RUB',

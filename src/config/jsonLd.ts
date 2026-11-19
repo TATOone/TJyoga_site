@@ -90,7 +90,7 @@ const clubOfferJsonLd = (): JsonLdNode => ({
   '@id': `${SITE_URL}/club#product`,
   name: 'Онлайн Йога-Клуб TJ Yoga',
   description:
-    'Онлайн-клуб: живые практики хатха-йоги в Zoom, записи, уровни и чат с преподавателем.',
+    'Онлайн-клуб: живые практики хатха-йоги в Zoom, записи и чат с преподавателем.',
   image: OG_IMAGE_URL,
   brand: { '@id': `${SITE_URL}/#organization` },
   url: pageUrl('/club'),
