@@ -59,8 +59,7 @@ const KinescopePlayer: React.FC<KinescopePlayerProps> = ({ videoId, kinescopeId,
         <div>
           <p className="font-semibold mb-2">{title}</p>
           <p className="text-sm opacity-80">
-            Демо-режим: подставьте реальный Kinescope ID в админке. Backend уже проверяет подписку
-            перед показом плеера.
+            Видео скоро появится. Если оно не открывается, напишите нам в Telegram.
           </p>
         </div>
       </div>

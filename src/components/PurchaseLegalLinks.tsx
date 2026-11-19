@@ -16,7 +16,9 @@ interface PurchaseLegalLinksProps {
 const PurchaseLegalLinks: React.FC<PurchaseLegalLinksProps> = ({ analyticsLocation }) => {
   return (
     <nav aria-label="Документы перед оплатой" className="min-w-0">
-      <p className="mb-2 text-sm text-gray-brown">Документы перед оплатой: оферта, политика и возврат.</p>
+      <p className="mb-2 text-sm text-gray-brown">
+        Перед оплатой, пожалуйста, прочитайте оферту, политику обработки данных и условия возврата.
+      </p>
       <ul className="flex min-w-0 flex-wrap gap-x-4 gap-y-2">
         {PURCHASE_DOCS.map(({ doc, label }) => (
           <li key={doc.path}>

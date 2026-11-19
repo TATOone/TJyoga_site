@@ -68,7 +68,7 @@ const Register: React.FC = () => {
                 rel="noopener noreferrer"
                 className="text-olive-ink hover:underline"
               >
-                Напишите в Telegram
+                Напишите нам в Telegram
               </a>
             </p>
           </div>

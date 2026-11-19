@@ -235,12 +235,12 @@ const CheckoutStub: React.FC = () => {
     if (product.id === 'retreat-pass') {
       return (
         <PublicPageLayout
-          title="Запись на ретрит в Telegram"
-          subtitle="Оплаты ретрита на сайте нет. Напишите Жене, чтобы занять место."
+          title="Ретриты в Telegram"
+          subtitle="Ретриты на сайте не оплачиваются. Анонсы новых выездов мы публикуем в канале @TJyogatrip, а с вопросами можно написать Жене."
         >
           <div className="max-w-xl mx-auto text-center space-y-3">
             <p className="text-gray-brown">
-              Чтобы записаться, напишите Жене в Telegram:{' '}
+              Написать Жене в Telegram:{' '}
               <a
                 href={RETREAT_BOOKING_URL}
                 target="_blank"
@@ -267,7 +267,7 @@ const CheckoutStub: React.FC = () => {
       return (
         <PublicPageLayout
           title="Запись на персональное занятие"
-          subtitle="Онлайн-оплаты персональных занятий на сайте нет. Напишите Жене."
+          subtitle="Персональные занятия на сайте не оплачиваются. Чтобы записаться, напишите Жене в Telegram."
         >
           <div className="max-w-xl mx-auto text-center space-y-3">
             <p className="text-gray-brown">
@@ -366,7 +366,7 @@ const CheckoutStub: React.FC = () => {
                 label="Telegram"
                 autoComplete="username"
                 placeholder="@username"
-                hint="Формат @username"
+                hint="Например, @username"
                 error={errors.telegram?.message}
                 {...register('telegram')}
               />
@@ -386,7 +386,7 @@ const CheckoutStub: React.FC = () => {
             <h3 className="font-display text-lg font-semibold text-dark-brown">2. Согласия</h3>
             <fieldset className="space-y-3 rounded-soft border border-light-sandy bg-cream/60 p-4">
               <legend className="px-1 text-sm font-semibold text-dark-brown">
-                Обязательные согласия ({CONSENT_BASELINE.version})
+                Обязательные согласия
               </legend>
 
               <label
@@ -466,7 +466,7 @@ const CheckoutStub: React.FC = () => {
               <legend className="px-1 text-sm font-semibold text-gray-brown">Дополнительно</legend>
               <label className="flex min-h-touch items-start gap-3 text-sm text-dark-brown">
                 <input type="checkbox" className="mt-1 size-5 shrink-0" {...register('cookiesAccept')} />
-                <span>Согласен(а) на аналитику на сайте (необязательно).</span>
+                <span>Согласен(а), чтобы сайт собирал статистику посещений (необязательно).</span>
               </label>
             </fieldset>
           </section>
@@ -474,7 +474,7 @@ const CheckoutStub: React.FC = () => {
           <section id="checkout-pay" className="space-y-3 scroll-mt-28">
             <h3 className="font-display text-lg font-semibold text-dark-brown">3. Оплата</h3>
             <p className="rounded-soft bg-light-olive px-4 py-3 text-sm text-dark-brown">
-              Дальше откроется оплата. Кабинет - обычно за несколько минут.
+              Дальше откроется страница оплаты. После оплаты кабинет обычно открывается через несколько минут.
             </p>
             <button
               type="submit"
@@ -495,7 +495,7 @@ const CheckoutStub: React.FC = () => {
         >
           <div className="sticky-funnel-cta mx-auto flex w-full min-w-0 max-w-lg flex-col gap-2 px-3">
             <p className="text-xs leading-tight text-gray-brown">
-              {product.priceLabel}. После оплаты кабинет обычно за несколько минут.
+              {product.priceLabel}. После оплаты кабинет обычно открывается через несколько минут.
             </p>
             {hasErrors ? (
               <p className="text-xs text-danger" role="alert">

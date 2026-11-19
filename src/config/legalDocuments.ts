@@ -33,7 +33,7 @@ export const OPERATOR_INFO = {
   legalEmail: 'legal@tjyoga.ru',
   supportEmail: 'support@tjyoga.ru',
   legalTelegram: '@starovoitovae',
-  taxInfo: 'Самозанятая: Старовойтова Евгения Викторовна. ИНН указан в публичной оферте.',
+  taxInfo: 'ИНН указан в публичной оферте.',
   bankDetailsNote:
     'Оплата цифровых услуг принимается через платёжного партнёра Prodamus. Чек формируется в соответствии с режимом НПД.',
 } as const;
@@ -97,7 +97,7 @@ export const CONSENT_REQUIREMENTS: readonly ConsentRequirement[] = [
   },
   {
     type: 'cookies_accept',
-    label: 'Согласен(а) на аналитику на сайте (необязательно)',
+    label: 'Согласен(а), чтобы сайт собирал статистику посещений (необязательно).',
     documentType: 'policy',
     required: false,
   },
@@ -107,5 +107,5 @@ export const CONSENT_BASELINE = {
   version: LEGAL_BASELINE_VERSION,
   legalMode: 'final_texts_now',
   gracePeriodHours: 72,
-  renewalSla: 'до 2 часов, ежедневно 10:00-22:00 МСК',
+  renewalSla: 'в течение 2 часов (каждый день 10:00–22:00 МСК)',
 } as const;

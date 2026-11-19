@@ -1,12 +1,10 @@
 import React from 'react';
-import Countdown from '../components/Countdown';
 import PublicPageLayout from '../components/PublicPageLayout';
 import { PRODUCTS } from '../config/products';
 import {
-  RETREAT_BOOKING_HANDLE,
-  RETREAT_BOOKING_URL,
+  RETREAT_CHANNEL_HANDLE,
+  RETREAT_CHANNEL_URL,
   RETREAT_NAME,
-  RETREAT_START,
 } from '../config/retreat';
 import { analyticsEvents } from '../utils/analytics';
 import { usePageMeta } from '../utils/usePageMeta';
@@ -17,7 +15,7 @@ const Retreats: React.FC = () => {
   const retreat = PRODUCTS['retreat-pass'];
 
   return (
-    <PublicPageLayout title={RETREAT_NAME} subtitle="Практика, лес и хорошие люди рядом.">
+    <PublicPageLayout title={RETREAT_NAME} subtitle="Практика, природа и хорошие люди рядом.">
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <img
@@ -28,29 +26,29 @@ const Retreats: React.FC = () => {
           />
           <div className="bg-cream border border-light-sandy rounded-2xl p-6">
             <p className="text-gray-brown mb-4">{retreat.details}</p>
-            <Countdown targetDate={RETREAT_START} />
-            <ul className="space-y-2 text-dark-brown mt-4 mb-6">
-              {retreat.includes.map((item) => (
-                <li key={item} className="pl-4 relative">
-                  <span className="absolute left-0 text-olive-ink">•</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <p className="text-2xl font-bold text-olive-ink mb-3">{retreat.priceLabel}</p>
+            {retreat.includes.length > 0 ? (
+              <ul className="space-y-2 text-dark-brown mt-4 mb-6">
+                {retreat.includes.map((item) => (
+                  <li key={item} className="pl-4 relative">
+                    <span className="absolute left-0 text-olive-ink">•</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
             <p className="text-dark-brown mb-5">
-              Одноместное проживание 57 000 ₽. Чтобы записаться, напишите Жене:{' '}
+              Чтобы первыми узнать о новом ретрите, подпишитесь на наш канал{' '}
               <a
-                href={RETREAT_BOOKING_URL}
+                href={RETREAT_CHANNEL_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-terracotta-ink underline underline-offset-2 hover:text-terracotta-ink-hover"
                 onClick={() => {
-                  analyticsEvents.ctaClick('Запись на ретрит', 'retreats_page');
-                  analyticsEvents.telegramClick('starovoitovae', 'retreats_page');
+                  analyticsEvents.ctaClick('Канал ретритов', 'retreats_page');
+                  analyticsEvents.telegramClick('TJyogatrip', 'retreats_page');
                 }}
               >
-                {RETREAT_BOOKING_HANDLE}
+                {RETREAT_CHANNEL_HANDLE}
               </a>
               .
             </p>

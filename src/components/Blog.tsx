@@ -31,7 +31,7 @@ const Blog: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={revealTransition(0.12)}
         >
-          Открытые заметки о практике, как в канале TJyoga.
+          Здесь мы пишем о практике, так же как в нашем Telegram-канале TJyoga.
         </motion.p>
         <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2">
           {publicPosts.map((post, index) => (

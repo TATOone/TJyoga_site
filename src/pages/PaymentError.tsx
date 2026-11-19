@@ -21,7 +21,7 @@ const PaymentError: React.FC = () => {
   return (
     <PublicPageLayout
       title="Оплата не завершена"
-      subtitle="Платёж отменён или прерван. Можно оплатить ещё раз."
+      subtitle="Оплата не прошла или была отменена. Попробуйте ещё раз, а если не получается, напишите нам в Telegram, мы поможем."
     >
       <FormCard className="text-center">
         <div className="mb-3 flex justify-center">

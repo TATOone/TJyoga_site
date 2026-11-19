@@ -7,9 +7,9 @@ import { IMAGES } from '../config/images';
 import { analyticsEvents } from '../utils/analytics';
 
 const HERO_CHIPS = [
-  'Йога из первоисточников',
-  'Структура практики',
-  'Поддержка от преподавателя',
+  'Классическая хатха-йога по традиции нашей школы',
+  'Четыре живые практики в неделю',
+  'Мы на связи в чате',
 ] as const;
 
 const Hero: React.FC = () => {

@@ -5,7 +5,6 @@ import TeachersTeaser from '../components/TeachersTeaser';
 import Testimonials from '../components/Testimonials';
 import { getActiveAccent } from '../config/campaignAccent';
 import {
-  ALL_LEVELS_NOTE,
   CLUB_SOCIAL_PROOF,
   CLUB_STRUCTURE,
   CLUB_SUPPORT,
@@ -66,9 +65,18 @@ const Club: React.FC = () => {
         </section>
 
         <section className="bg-light-text border border-light-sandy rounded-2xl p-6 md:p-8">
+          <h2 className="text-2xl font-semibold text-dark-brown mb-2">Для любого уровня</h2>
+          <p className="text-gray-brown text-sm md:text-base">
+            Все наши занятия подходят для любого уровня. В нашей школе и в наших первоисточниках у
+            каждой асаны есть базовая форма или вариант, который подойдёт именно вашему уровню
+            практики. Названия асан знать заранее не нужно.
+          </p>
+        </section>
+
+        <section className="bg-light-text border border-light-sandy rounded-2xl p-6 md:p-8">
           <h2 className="text-2xl font-semibold text-dark-brown mb-2">Расписание Zoom</h2>
           <p className="text-gray-brown mb-4 text-sm">
-            Время по Москве. {ALL_LEVELS_NOTE}. Ссылка открывается из кабинета.
+            Время указано по Москве. Ссылку на занятие вы найдёте в личном кабинете.
           </p>
           <ul className="space-y-3">
             {ZOOM_SCHEDULE.map((item) => (
@@ -155,7 +163,7 @@ const Club: React.FC = () => {
           <div>
             <h2 className="text-2xl font-semibold text-dark-brown mb-2">{accent.ctaHint}</h2>
             <p className="text-gray-brown">
-              Месяц или год. Если есть вопрос - напишите нам. {CLUB_SUPPORT.sla}
+              Выберите месяц или год. Если остались вопросы, напишите нам. {CLUB_SUPPORT.sla}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">

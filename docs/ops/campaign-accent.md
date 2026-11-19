@@ -25,7 +25,7 @@ export const ACTIVE_ACCENT_ID: CampaignAccentId = 'beginners';
 - Цены и `checkoutPath` в `src/config/products.ts`
 - Коды тарифов backend `PLAN_CATALOG` (`club-month` / `club-year`, алиасы `club-monthly` / `club-yearly`)
 - Расписание Zoom и сроки поддержки в `src/config/clubContent.ts` - если они не менялись по факту
-- У акцента `beginners`: `heroEyebrow`, `heroHeadline`, `heroSubhead` (утверждено)
+- У акцента `beginners` заголовок и подзаголовок первого экрана обновлены чистовиком 19.11.2026. `heroEyebrow` не менялся.
 
 Акцент меняет **формулировки** (eyebrow, заголовок, подзаголовок, акцент на Home/Club, подсказку CTA). Обещания клуба (эфиры + записи, чат, классическая хатха, цена как на сайте) остаются в `products.ts` и на витрине клуба. Отдельных уровней у занятий нет: каждое подходит любому уровню.
 

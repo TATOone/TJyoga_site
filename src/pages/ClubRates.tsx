@@ -96,8 +96,8 @@ const ClubRates: React.FC = () => {
         <div className="rounded-card bg-light-olive p-6 text-dark-brown">
           <h3 className="mb-3 font-display text-xl font-semibold">После оплаты</h3>
           <p className="mb-3">
-            Кабинет обычно за несколько минут. Если доступа нет, включим вручную в течение 2 часов
-            (ежедневно 10:00–22:00 МСК).
+            Кабинет обычно открывается через несколько минут после оплаты. Если этого не случилось, мы
+            включим доступ вручную в течение 2 часов (каждый день 10:00–22:00 МСК).
           </p>
           <Link
             to="/how-to-buy"

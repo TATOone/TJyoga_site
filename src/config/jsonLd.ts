@@ -8,13 +8,6 @@ import {
   resolvePageMeta,
 } from './pageMeta';
 import { CLUB_RATE_PRODUCT_IDS, PRODUCTS } from './products';
-import {
-  RETREAT_BOOKING_URL,
-  RETREAT_END_ISO,
-  RETREAT_NAME,
-  RETREAT_PLACE_NAME,
-  RETREAT_START_ISO,
-} from './retreat';
 import { SEED_ARTICLES } from './seedContent';
 import { TEACHERS } from './teachers';
 
@@ -30,7 +23,7 @@ export const organizationJsonLd = (): JsonLdNode => ({
   logo: `${SITE_URL}/images/logo/exports/tjyoga-logo-512.png`,
   image: OG_IMAGE_URL,
   description:
-    'Классическая хатха-йога из первоисточников. Онлайн-клуб, ретриты и персональные занятия. Тим и Женя.',
+    'Тим и Женя, классическая хатха-йога школы Патанджали. Онлайн-клуб, ретриты и персональные занятия.',
   email: OPERATOR_INFO.supportEmail,
   sameAs: ['https://t.me/TJyoga', 'https://t.me/starovoitovae'],
   contactPoint: {
@@ -90,7 +83,7 @@ const clubOfferJsonLd = (): JsonLdNode => ({
   '@id': `${SITE_URL}/club#product`,
   name: 'Онлайн Йога-Клуб TJ Yoga',
   description:
-    'Онлайн-клуб: живые практики хатха-йоги в Zoom, записи и чат с преподавателем.',
+    'Онлайн-клуб: живые практики хатха-йоги в Zoom, записи занятий и чат с преподавателем.',
   image: OG_IMAGE_URL,
   brand: { '@id': `${SITE_URL}/#organization` },
   url: pageUrl('/club'),
@@ -112,52 +105,6 @@ const clubOfferJsonLd = (): JsonLdNode => ({
     ];
   }),
 });
-
-const retreatEventJsonLd = (): JsonLdNode => {
-  const product = PRODUCTS['retreat-pass'];
-
-  return {
-    '@type': 'Event',
-    '@id': `${SITE_URL}/retreats#event`,
-    name: RETREAT_NAME,
-    description: `${product.details} ${product.includes.join('. ')}.`,
-    startDate: RETREAT_START_ISO,
-    endDate: RETREAT_END_ISO,
-    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    eventStatus: 'https://schema.org/EventScheduled',
-    image: `${SITE_URL}${product.image}`,
-    url: pageUrl('/retreats'),
-    location: {
-      '@type': 'Place',
-      name: RETREAT_PLACE_NAME,
-      address: {
-        '@type': 'PostalAddress',
-        addressCountry: 'BY',
-        addressLocality: 'Налибокская пуща',
-      },
-    },
-    organizer: { '@id': `${SITE_URL}/#organization` },
-    maximumAttendeeCapacity: 20,
-    offers: [
-      {
-        '@type': 'Offer',
-        name: 'Двухместное проживание',
-        price: '45000',
-        priceCurrency: 'RUB',
-        url: RETREAT_BOOKING_URL,
-        availability: 'https://schema.org/InStock',
-      },
-      {
-        '@type': 'Offer',
-        name: 'Одноместное проживание',
-        price: '57000',
-        priceCurrency: 'RUB',
-        url: RETREAT_BOOKING_URL,
-        availability: 'https://schema.org/InStock',
-      },
-    ],
-  };
-};
 
 const clubFaqJsonLd = (): JsonLdNode => ({
   '@type': 'FAQPage',
@@ -231,7 +178,6 @@ export const getRouteJsonLdGraph = (pathname: string): JsonLdNode[] => {
     case 'free':
       break;
     case 'retreats':
-      graph.push(retreatEventJsonLd());
       break;
     case 'personal':
     case 'about':

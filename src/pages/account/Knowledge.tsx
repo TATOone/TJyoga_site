@@ -74,7 +74,7 @@ const Knowledge: React.FC = () => {
         <SectionHeader title="Знания" />
         <EmptyState
           title="Раздел откроется после оплаты"
-          description="Знания - при активной подписке. Открытые заметки можно читать в блоге."
+          description="Раздел «Знания» открыт участникам клуба с активной подпиской. Открытые заметки можно читать в блоге."
           actionLabel="Выбрать тариф"
           actionTo={FUNNEL_RATES_PATH}
           onActionClick={() => analyticsEvents.ctaClick('renew', 'account_knowledge')}
@@ -97,7 +97,7 @@ const Knowledge: React.FC = () => {
       {articles.length === 0 ? (
         <EmptyState
           title="Пока пусто"
-          description="Клубные статьи появятся здесь."
+          description="Скоро здесь появятся статьи для участников клуба."
           actionLabel="К обзору"
           actionTo="/account"
         />

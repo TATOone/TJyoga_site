@@ -28,7 +28,10 @@ const BlogIndex: React.FC = () => {
   }, []);
 
   return (
-    <PublicPageLayout title="Блог" subtitle="Открытые заметки о практике, как в канале TJyoga.">
+    <PublicPageLayout
+      title="Блог"
+      subtitle="Здесь мы пишем о практике, так же как в нашем Telegram-канале TJyoga."
+    >
       <div className="mx-auto max-w-3xl">
         {loading ? <ArticleListSkeleton /> : null}
         {error ? <p className="text-danger">{error}</p> : null}
@@ -36,7 +39,7 @@ const BlogIndex: React.FC = () => {
         {!loading && !error && articles.length === 0 ? (
           <EmptyState
             title="Пока нет записей"
-            description="Скоро здесь появятся открытые посты о йоге и практике."
+            description="Скоро здесь появятся наши заметки о йоге и практике."
           />
         ) : null}
 
@@ -66,11 +69,11 @@ const BlogIndex: React.FC = () => {
         </ul>
 
         <p className="mt-10 rounded-card border border-light-olive bg-light-olive/50 p-5 text-sm text-dark-brown">
-          Клубные материалы - в{' '}
+          Материалы для участников клуба лежат в разделе{' '}
           <Link to="/account/knowledge" className="font-medium text-terracotta-ink hover:underline">
-            Знаниях
+            «Знания»
           </Link>{' '}
-          (нужна подписка).
+          в личном кабинете.
         </p>
       </div>
     </PublicPageLayout>
