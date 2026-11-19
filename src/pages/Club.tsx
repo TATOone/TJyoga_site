@@ -5,7 +5,7 @@ import TeachersTeaser from '../components/TeachersTeaser';
 import Testimonials from '../components/Testimonials';
 import { getActiveAccent } from '../config/campaignAccent';
 import {
-  CLUB_PROGRAM,
+  ALL_LEVELS_NOTE,
   CLUB_SOCIAL_PROOF,
   CLUB_STRUCTURE,
   CLUB_SUPPORT,
@@ -66,25 +66,9 @@ const Club: React.FC = () => {
         </section>
 
         <section className="bg-light-text border border-light-sandy rounded-2xl p-6 md:p-8">
-          <h2 className="text-2xl font-semibold text-dark-brown mb-2">{CLUB_PROGRAM.title}</h2>
-          <p className="text-gray-brown mb-6 text-sm md:text-base">{CLUB_PROGRAM.intro}</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {CLUB_PROGRAM.levels.map((level) => (
-              <article
-                key={level.id}
-                className="border border-light-sandy rounded-xl p-4 bg-cream"
-              >
-                <h3 className="text-lg font-semibold text-olive-ink mb-2">{level.title}</h3>
-                <p className="text-gray-brown text-sm md:text-base">{level.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="bg-light-text border border-light-sandy rounded-2xl p-6 md:p-8">
           <h2 className="text-2xl font-semibold text-dark-brown mb-2">Расписание Zoom</h2>
           <p className="text-gray-brown mb-4 text-sm">
-            Время по Москве. Ссылка открывается из кабинета.
+            Время по Москве. {ALL_LEVELS_NOTE}. Ссылка открывается из кабинета.
           </p>
           <ul className="space-y-3">
             {ZOOM_SCHEDULE.map((item) => (

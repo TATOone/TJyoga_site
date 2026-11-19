@@ -14,7 +14,7 @@ const audienceLead = (id: CampaignAccentId): string => {
     case 'beginners':
       return 'Можно приходить с нуля. Есть простой вариант асаны. Разрешите себе быть новичком.';
     case 'depth':
-      return 'Уровни, первоисточники и ритм недели.';
+      return 'Первоисточники и ритм недели.';
     case 'office-restore':
       return 'День за компьютером. Практика вписывается в неделю: утро, вечер или запись.';
     default: {

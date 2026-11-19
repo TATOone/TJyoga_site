@@ -1,4 +1,4 @@
-import type { ArticleCategoryId } from './clubContent';
+import { LIVE_CLASSES_WHEN, type ArticleCategoryId } from './clubContent';
 
 export interface SeedArticle {
   id: string;
@@ -51,7 +51,7 @@ export const SEED_ARTICLES: readonly SeedArticle[] = [
     slug: 'raspisanie-iyun',
     title: 'Расписание клуба',
     excerpt: 'Как устроены живые практики и записи.',
-    body: 'Четыре регулярные Zoom-практики в неделю, включая воскресный вечерний блок. Записи появляются в библиотеке в течение суток после эфира. Вопросы можно писать нам до 22:00 МСК.',
+    body: `Четыре регулярные Zoom-практики в неделю: ${LIVE_CLASSES_WHEN}. Записи появляются в библиотеке в течение суток после эфира. Вопросы можно писать нам до 22:00 МСК.`,
     category: 'club-news',
     access: 'club',
     publishedAt: '2026-06-01T09:00:00Z',
