@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import ArticleBody from '../../components/ArticleBody';
 import PublicPageLayout from '../../components/PublicPageLayout';
 import { StatusBadge } from '../../components/ui';
 import { apiClient, ApiClientError, type ArticleDetail } from '../../lib/apiClient';
@@ -75,7 +76,10 @@ const BlogPost: React.FC = () => {
           </span>
         </div>
         <h1 className="font-display text-3xl font-semibold text-dark-brown">{article.title}</h1>
-        <div className="mt-6 whitespace-pre-wrap text-dark-brown leading-relaxed">{article.body}</div>
+        <ArticleBody
+          body={article.body}
+          className="mt-6 whitespace-pre-wrap text-dark-brown leading-relaxed"
+        />
       </article>
     </PublicPageLayout>
   );
