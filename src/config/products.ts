@@ -27,7 +27,6 @@ export interface ProductConfig {
   image: string;
   includes: readonly string[];
   featured?: boolean;
-  showCountdown?: boolean;
   /** Копирайт карточки на главной. Не подменяет IA страницы продукта. */
   homeCard?: HomeServiceCardCopy;
   /** Внешняя запись (Telegram). Если задана, вторичная кнопка ведёт сюда, а не в checkout. */
@@ -105,7 +104,6 @@ export const PRODUCTS: Record<ProductId, ProductConfig> = {
     bookingHref: RETREAT_CHANNEL_URL,
     image: IMAGES.services.retreat,
     includes: [],
-    showCountdown: false,
     homeCard: {
       title: 'Йогические выходные',
       description:

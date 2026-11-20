@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import ArticleBody from '../../components/ArticleBody';
 import { EmptyState, StatusBadge } from '../../components/ui';
 import { FUNNEL_RATES_PATH } from '../../config/funnel';
 import { apiClient, ApiClientError, type ArticleDetail } from '../../lib/apiClient';
@@ -73,7 +74,10 @@ const KnowledgeDetail: React.FC = () => {
         </span>
       </div>
       <h1 className="font-display text-3xl font-semibold text-dark-brown">{article.title}</h1>
-      <div className="whitespace-pre-wrap leading-relaxed text-dark-brown">{article.body}</div>
+      <ArticleBody
+        body={article.body}
+        className="whitespace-pre-wrap leading-relaxed text-dark-brown"
+      />
     </article>
   );
 };

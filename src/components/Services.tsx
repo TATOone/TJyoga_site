@@ -2,8 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle, Globe, Star } from 'lucide-react';
 import { analyticsEvents } from '../utils/analytics';
-import Countdown from './Countdown';
-import { RETREAT_START } from '../config/retreat';
 import { Link } from 'react-router-dom';
 import { HOME_SERVICE_PRODUCT_IDS, PRODUCTS } from '../config/products';
 import type { ProductId } from '../config/products';
@@ -22,7 +20,6 @@ type Service = {
   checkoutPath: string;
   bookingHref?: string;
   image: string;
-  showCountdown?: boolean;
 };
 
 const Services: React.FC = () => {
@@ -50,7 +47,6 @@ const Services: React.FC = () => {
       checkoutPath: product.checkoutPath,
       bookingHref: product.bookingHref,
       image: product.image,
-      showCountdown: product.showCountdown,
     };
   });
 
@@ -93,9 +89,6 @@ const Services: React.FC = () => {
                   <h3 className="ml-2 text-xl font-semibold text-terracotta-ink">{service.title}</h3>
                 </div>
                 <p className="text-dark-brown mb-2 flex-grow whitespace-pre-line">{service.description}</p>
-                {service.showCountdown && (
-                  <Countdown targetDate={RETREAT_START} />
-                )}
                 {service.price ? (
                   <p className="text-2xl font-bold text-olive-ink mb-4 mt-1">{service.price}</p>
                 ) : null}
